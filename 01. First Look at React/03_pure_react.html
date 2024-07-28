@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello React</title>
+  </head>
+  <body>
+    <!-- Root ID of React: root -->
+    <div id="root"></div>
+
+    <!-- Including React Locally in HTML file the Pure Way -->
+    <!-- 1. Core React Library -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+
+    <!-- 2. Render React Components into the DOM -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Using React -->
+    <script>
+      // App Component
+      // A Component is a Function that starts with an Uppercase like this: 'App'
+      function App() {
+        // Define a state variable 'time' initialized with the current time as a string
+        // 'new Date().toLocaleTimeString()' returns the current time as a string in the format 'HH:MM:SS'
+
+        // ---What is .useState() ??
+        // The useState hook in React is a fundamental hook that allows functional components to have state
+        // 'React.useState()' returns an array containing the current state and a function to update it
+        // useState is called with an initial state value and returns an array with two elements:
+        // state: The current state value.
+        // setState: A function that lets you update the state value
+
+        // React.useState(new Date().toLocaleTimeString()) returns the Time as String and a function to update it
+        // Here, we're using destructuring to get 'time' and'setTime' as holders for Time and function to update the time
+        // time: holds the state value returned by the .useState()
+        // 'setTime' is a function to update 'time'
+        const [time, setTime] = React.useState(new Date().toLocaleTimeString());
+
+        // --- What is .useEffect() ??
+        // The useEffect hook in React is used to perform side effects in functional components.
+        // It is particularly useful for tasks such as fetching data, updating the DOM directly, and setting up subscriptions or timers
+        // The useEffect hook is called with two arguments:
+        // 1. A function to execute the side effect.
+        // 2. An empty dependency array [], indicating that the effect should only run once when the component mounts.
+        React.useEffect(function () {
+          // Inside the useEffect function, setInterval is used to set up a timer that executes a provided function every 1000 milliseconds (1 second).
+          setInterval(function () {
+            // When setTime is called with a new value, React will re-render the component with the updated state rendering the current time every second
+            setTime(new Date().toLocaleTimeString());
+          }, 1000);
+        }, []); // Empty dependency array means this effect runs only once after the initial render
+
+        // Create an element using React: .createElement()
+        // Creates a 'header' element containing the text with the current time
+        return React.createElement(
+          'header',
+          null,
+          `Hello React !! It's ${time}`,
+        );
+      }
+
+      // Get the root DOM element where the React application will be mounted
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+
+      // Render the 'App' component into the root DOM element
+      root.render(React.createElement(App));
+    </script>
+  </body>
+</html>
