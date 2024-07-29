@@ -161,18 +161,26 @@ console.log(author, title, genres);
 const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
 console.log(primaryGenre, secondaryGenre, ...otherGenres);
 
-// --- Ternary Operator
-// The ternary operator is the only JavaScript operator that takes three operands:
-// A condition followed by a question mark (?), then an expression to execute if the condition is truthy followed by a colon (:), and finally the expression to execute if the condition is falsy
-// An expression a ? b : c evaluates to b if the value of a is true, and otherwise to c . One can read it aloud as "if a then b otherwise c".
-//  This operator is frequently used as an alternative to an if...else statement.
+// --- Arrow Functions
+// A new way to write functions introduced in ES6
+// Very useful for Quick & Short Functions
+// We don't need to write function keyword we can just use the =>
+// If we have only one line we dont need to have the {} and explicitly  mention the return keyword
+// If we have multiple lines we need to write them under {} and use return to return anything
 
-// If pages are over a 1000: displays 'over a thousand' else displays 'under a thousand'
-const pagesRange = pages > 1000 ? 'over a thousand' : 'under a thousand';
-console.log(pagesRange);
+// Normal way
+// function getYear(str) {
+//   return str.split('-')[0];
+// }
+
+// Arrow Function
+const getYear = (str) => str.split('-')[0];
+console.log(getYear(publicationDate));
 
 // Summary
-const summary = `${title} is a Book, a ${pages}-pages long Book & published in ${
-  publicationDate.split('-')[0]
-}. The Book has ${hasMovieAdaptation ? '' : 'not'} been adopted as a movie`;
+// Used arrow function here to specify the publication date
+const summary = `${title} is a Book, a ${pages}-pages long Book & published in ${getYear(
+  publicationDate,
+)}. The Book has ${hasMovieAdaptation ? '' : 'not'} been adopted as a movie`;
+
 console.log(summary);
