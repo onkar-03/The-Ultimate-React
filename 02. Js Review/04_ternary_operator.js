@@ -153,16 +153,27 @@ function getBook(id) {
 
 // --- Destructuring Objects {}
 const book = getBook(1);
-const { title, author, pages, genres, publicationDate } = book;
+const { title, author, pages, genres, publicationDate, hasMovieAdaptation } =
+  book;
 console.log(author, title, genres);
 
 // --- Destructuring Arrays []
 const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
 console.log(primaryGenre, secondaryGenre, ...otherGenres);
 
-// --- Template Literals
-// An ES6 Js feature which allows you to very easily create Strings that contain some Javascript Expression inside of a String
+// --- Ternary Operator
+// The ternary operator is the only JavaScript operator that takes three operands:
+// A condition followed by a question mark (?), then an expression to execute if the condition is truthy followed by a colon (:), and finally the expression to execute if the condition is falsy
+// An expression a ? b : c evaluates to b if the value of a is true, and otherwise to c . One can read it aloud as "if a then b otherwise c".
+//  This operator is frequently used as an alternative to an if...else statement.
+
+// If pages are over a 1000: displays 'over a thousand' else displays 'under a thousand'
+const pagesRange = pages > 1000 ? 'over a thousand' : 'under a thousand';
+console.log(pagesRange);
+
+// Summary
 const summary = `${title} is a Book, a ${pages}-pages long Book & published in ${
   publicationDate.split('-')[0]
-}`;
+}. The Book has ${hasMovieAdaptation ? '' : 'not'} been adopted as a movie`;
+
 console.log(summary);
