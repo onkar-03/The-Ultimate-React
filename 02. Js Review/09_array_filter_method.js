@@ -151,58 +151,34 @@ function getBook(id) {
   return data.find((d) => d.id === id);
 }
 
-// --- Destructuring Objects {}
-const book = getBook(2);
-const { title, author, pages, genres, publicationDate, hasMovieAdaptation } =
-  book;
-console.log(author, title, genres);
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews.goodreads?.reviewsCount ?? 0;
+  const librarything = book.reviews.librarything?.reviewsCount ?? 0;
+  return goodreads + librarything;
+}
 
-// --- Destructuring Arrays []
-const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
-console.log(primaryGenre, secondaryGenre, ...otherGenres);
+// --- Array Methods
+// The Array methods .map(), .filter(), .reduce() are called functional array methods as they do not mutate the original array instead return a new array based on original one
 
-// --- Logical Operators
+// Getting all books from the Data
+const books = getBooks();
+books;
 
-// A) Logical AND (&&)
-// The logical AND operator (&&) evaluates two expressions, it immediately returns the first expression if its falsy, else returns the second expression
-//  It is commonly used to check multiple conditions
-// Falsy Values for (&&): 0, '', null, undefined
+// 2. Filter Method
+// In Javascript .filter() method is used to filter out some elements of an Array based on certain condition and form a new array of those elements
+// Filter expects a callback function inside of it for which each of the element will be called and processed
 
-console.log(true && 'Some String');
-console.log(false && 'Some String');
-console.log(0 && 'Some String');
+// A) Chaining Multiple Filters
+// Creating a longBooks array than has books which have pages > 500 & which have a movie adaptation
+const longBooks = books
+  .filter((book) => book.pages > 500)
+  .filter((book) => book.hasMovieAdaptation);
+console.log(longBooks);
 
-// If the hasMovieAdaptation === true we are returned with 'This book has a movie'
-console.log(hasMovieAdaptation && 'This book has a movie');
-
-// Here jonas is considered a truthy value hence we get the other string as O/P
-console.log('Jonas' && 'Some Sting');
-
-// 2. Logical OR (||)
-// The logical OR operator (||) evaluates two expressions and returns the first truthy expression it encounters; if neither is truthy, it returns the last expression
-//  It is commonly used to set default
-// Falsy Values for (||): 0, '', null, undefined
-
-console.log(true || 'Some string');
-console.log(false || 'Some String');
-
-console.log(book.translations.spanish);
-
-// If the Book whose data is retrieved does not have the spanish translation we set the default value as 'Not Translated in Spanish!'
-const spanishTranslation =
-  book.translations.spanish || 'Not Translated in Spanish!';
-spanishTranslation;
-
-// Problem with Logical OR (||)
-// The problem with using the logical OR (||) operator in this context is that it considers any falsy value (such as 0, false, null, undefined, NaN, or an empty string '') as equivalent to false
-// Therefore, if book.reviews.librarything.reviewsCount is 0, the logical OR operator will treat it as falsy and will return the fallback value 'No Data', even though 0 is a valid and meaningful value for reviewsCount
-console.log(book.reviews.librarything.reviewsCount);
-const countWrong = book.reviews.librarything.reviewsCount || 'No Data';
-countWrong;
-
-// C) Nullish Coalescing (??)
-// The nullish coalescing operator (??) addresses this issue by only considering null and undefined as nullish values
-// It's same as the (||) but here it only considers the null & undefined as the falsy values
-// Falsy Values for (??): null, undefined
-const count = book.reviews.librarything.reviewsCount ?? 'No Data';
-count;
+// B) Chain Multiple Array Methods
+// Create an Array of Books that have genre 'adventure' and include their Titles in 'adventureBooks'
+// The .includes() method in JavaScript is used to determine whether an array contains a certain element, returning true or false as appropriate, if true for a certain book then the filter method includes that book in the new array
+const adventureBooks = books
+  .filter((books) => books.genres.includes('adventure'))
+  .map((book) => book.title);
+console.log(adventureBooks);

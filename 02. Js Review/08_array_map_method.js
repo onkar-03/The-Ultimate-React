@@ -165,7 +165,7 @@ const books = getBooks();
 books;
 
 // 1. Map Method:
-// in JavaScript .map() method used to create a new array by applying a provided function to each element of an existing array
+// In JavaScript .map() method used to create a new array by applying a provided function to each element of an existing array
 // Map expects a callback function inside of it for which each of the element will be called and processed
 // It does not modify the original array but returns a new one
 
