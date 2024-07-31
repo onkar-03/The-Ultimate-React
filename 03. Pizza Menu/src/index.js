@@ -49,6 +49,7 @@ const pizzaData = [
 
 // App Component as a Function
 // A Component is a Function that starts with an Uppercase like this: 'App'
+// Also Components are basically Js Functions so we can write any Js code directly in teh Components as soon as the Component is initialized even if we dont write a JSX
 function App() {
   return (
     /* 
@@ -93,6 +94,22 @@ function Menu() {
 
 // Footer Component
 function Footer() {
+  // As we know Components are Js Functions and we can write any Js inside of it as soon as they are initialized even if we dont write a JSX
+  const hours = new Date().getHours();
+  // console.log(hours);
+
+  const openHour = 12;
+  const closeHour = 24;
+  const isOpen = hours >= openHour && hours <= closeHour;
+  console.log(isOpen);
+
+  // if (isOpen) {
+  //   alert("We're currently Open");
+  // } else {
+  //   alert("Sorry! We're currently Closed");
+  // }
+
+  // We can also use Js inside the JSX like this
   return <footer>{new Date().toLocaleTimeString()}We're currently Open</footer>;
 
   /*
