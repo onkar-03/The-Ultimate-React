@@ -51,13 +51,39 @@ const pizzaData = [
 // A Component is a Function that starts with an Uppercase like this: 'App'
 function App() {
   return (
+    /* 
+    What is JSX ?? 
+    - JSX is declarative syntax means describe how UI should look like based on current data
+    - Declarative means using JSX we tell React what to see on screen and not how to achieve it, Vanilla Js was imperative
+    - JSX Code: Extension of Js helps us write embedded  CSS, Js React Components into HTML
+    - This JSX is Later converted to React.createElement() Code using Babel by create react app / vite build setups
+    - We can write React without JSX but it makes the Code very hard to read etc...
+    */
+
     // To render multiple Components we need to Wrap them in a parent element such as:
     // 1. <div></div>
     // 2. <React.Fragment></React.Fragment>
     <div>
-      <h1>Hello, React!</h1>
       {/* Nested Pizza Component inside App Component */}
       {/* Nesting does not mean writing one component inside another never do it */}
+      {/* Header Component to Display Name  */}
+      <Header />
+      <Menu />
+      <Footer />
+    </div>
+  );
+}
+
+// Header Component
+function Header() {
+  return <h1>Fast React Pizza Co.</h1>;
+}
+
+// Menu Component
+function Menu() {
+  return (
+    <div>
+      <h2>Our Menu</h2>
       <Pizza />
       <Pizza />
       <Pizza />
@@ -65,16 +91,30 @@ function App() {
   );
 }
 
+// Footer Component
+function Footer() {
+  return <footer>{new Date().toLocaleTimeString()}We're currently Open</footer>;
+
+  /*
+If we dont use JSX we need to use the React.createElement() method and do the following to create the same component:
+
+1. type: Specify the type of the element. This can be a string representing a DOM tag (such as 'div', 'span', 'h1'), or a React component (either a class or function).
+
+2. props: Provide an object containing the properties or attributes to be passed to the element. This object can include standard HTML attributes (like className, id, style), event handlers (such as onClick, onChange), and custom properties.
+
+3. children: Include the children of the element. Children can be a single child, multiple children, or null. They can be other React elements, strings, numbers, or an array containing a mix of these types.
+*/
+  // return React.createElement('footer', null, 'We are currently helping');
+}
+
 // Pizza Component
 function Pizza() {
   return (
-    // To render multiple Components we need to Wrap them in a parent element such as:
-    // 1. <div></div>
-    // 2. <React.Fragment></React.Fragment>
+    // JSX Code: Js, CSS, React components all together in HTML Code
     <div>
       <img src='pizzas/spinaci.jpg' alt='Spinaci Pizza' />
       <h2>Pizza Spinaci</h2>
-      <p>Tomato, mozarella, spinach, and ricotta cheese</p>;
+      <p>Tomato, mozarella, spinach, and ricotta cheese</p>
     </div>
   );
 }
