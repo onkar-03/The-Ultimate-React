@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css';
 
 // Pizza Data
 const pizzaData = [
@@ -47,24 +48,46 @@ const pizzaData = [
   },
 ];
 
-// App Component as a Function
-// A Component is a Function that starts with an Uppercase like this: 'App'
-// Also Components are basically Js Functions so we can write any Js code directly in teh Components as soon as the Component is initialized even if we dont write a JSX
-function App() {
-  return (
-    /* 
-    What is JSX ?? 
+/* 
+--- What is a Component ??
+  - App Component as a Function
+  - A Component is a Function that starts with an Uppercase like this: 'App' 
+  - Also Components are basically Js Functions so we can write any Js code directly in the Components as soon as the Component is initialized even if we dont write a JSX
+*/
+
+/* 
+--- What is JSX ?? 
     - JSX is declarative syntax means describe how UI should look like based on current data
     - Declarative means using JSX we tell React what to see on screen and not how to achieve it, Vanilla Js was imperative
     - JSX Code: Extension of Js helps us write embedded  CSS, Js React Components into HTML
     - This JSX is Later converted to React.createElement() Code using Babel by create react app / vite build setups
     - We can write React without JSX but it makes the Code very hard to read etc...
-    */
+*/
 
+/*
+--- CSS in React !!
+  - Using Inline CSS in React we need to enter the Javascript mode and then create an Object to define styles
+  -  1. Internal CSS
+   We can declare a variable holding the style properties and then use it as an Object in JSX
+   EG: style = { color: 'red', fontSize: '42px', textTransform: 'uppercase' }
+       return <h1 style={style}>Fast React Pizza Co.</h1>;
+  - 2. Inline CSS 
+   We can directly declare an Object in JSX and then use it as an Object to write styles for React Component
+   EG: return <h1 style={{ color: 'red', fontSize: '42px', textTransform: 'uppercase' }}>Hello React!!</h1>
+   
+  - 3. External CSS
+   We can create a separate CSS file and import it in our React Component
+   First Import the External CSS File at the start: import './index.css';
+   Then we can use the className attribute to reference the CSS class in the JSX
+   EG: 
+*/
+
+function App() {
+  return (
     // To render multiple Components we need to Wrap them in a parent element such as:
     // 1. <div></div>
     // 2. <React.Fragment></React.Fragment>
-    <div>
+    <div className='container'>
       {/* Nested Pizza Component inside App Component */}
       {/* Nesting does not mean writing one component inside another never do it */}
       {/* Header Component to Display Name  */}
@@ -77,18 +100,22 @@ function App() {
 
 // Header Component
 function Header() {
-  return <h1>Fast React Pizza Co.</h1>;
+  return (
+    <header className='header'>
+      <h1>Fast React Pizza Co.</h1>;
+    </header>
+  );
 }
 
 // Menu Component
 function Menu() {
   return (
-    <div>
+    <main className='menu'>
       <h2>Our Menu</h2>
       <Pizza />
       <Pizza />
       <Pizza />
-    </div>
+    </main>
   );
 }
 
@@ -110,7 +137,11 @@ function Footer() {
   // }
 
   // We can also use Js inside the JSX like this
-  return <footer>{new Date().toLocaleTimeString()}We're currently Open</footer>;
+  return (
+    <footer className='footer'>
+      {new Date().toLocaleTimeString()}We're currently Open
+    </footer>
+  );
 
   /*
 If we dont use JSX we need to use the React.createElement() method and do the following to create the same component:
@@ -121,6 +152,8 @@ If we dont use JSX we need to use the React.createElement() method and do the fo
 
 3. children: Include the children of the element. Children can be a single child, multiple children, or null. They can be other React elements, strings, numbers, or an array containing a mix of these types.
 */
+
+  // CODE:
   // return React.createElement('footer', null, 'We are currently helping');
 }
 
@@ -130,7 +163,7 @@ function Pizza() {
     // JSX Code: Js, CSS, React components all together in HTML Code
     <div>
       <img src='pizzas/spinaci.jpg' alt='Spinaci Pizza' />
-      <h2>Pizza Spinaci</h2>
+      <h3>Pizza Spinaci</h3>
       <p>Tomato, mozarella, spinach, and ricotta cheese</p>
     </div>
   );
