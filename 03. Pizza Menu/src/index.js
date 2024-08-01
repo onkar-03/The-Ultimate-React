@@ -82,6 +82,24 @@ const pizzaData = [
    EG: 
 */
 
+/*
+ --- Props in React!!
+  - Props is how we pass in data between Components & in particular from parent to child components
+  - They are like a communication channel between Parent & Child components
+  - Props are like special variables that are passed from parent component to child component 
+  - They are used to pass data or configuration from parent component to child component that the child component can use
+  - Props are used to define how a component should look or behave
+  - Props are read only and cannot be changed by the Child components that receive them
+  - Props are passed in the component definition as a JavaScript object
+  - If we want to pass anything other than a String like Number, Arrays, Objects etc.. in Props we need to enter the Js mode using {}
+ */
+
+/* 
+ --- Receiving Props in Child Component:
+ - In the child component, you can access the props passed from the parent component using the props object
+ - For using the Props passed to CHild component u need to use the JS Mode in there {}
+ */
+
 function App() {
   return (
     // To render multiple Components we need to Wrap them in a parent element such as:
@@ -112,10 +130,55 @@ function Menu() {
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+
+      {/* 
+      - Using Props to send Data to Child Component
+      - This is a one way data flow from Parent to Child 
+      - For each Pizza we can use the same component and pass different values to render on the Page
+      */}
+      <Pizza
+        name='Pizza Spinaci'
+        ingredients='Tomato, mozarella, spinach, and ricotta cheese'
+        photoName='pizzas/spinaci.jpg'
+        // String
+        // price='$10.00'
+
+        // If we want to write a Number etc.. i.e not a String then we need to enter the Js Mode
+        price={10}
+      />
+
+      <Pizza
+        name='Pizza Funghi'
+        ingredients='Tomato, mozarella, mushrooms, and onion'
+        photoName='pizzas/funghi.jpg'
+        // String
+        // price='$15.00'
+
+        // If we want to write a Number we need to enter the Js Mode
+        price={15}
+      />
     </main>
+  );
+}
+
+// Pizza Component
+function Pizza(props) {
+  // console.log(props);
+  return (
+    // JSX Code: Js, CSS, React components all together in HTML Code
+    <div className='pizza'>
+      {/*
+      - Accepting props passed in the Menu (Parent) for Pizza Component (Child)
+      - For this we use an argument say 'props' 
+      - And to use the Props Object and its Properties we need to enter the Js Mode '{}' 
+      */}
+      <img src={props.photoName} alt={props.name} />
+      <div>
+        <h3>{props.name}</h3>
+        <p>{props.ingredients}</p>
+        <span>{props.price}</span>
+      </div>
+    </div>
   );
 }
 
@@ -155,18 +218,6 @@ If we dont use JSX we need to use the React.createElement() method and do the fo
 
   // CODE:
   // return React.createElement('footer', null, 'We are currently helping');
-}
-
-// Pizza Component
-function Pizza() {
-  return (
-    // JSX Code: Js, CSS, React components all together in HTML Code
-    <div>
-      <img src='pizzas/spinaci.jpg' alt='Spinaci Pizza' />
-      <h3>Pizza Spinaci</h3>
-      <p>Tomato, mozarella, spinach, and ricotta cheese</p>
-    </div>
-  );
 }
 
 // Root Element Creation using ReactDOM
