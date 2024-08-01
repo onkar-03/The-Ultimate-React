@@ -59,10 +59,17 @@ const pizzaData = [
 --- What is JSX ?? 
     - JSX is declarative syntax means describe how UI should look like based on current data
     - Declarative means using JSX we tell React what to see on screen and not how to achieve it, Vanilla Js was imperative
-    - JSX Code: Extension of Js helps us write embedded  CSS, Js React Components into HTML
+    - JSX Code: Extension of Js helps us write embedded  CSS, Javascript, React Components into HTML
     - This JSX is Later converted to React.createElement() Code using Babel by create react app / vite build setups
     - We can write React without JSX but it makes the Code very hard to read etc...
 */
+
+/*
+--- Writing JavaScript inside Components 
+- To write Js inside components is we use JSX we need to enter Js Mode using {} and write out Js code 
+- But as we know components are Js Functions and we can write any Js inside of it as soon as they are initialized even if we dont write a JSX without the {} 
+- Means if we are in JSX we need to write using Js mode via {} otherwise we can simply write out Js code as we normally do
+ */
 
 /*
 --- CSS in React !!
@@ -84,14 +91,14 @@ const pizzaData = [
 
 /*
  --- Props in React!!
-  - Props is how we pass in data between Components & in particular from parent to child components
+  - Props is how we pass in data between components & in particular from parent to child components
   - They are like a communication channel between Parent & Child components
-  - Props are like special variables that are passed from parent component to child component 
   - They are used to pass data or configuration from parent component to child component that the child component can use
   - Props are used to define how a component should look or behave
-  - Props are read only and cannot be changed by the Child components that receive them
+  - Props are read only (immutable) and cannot be changed by the Child components that receive them, they can only be updated by the parent component
   - Props are passed in the component definition as a JavaScript object
   - If we want to pass anything other than a String like Number, Arrays, Objects etc.. in Props we need to enter the Js mode using {}
+  - Anything can be passed as props
  */
 
 /* 
@@ -99,6 +106,38 @@ const pizzaData = [
  - In the child component, you can access the props passed from the parent component using the props object
  - For using the Props passed to CHild component u need to use the JS Mode in there {}
  */
+
+/*
+--- Structure in Component
+ - Data
+ - Logic: Includes the JSX & Javascript code we write in Components
+ - Appearance: Includes the CSS in JSX 
+*/
+
+/*
+ --- Data in Component 
+ - Data in Component contains the Props & State 
+ - Props are the Data that are passed to the child component by the parent
+ - Props are immutable, they are React's Strict Rules
+ - State is the internal data that is updated by components logic
+ - If we want to mutate the props we actually need the state
+*/
+
+/* 
+ --- Why are Props immutable?? 
+ - Props are immutable because changing props would result in changing Parent component creating side effects
+ - In React components / functions need to be pure in terms of props and state
+ - This allows React to make Apps Optimized, avoid bugs and make apps predictable 
+*/
+
+/* 
+ --- One Way Data Flow 
+ - In React the Data flows only from Parent to Child components only
+ - This makes Apps easy to understand and predict 
+ - Easy to Debug 
+ - Increases Efficiency
+ - In frameworks like Angular 2 way data flow is allowed, which makes them less efficient 
+*/
 
 function App() {
   return (
