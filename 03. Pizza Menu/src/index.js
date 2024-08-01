@@ -181,13 +181,13 @@ function Menu() {
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-
       {/* 
+      - Calling each pizza Component Manually one by one, which can be optimized using Rendering Lists i.e to render elements such as from an array say pizzaData that we have
       - Using Props to send Data to Child Component
       - This is a one way data flow from Parent to Child 
       - For each Pizza we can use the same component and pass different values to render on the Page
       */}
-      <Pizza
+      {/* <Pizza
         name='Pizza Spinaci'
         ingredients='Tomato, mozarella, spinach, and ricotta cheese'
         photoName='pizzas/spinaci.jpg'
@@ -197,7 +197,6 @@ function Menu() {
         // If we want to write a Number etc.. i.e not a String then we need to enter the Js Mode
         price={10}
       />
-
       <Pizza
         name='Pizza Funghi'
         ingredients='Tomato, mozarella, mushrooms, and onion'
@@ -207,7 +206,26 @@ function Menu() {
 
         // If we want to write a Number we need to enter the Js Mode
         price={15}
-      />
+      /> */}
+      {/* 
+      - Traversing the Whole pizzaData and rendering the Pizzas on the Page
+      - Using .map() for this
+      - As we need to write Js in JSX we need to enter the Js Mode
+      - 1. For each property name we can pass a props to the Pizza Component
+      - 2. We pass the whole Object into the specific component and then take out specific required properties inside the component itself
+      - Using foreach() wont work as inside the ul we need some JSX to return that can only happen if we have a new array possible using .map() and not forEach()
+      */}
+      <ul className='pizzas'>
+        {/* pizza refers to individual object here  */}
+        {pizzaData.map((pizza) => (
+          // Passing each property name one-by-one here in pizza component
+          // <Pizza name={pizza.name} photoName={pizza.photoName} />
+
+          // Passing entire Pizza Object to the Component
+          // We need to pass the key its use case we will know later, but React wants to identify each list item as unique for which it needs to have a key hence we pass the key
+          <Pizza pizzaObj={pizza} key={pizza.name} />
+        ))}
+      </ul>
     </main>
   );
 }
@@ -217,19 +235,20 @@ function Pizza(props) {
   // console.log(props);
   return (
     // JSX Code: Js, CSS, React components all together in HTML Code
-    <div className='pizza'>
+    <li className='pizza'>
       {/*
       - Accepting props passed in the Menu (Parent) for Pizza Component (Child)
       - For this we use an argument say 'props' 
-      - And to use the Props Object and its Properties we need to enter the Js Mode '{}' 
+      - And to use the Props Object and its Properties we need to enter the Js Mode '{}'
+      - If the passed value is a whole Object as props then we need to Access object properties using that object name  
       */}
-      <img src={props.photoName} alt={props.name} />
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
