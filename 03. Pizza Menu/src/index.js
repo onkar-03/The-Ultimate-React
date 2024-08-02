@@ -149,7 +149,7 @@ const pizzaData = [
  - A pice of JSX produces at the very final level a Javascript Expression using React.createElement () etc..
  - We can place other pieces of JSX inside {}
  - We can write JSX anywhere inside a component (in if/else, assign to variables, pass it into functions)
- - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short < >)
+ - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short <> </>)
 */
 
 /* 
@@ -228,6 +228,7 @@ function Menu() {
         // If we want to write a Number we need to enter the Js Mode
         price={15}
       /> */}
+
       {/*Conditional rendering of pizzas if and only if there are pizza data ready
        to be displayed else short circuit using the && operator */}
       {/* EG: {numPizzas > 0 && (
@@ -237,30 +238,37 @@ function Menu() {
 
       {/* Using Ternary operator to do the same as with the conditional operator */}
       {numPizzas > 0 ? (
-        <ul className='pizzas'>
-          {/* 
+        // Using React Fragment when we want to render more than 1 parent element in JSX
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven. all organic. all delicious.
+          </p>
+          <ul className='pizzas'>
+            {/* 
       - Traversing the Whole pizzaData and rendering the Pizzas on the Page
       - Using .map() for this
       - As we need to write Js in JSX we need to enter the Js Mode {}
       - We can do this in 2 ways
       - 1. For each pizza we can pass a Pizza component with necessary properties as props in that component
       EG: {pizzaData.map((pizza) => <Pizza name='pizza.name'/> etc ...
-
+      
       - 2. We pass the whole Object into the component as a prop and then take out  required properties inside the component itself
       EG: {pizzaData.map((pizza) => <Pizza pizzaObj={pizza} key={pizza.name}/>
       
       - Using foreach() wont work as inside the ul we need some JSX to return that can only happen if we have a new array possible using .map() and not forEach()
       */}
-          {/* pizza refers to individual object here  */}
-          {pizzaData.map((pizza) => (
-            // Passing each property name one-by-one here in pizza component
-            // <Pizza name={pizza.name} photoName={pizza.photoName} />
+            {/* pizza refers to individual object here  */}
+            {pizzaData.map((pizza) => (
+              // Passing each property name one-by-one here in pizza component
+              // <Pizza name={pizza.name} photoName={pizza.photoName} />
 
-            // Passing entire Pizza Object to the Component
-            // We need to pass the key its use case we will know later, but React wants to identify each list item as unique for which it needs to have a key hence we pass the key
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+              // Passing entire Pizza Object to the Component
+              // We need to pass the key its use case we will know later, but React wants to identify each list item as unique for which it needs to have a key hence we pass the key
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We are still working on our menu. Please come back later 😁</p>
       )}
@@ -275,11 +283,13 @@ function Pizza({ pizzaObj }) {
 
   // Multiple Returns are valid in a component
   // Also as we are in a component we can write any Js code we want
-  if (pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
 
   return (
     // JSX Code: Js, CSS, React components all together in HTML Code
-    <li className='pizza'>
+
+    // Conditionally rendering class names for sold-out pizzas
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''} `}>
       {/*
       - Accepting props passed in the Menu (Parent) for Pizza Component (Child)
       - For this we use an argument say 'props' 
@@ -290,7 +300,9 @@ function Pizza({ pizzaObj }) {
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
+
+        {/* // Conditionally rendering Text on page*/}
+        <span>{pizzaObj.soldOut ? 'SOLD OUT' : pizzaObj.price}</span>
       </div>
     </li>
   );
