@@ -321,10 +321,7 @@ function Footer() {
       {/* Using Ternary operator to do the same as with the conditional operator */}
       <div className='order'>
         {isOpen ? (
-          <p>
-            We're currently Open until {closeHour}:00. Come visit us or order
-            online!!
-          </p>
+          <Order closeHour={closeHour} />
         ) : (
           <p>
             We are happy to welcome u between {openHour}:00 - {closeHour}:00
@@ -347,6 +344,16 @@ If we dont use JSX we need to use the React.createElement() method and do the fo
 
   // CODE:
   // return React.createElement('footer', null, 'We are currently helping');
+}
+
+// Order Component
+function Order(props) {
+  return (
+    <p>
+      We're currently Open until {props.closeHour}:00. Come visit us or order
+      online!!
+    </p>
+  );
 }
 
 // Root Element Creation using ReactDOM
