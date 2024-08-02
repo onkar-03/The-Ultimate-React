@@ -152,6 +152,13 @@ const pizzaData = [
  - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short < >)
 */
 
+/* 
+--- Destructuring Props
+ - We can directly destructure the props passed in order to use them with the name and not as props.PropName
+ - But we need to use the same name as we used while passing data as props in the component while destructuring
+ - Destructure: function Name ({PropName}) {};
+*/
+
 /*
 --- Key Points
 - Inside a Component we can write any JavaScript we want 
@@ -262,12 +269,13 @@ function Menu() {
 }
 
 // Pizza Component
-function Pizza(props) {
+// Destructuring props passed using the same name as we used in while passing them in the component rendering time
+function Pizza({ pizzaObj }) {
   // console.log(props);
 
   // Multiple Returns are valid in a component
   // Also as we are in a component we can write any Js code we want
-  if (props.pizzaObj.soldOut) return null;
+  if (pizzaObj.soldOut) return null;
 
   return (
     // JSX Code: Js, CSS, React components all together in HTML Code
@@ -278,11 +286,11 @@ function Pizza(props) {
       - And to use the Props Object and its Properties we need to enter the Js Mode '{}'
       - If the passed value is a whole Object as props then we need to Access object properties using that object name  
       */}
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -321,7 +329,7 @@ function Footer() {
       {/* Using Ternary operator to do the same as with the conditional operator */}
       <div className='order'>
         {isOpen ? (
-          <Order closeHour={closeHour} />
+          <Order closeHour={closeHour} openHour={openHour} />
         ) : (
           <p>
             We are happy to welcome u between {openHour}:00 - {closeHour}:00
@@ -347,11 +355,12 @@ If we dont use JSX we need to use the React.createElement() method and do the fo
 }
 
 // Order Component
-function Order(props) {
+// Destructuring props passed using the same name as we used in while passing them in the component rendering time
+function Order({ closeHour, openHour }) {
   return (
     <p>
-      We're currently Open until {props.closeHour}:00. Come visit us or order
-      online!!
+      We're currently Open from {openHour}:00 am - {closeHour}:00 pm. Come visit
+      us or order online!!
     </p>
   );
 }
