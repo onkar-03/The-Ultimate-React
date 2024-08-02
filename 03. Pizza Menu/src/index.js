@@ -152,6 +152,15 @@ const pizzaData = [
  - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short < >)
 */
 
+/*
+--- Key Points
+- Inside a Component we can write any JavaScript we want 
+- Inside a JSX we can only write Js Expressions and not Statements 
+- Expressions is any valid unit of code that resolves to a value
+- A statement is an instruction that performs an action
+- Prefer using the Ternary Operator (condition ? true : false;) for conditional rendering
+*/
+
 function App() {
   return (
     // To render multiple Components we need to Wrap them in a parent element such as:
@@ -255,6 +264,11 @@ function Menu() {
 // Pizza Component
 function Pizza(props) {
   // console.log(props);
+
+  // Multiple Returns are valid in a component
+  // Also as we are in a component we can write any Js code we want
+  if (props.pizzaObj.soldOut) return null;
+
   return (
     // JSX Code: Js, CSS, React components all together in HTML Code
     <li className='pizza'>
