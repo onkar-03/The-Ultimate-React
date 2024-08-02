@@ -142,6 +142,7 @@ const pizzaData = [
 /*
  --- JSX Rules
  - JSX works essentially like HTML, but we can enter "JavaScript mode" by using {} (for text or attributes)
+ - We need to write something inside the {} in JSX mode that produces an output
  - We can place JavaScript expressions inside {}.
  - Examples: reference variables, create arrays or objects,[]. map(), ternary operator
  - Statements are not allowed (if/else, for, switch)
@@ -178,6 +179,7 @@ function Header() {
 
 // Menu Component
 function Menu() {
+  // const pizzas = [];
   const pizzas = pizzaData;
   const numPizzas = pizzas.length;
 
@@ -210,18 +212,27 @@ function Menu() {
         // If we want to write a Number we need to enter the Js Mode
         price={15}
       /> */}
-
       {/*Conditional rendering of pizzas if and only if there are pizza data ready
        to be displayed else short circuit using the && operator */}
-      {numPizzas > 0 && (
+      {/* EG: {numPizzas > 0 && (
+        <ul className='pizzas'>
+          {...} 
+      */}
+
+      {/* Using Ternary operator to do the same as with the conditional operator */}
+      {numPizzas > 0 ? (
         <ul className='pizzas'>
           {/* 
       - Traversing the Whole pizzaData and rendering the Pizzas on the Page
       - Using .map() for this
       - As we need to write Js in JSX we need to enter the Js Mode {}
       - We can do this in 2 ways
-      - 1. For each property name we can pass a props to the Pizza Component
-      - 2. We pass the whole Object into the specific component and then take out  required properties inside the component itself
+      - 1. For each pizza we can pass a Pizza component with necessary properties as props in that component
+      EG: {pizzaData.map((pizza) => <Pizza name='pizza.name'/> etc ...
+
+      - 2. We pass the whole Object into the component as a prop and then take out  required properties inside the component itself
+      EG: {pizzaData.map((pizza) => <Pizza pizzaObj={pizza} key={pizza.name}/>
+      
       - Using foreach() wont work as inside the ul we need some JSX to return that can only happen if we have a new array possible using .map() and not forEach()
       */}
           {/* pizza refers to individual object here  */}
@@ -234,6 +245,8 @@ function Menu() {
             <Pizza pizzaObj={pizza} key={pizza.name} />
           ))}
         </ul>
+      ) : (
+        <p>We are still working on our menu. Please come back later 😁</p>
       )}
     </main>
   );
@@ -281,12 +294,26 @@ function Footer() {
   // We can also use Js inside the JSX like this
   return (
     <footer className='footer'>
-      {/* Conditional Rendering in case the Shop is open then we display we are open, otherwise short circuit using the && operator */}
-      <div className='order'>
+      {/*Conditional rendering of pizzas if and only if there are pizza data ready
+       to be displayed else short circuit using the && operator */}
+      {/* EG:  <div className='order'>
         {isOpen && (
+          <p> </p>
+        )}
+        <button className='btn'>Order</button>
+      </div>
+      */}
+
+      {/* Using Ternary operator to do the same as with the conditional operator */}
+      <div className='order'>
+        {isOpen ? (
           <p>
-            We're currently Open until {closeHour}. Come visit us or order
+            We're currently Open until {closeHour}:00. Come visit us or order
             online!!
+          </p>
+        ) : (
+          <p>
+            We are happy to welcome u between {openHour}:00 - {closeHour}:00
           </p>
         )}
         <button className='btn'>Order</button>
