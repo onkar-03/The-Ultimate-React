@@ -62,6 +62,7 @@ const pizzaData = [
     - JSX Code: Extension of Js helps us write embedded  CSS, Javascript, React Components into HTML
     - This JSX is Later converted to React.createElement() Code using Babel by create react app / vite build setups
     - We can write React without JSX but it makes the Code very hard to read etc...
+    - JSX is what we return from a Component
 */
 
 /*
@@ -111,7 +112,7 @@ const pizzaData = [
 --- Structure in Component
  - Data
  - Logic: Includes the JSX & Javascript code we write in Components
- - Appearance: Includes the CSS in JSX 
+ - Appearance: Includes the HTML, CSS & Js code in JSX 
 */
 
 /*
@@ -157,6 +158,13 @@ const pizzaData = [
  - We can directly destructure the props passed in order to use them with the name and not as props.PropName
  - But we need to use the same name as we used while passing data as props in the component while destructuring
  - Destructure: function Name ({PropName}) {};
+*/
+
+/* 
+--- React Fragments
+ - If we want to have more than 1 parent element in our JSX we need to wrap them up in a <div> </div>
+ - We can also use React Fragments to do the same as using <div> </div> might fuck up our layout and design in many cases
+ - To use React Fragments we enclose teh multiple elements inside <> </> OR <React.Fragments></React.Fragments>
 */
 
 /*
@@ -246,6 +254,7 @@ function Menu() {
           </p>
           <ul className='pizzas'>
             {/* 
+      --- Rendering Lists
       - Traversing the Whole pizzaData and rendering the Pizzas on the Page
       - Using .map() for this
       - As we need to write Js in JSX we need to enter the Js Mode {}
