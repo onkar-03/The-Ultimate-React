@@ -141,11 +141,11 @@ const pizzaData = [
 
 /*
  --- JSX Rules
- - JSX works essentially like HTML, but we can enter "JavaScript mode" by using { } (for text or attributes)
+ - JSX works essentially like HTML, but we can enter "JavaScript mode" by using {} (for text or attributes)
  - We can place JavaScript expressions inside {}.
  - Examples: reference variables, create arrays or objects,[]. map(), ternary operator
  - Statements are not allowed (if/else, for, switch)
- - JSX produces at the very final level a Javascript Expression using React.createElement () etc..
+ - A pice of JSX produces at the very final level a Javascript Expression using React.createElement () etc..
  - We can place other pieces of JSX inside {}
  - We can write JSX anywhere inside a component (in if/else, assign to variables, pass it into functions)
  - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short < >)
@@ -178,6 +178,9 @@ function Header() {
 
 // Menu Component
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
+
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
@@ -207,25 +210,31 @@ function Menu() {
         // If we want to write a Number we need to enter the Js Mode
         price={15}
       /> */}
-      {/* 
+
+      {/*Conditional rendering of pizzas if and only if there are pizza data ready
+       to be displayed else short circuit using the && operator */}
+      {numPizzas > 0 && (
+        <ul className='pizzas'>
+          {/* 
       - Traversing the Whole pizzaData and rendering the Pizzas on the Page
       - Using .map() for this
-      - As we need to write Js in JSX we need to enter the Js Mode
+      - As we need to write Js in JSX we need to enter the Js Mode {}
+      - We can do this in 2 ways
       - 1. For each property name we can pass a props to the Pizza Component
-      - 2. We pass the whole Object into the specific component and then take out specific required properties inside the component itself
+      - 2. We pass the whole Object into the specific component and then take out  required properties inside the component itself
       - Using foreach() wont work as inside the ul we need some JSX to return that can only happen if we have a new array possible using .map() and not forEach()
       */}
-      <ul className='pizzas'>
-        {/* pizza refers to individual object here  */}
-        {pizzaData.map((pizza) => (
-          // Passing each property name one-by-one here in pizza component
-          // <Pizza name={pizza.name} photoName={pizza.photoName} />
+          {/* pizza refers to individual object here  */}
+          {pizzaData.map((pizza) => (
+            // Passing each property name one-by-one here in pizza component
+            // <Pizza name={pizza.name} photoName={pizza.photoName} />
 
-          // Passing entire Pizza Object to the Component
-          // We need to pass the key its use case we will know later, but React wants to identify each list item as unique for which it needs to have a key hence we pass the key
-          <Pizza pizzaObj={pizza} key={pizza.name} />
-        ))}
-      </ul>
+            // Passing entire Pizza Object to the Component
+            // We need to pass the key its use case we will know later, but React wants to identify each list item as unique for which it needs to have a key hence we pass the key
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
@@ -255,12 +264,12 @@ function Pizza(props) {
 // Footer Component
 function Footer() {
   // As we know Components are Js Functions and we can write any Js inside of it as soon as they are initialized even if we dont write a JSX
-  const hours = new Date().getHours();
+  const hour = new Date().getHours();
   // console.log(hours);
 
   const openHour = 12;
-  const closeHour = 24;
-  const isOpen = hours >= openHour && hours <= closeHour;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
 
   // if (isOpen) {
@@ -272,7 +281,16 @@ function Footer() {
   // We can also use Js inside the JSX like this
   return (
     <footer className='footer'>
-      {new Date().toLocaleTimeString()}We're currently Open
+      {/* Conditional Rendering in case the Shop is open then we display we are open, otherwise short circuit using the && operator */}
+      <div className='order'>
+        {isOpen && (
+          <p>
+            We're currently Open until {closeHour}. Come visit us or order
+            online!!
+          </p>
+        )}
+        <button className='btn'>Order</button>
+      </div>
     </footer>
   );
 
