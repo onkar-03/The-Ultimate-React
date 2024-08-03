@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const messages = [
   'Learn React ⚛️',
   'Apply for jobs 💼',
@@ -28,20 +30,31 @@ const messages = [
  --- What does state do ??
  - Updates the Components View
  - Persist local variables between renders & re-renders
- */
+*/
+
+/*
+ --- Using State in React
+ 1. Define a State Variable
+ 2. Use the State variable mainly in JSX
+ 3. Update the State in Event Handlers
+*/
 
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
-  // Current Step
-  let step = 1;
+  // Defining State variable
+  // It is a function & it takes an argument which is the default value of the State
+  // As we initially want the step to be 1 hence 1
+  // useState returns the default value and a function to update the value, hence we destructure it
+  const [step, setStep] = useState(1);
 
   // Event Handler Functions
+  // As soon as the event handler is called & the setStep is updated, then React re-renders the Component
   function handlePrevious() {
-    step--;
+    if (step > 1) setStep(step - 1);
   }
   function handleNext() {
-    step++;
+    if (step < 3) setStep(step + 1);
   }
 
   return (
@@ -49,9 +62,10 @@ export default function App() {
       <div className='steps'>
         <div className='numbers'>
           {/* Conditional rendering of active class based on current step */}
-          <div className={`${step >= 1 ? 'active' : ''}`}>1</div>
-          <div className={`${step >= 2 ? 'active' : ''}`}>2</div>
-          <div className={`${step >= 3 ? 'active' : ''}`}>3</div>
+          {/* Using the 'step' state variable */}
+          <div className={step >= 1 ? 'active' : ''}>1</div>
+          <div className={step >= 2 ? 'active' : ''}>2</div>
+          <div className={step >= 3 ? 'active' : ''}>3</div>
         </div>
 
         <p className='message'>
