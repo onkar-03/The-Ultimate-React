@@ -49,122 +49,157 @@ const pizzaData = [
 ];
 
 /* 
---- What is a Component ??
-  - App Component as a Function
-  - A Component is a Function that starts with an Uppercase like this: 'App' 
-  - Also Components are basically Js Functions so we can write any Js code directly in the Components as soon as the Component is initialized even if we dont write a JSX
+--- What is a Component in React? ---
+
+  - A React Component is essentially a JavaScript function or class that returns JSX (or React elements).
+  - Components are named with an uppercase first letter, such as `App`. This convention differentiates them from regular HTML elements and allows React to treat them as custom components.
+  - Components can be written as functions (Functional Components) or classes (Class Components). With the introduction of React Hooks, Functional Components are now commonly used for most cases.
+  - As JavaScript functions, components can include any JavaScript code, such as logic, calculations, or state management, and they do not necessarily need to return JSX.
+  - While components typically return JSX to describe what the UI should look like, they can also return `null` or other values based on logic
 */
 
 /* 
---- What is JSX ?? 
-    - JSX is declarative syntax means describe how UI should look like based on current data
-    - Declarative means using JSX we tell React what to see on screen and not how to achieve it, Vanilla Js was imperative
-    - JSX Code: Extension of Js helps us write embedded  CSS, Javascript, React Components into HTML
-    - This JSX is Later converted to React.createElement() Code using Babel by create react app / vite build setups
-    - We can write React without JSX but it makes the Code very hard to read etc...
-    - JSX is what we return from a Component
+--- What is JSX? ---
+
+  - JSX (JavaScript XML) is a declarative syntax extension for JavaScript that allows you to write HTML-like code within JavaScript.
+  - Declarative syntax means JSX describes what the UI should look like based on the current data, rather than specifying the steps to achieve that UI. This contrasts with imperative programming, where you manually dictate each step.
+  - JSX enables you to embed HTML, CSS, and JavaScript directly within your components, making it easier to write and understand UI code.
+  - JSX code is not valid JavaScript by itself. It needs to be transformed into standard JavaScript using a compiler like Babel. For example, JSX is converted into `React.createElement()` calls, which create the corresponding React elements.
+  - While it is possible to write React components without JSX by using `React.createElement()` directly, JSX provides a more readable and expressive way to define the component structure.
+  - JSX is used within React components to define what the component should render.
 */
-
-/*
---- Writing JavaScript inside Components 
-- To write Js inside components is we use JSX we need to enter Js Mode using {} and write out Js code 
-- But as we know components are Js Functions and we can write any Js inside of it as soon as they are initialized even if we dont write a JSX without the {} 
-- Means if we are in JSX we need to write using Js mode via {} otherwise we can simply write out Js code as we normally do
- */
-
-/*
---- CSS in React !!
-  - Using Inline CSS in React we need to enter the Javascript mode and then create an Object to define styles
-  -  1. Internal CSS
-   We can declare a variable holding the style properties and then use it as an Object in JSX
-   EG: style = { color: 'red', fontSize: '42px', textTransform: 'uppercase' }
-       return <h1 style={style}>Fast React Pizza Co.</h1>;
-  - 2. Inline CSS 
-   We can directly declare an Object in JSX and then use it as an Object to write styles for React Component
-   EG: return <h1 style={{ color: 'red', fontSize: '42px', textTransform: 'uppercase' }}>Hello React!!</h1>
-   
-  - 3. External CSS
-   We can create a separate CSS file and import it in our React Component
-   First Import the External CSS File at the start: import './index.css';
-   Then we can use the className attribute to reference the CSS class in the JSX
-   EG: 
-*/
-
-/*
- --- Props in React!!
-  - Props is how we pass in data between components & in particular from parent to child components
-  - They are like a communication channel between Parent & Child components
-  - They are used to pass data or configuration from parent component to child component that the child component can use
-  - Props are used to define how a component should look or behave
-  - Props are read only (immutable) and cannot be changed by the Child components that receive them, they can only be updated by the parent component
-  - Props are passed in the component definition as a JavaScript object
-  - If we want to pass anything other than a String like Number, Arrays, Objects etc.. in Props we need to enter the Js mode using {}
-  - Anything can be passed as props
- */
 
 /* 
- --- Receiving Props in Child Component:
- - In the child component, you can access the props passed from the parent component using the props object
- - For using the Props passed to CHild component u need to use the JS Mode in there {}
- */
+--- Writing JavaScript Inside Components ---
+
+  - In React components, you can write JavaScript code within JSX by using curly braces `{}`. This allows you to embed JavaScript expressions directly into the JSX.
+  - JavaScript expressions inside curly braces `{}` can include variables, functions, calculations, and other expressions that you want to include in the rendered output.
+  - For example, to display a variable's value in JSX, you would use `{variableName}` within the JSX code.
+*/
+
+/* 
+--- CSS in React ---
+
+  - **Inline CSS**:
+    To use inline CSS in React, you enter JavaScript mode using curly braces `{}` and define styles as a JavaScript object. 
+    This object can then be used in the `style` attribute of an element. The style properties should be camel-cased.
+    
+    Example:
+    import React from 'react';
+
+    function App() {
+      const style = { color: 'red', fontSize: '42px', textTransform: 'uppercase' };
+
+      return <h1 style={style}>Fast React Pizza Co.</h1>;
+    }
+
+  - **Internal CSS**:
+    You can define styles as a JavaScript object within the component and use it directly in JSX.
+    This approach is useful for small or component-specific styles that do not need to be reused.
+    
+    Example:
+    import React from 'react';
+
+    function App() {
+      return (
+        <h1 style={{ color: 'red', fontSize: '42px', textTransform: 'uppercase' }}>
+          Hello React!!
+        </h1>
+      );
+    }
+
+
+  - **External CSS**:
+    To use external CSS, create a separate `.css` file with your styles and import it into your React component. You then use the `className` attribute to apply the styles to elements. This method is ideal for larger projects or shared styles.
+    
+    Example:
+    --- index.css
+    .heading {
+      color: red;
+      font-size: 42px;
+      text-transform: uppercase;
+    }
+
+    import './index.css';  // Import the external CSS file
+    function App() {
+      return <h1 className="heading">Fast React Pizza Co.</h1>;
+    }
+
+  Summary:
+  - **Inline CSS**: Use JavaScript objects with camel-cased properties directly in the `style` attribute.
+  - **Internal CSS**: Define style objects within the component and apply them inline.
+  - **External CSS**: Create and import separate CSS files and use `className` to apply styles.
+
+  Each method has its use cases, and the choice depends on factors such as the scope of styles, maintainability, and project size.
+*/
+
+/* 
+--- Props in React ---
+
+  - **Props** (short for properties) are a mechanism for passing data and configuration from parent components to child components in React.
+  - They act as a communication channel between parent and child components, allowing you to pass information down the component tree.
+  - Props are used to define how a component should look or behave based on the data or configuration provided by the parent.
+  - Props are **read-only** and **immutable**, meaning they cannot be modified by the child components that receive them. Any changes to props must be made by the parent component.
+  - Props are passed to a component as a JavaScript object and can include various types of data, such as strings, numbers, arrays, objects, and functions.
+  - When passing non-string values (like numbers, arrays, or objects) in props, you need to use curly braces `{}` to enter JavaScript mode.
+*/
+
+/* 
+--- Receiving Props in Child Component ---
+
+  - Accessing Props: In a child component, you access the props passed from the parent component using the `props` object. This object contains all the properties passed to the child component.
+
+  - JSX Mode: To use the props within JSX, you need to enter JavaScript mode by using curly braces `{}`. This allows you to embed the props directly within the JSX code.
+*/
 
 /*
 --- Structure in Component
- - Data
- - Logic: Includes the JSX & Javascript code we write in Components
- - Appearance: Includes the HTML, CSS & Js code in JSX 
+- Data: The data held within a component, including props and state.
+- Logic: The combination of JSX and JavaScript code written within components to handle the component's functionality.
+- Appearance: The HTML, CSS, and JavaScript code that defines the visual presentation and structure of the component in JSX.
 */
 
 /*
- --- Data in Component 
- - Data in Component contains the Props & State 
- - Props are the Data that are passed to the child component by the parent
- - Props are immutable, they are React's Strict Rules
- - State is the internal data that is updated by components logic
- - If we want to mutate the props we actually need the state
-*/
-
-/* 
- --- Why are Props immutable?? 
- - Props are immutable because changing props would result in changing Parent component creating side effects
- - In React components / functions need to be pure in terms of props and state
- - This allows React to make Apps Optimized, avoid bugs and make apps predictable 
-*/
-
-/* 
- --- One Way Data Flow 
- - In React the Data flows only from Parent to Child components only
- - This makes Apps easy to understand and predict 
- - Easy to Debug 
- - Increases Efficiency
- - In frameworks like Angular 2 way data flow is allowed, which makes them less efficient 
+--- Data in Component
+- Data in Component: Includes both props and state.
+- Props: Data passed to a child component from a parent component.
+- State: Internal data that a component manages and updates through its logic.
+- Mutability: Props are immutable, meaning they cannot be changed by the child component; state is used for mutable data.
 */
 
 /*
- --- JSX Rules
- - JSX works essentially like HTML, but we can enter "JavaScript mode" by using {} (for text or attributes)
- - We need to write something inside the {} in JSX mode that produces an output
- - We can place JavaScript expressions inside {}.
- - Examples: reference variables, create arrays or objects,[]. map(), ternary operator
- - Statements are not allowed (if/else, for, switch)
- - A pice of JSX produces at the very final level a Javascript Expression using React.createElement () etc..
- - We can place other pieces of JSX inside {}
- - We can write JSX anywhere inside a component (in if/else, assign to variables, pass it into functions)
- - A piece of JSX can only have one root element. If you need more, use <React.Fragment> (or the short <> </>)
+--- Why are Props Immutable?
+- Immutability: Props are immutable to prevent unintended side effects from changing parent component data.
+- Component Purity: Ensures components are pure and predictable, leading to better optimization and fewer bugs.
+- App Consistency: Immutability helps maintain predictable data flow and component behavior.
 */
 
-/* 
+/*
+--- One Way Data Flow
+- Data Flow: In React, data flows exclusively from parent components to child components.
+- Advantages: This approach makes the application easier to understand, debug, and maintain.
+- Efficiency: One-way data flow contributes to the efficiency and simplicity of React applications compared to frameworks with two-way data binding.
+*/
+
+/*
+--- JSX Rules
+- JSX Syntax: JSX is similar to HTML but allows embedding JavaScript expressions using curly braces `{}`.
+- Expressions: JavaScript expressions within `{}` can include variables, arrays, objects, and functions.
+- Statements: Statements like `if/else`, `for`, and `switch` are not permitted directly within JSX.
+- Single Root Element: Each JSX element must have a single root element. Use `<React.Fragment>` or the shorthand `<> </>` for multiple elements.
+*/
+
+/*
 --- Destructuring Props
- - We can directly destructure the props passed in order to use them with the name and not as props.PropName
- - But we need to use the same name as we used while passing data as props in the component while destructuring
- - Destructure: function Name ({PropName}) {};
+- Destructuring: Props can be destructured in the function parameters for easier access.
+- Naming: Ensure that the destructured variable names match the names used when passing the props to the component.
 */
 
-/* 
+/*
 --- React Fragments
- - If we want to have more than 1 parent element in our JSX we need to wrap them up in a <div> </div>
- - We can also use React Fragments to do the same as using <div> </div> might fuck up our layout and design in many cases
- - To use React Fragments we enclose teh multiple elements inside <> </> OR <React.Fragments></React.Fragments>
+- Purpose: Use React Fragments to group multiple elements without adding extra nodes to the DOM.
+- Syntax: Enclose multiple elements within `<> </>` or `<React.Fragment></React.Fragment>`.
+- Benefits: Avoids layout issues and extra wrapper elements that can affect styling.
 */
 
 /*

@@ -6,47 +6,90 @@ const messages = [
   'Invest your new income 🤑',
 ];
 
-/*
- --- Event Listeners in React
- - In React, we use a more declarative approach so we do not manually select Dom elements and so therefore we do also not use add event listener
- - We do something very similar to the HTML inline event listeners. So basically we will directly listen for the event right on the element where they will happen.
- - In React, event listeners are written as attributes in JSX
- - These attributes have a prefix 'on' and are camel-cased unlike HTML, and their values are callback functions that will be called when the event occurs inside {} as we need to write in Js mode inside JSX
- - We generally write these event handlers Functions separately inside the JSX and then call them in the Event Handlers
+/* 
+ --- Event Listeners in React ---
+ 
+ - In React, we use a declarative approach to handle events, so we do not manually select DOM elements or use `addEventListener`.
+ - Instead, we handle events directly in the JSX, similar to how we use inline event listeners in HTML.
+ - Event listeners in React are specified as attributes in JSX.
+ - These attributes use the prefix `on` and are camel-cased (e.g., `onClick`, `onChange`), unlike HTML where attributes are lowercase and hyphenated (e.g., `onclick`, `onchange`).
+ - The values of these attributes are callback functions that are called when the event occurs. These callback functions are specified inside curly braces `{}` to indicate that they are JavaScript expressions.
+ - Event handler functions are often defined separately and then referenced in the JSX.
+
+ Example:
+ import React, { useState } from 'react';
+
+ function ExampleComponent() {
+   const [count, setCount] = useState(0);
+
+   --- Event handler function
+   const handleClick = () => {
+     setCount(count + 1);
+   };
+
+   return (
+     <div>
+       <p>You clicked {count} times</p>
+       <button onClick={handleClick}>Click me</button>
+     </div>
+   );
+ }
 */
 
 /* 
- --- State in React
- - State is the most important concept in React
- - State refers to the general condition in which a component is
- - We have already learned how to pass data to a component using props
- - State is components own data that the component holds overtime, necessary for information that it needs to hold throughout the app's cycle
- - State: Components Memory
- - Piece of State: a State variable in a component
- - Updating component state triggers React to re-render the component
+ --- State in React ---
+ 
+ - State is one of the most important concepts in React.
+ - State refers to the general condition or situation in which a component exists.
+ - While props are used to pass data to a component from a parent component, state is data that is managed within the component itself.
+ - State represents the component's own data that changes over time and is necessary for the component to function properly throughout its lifecycle.
+ - State can be thought of as the component's memory.
+ - A piece of state refers to an individual state variable within a component.
+ - Updating the state of a component triggers React to re-render that component, ensuring the UI is in sync with the current state.
+ 
+ Summary:
+ - State is managed within the component and changes over time.
+ - Props are used to pass data from parent to child components, while state is local to the component.
+ - State updates trigger re-renders, allowing React to update the UI to reflect the latest state.
 */
 
 /*
- --- What does state do ??
+ --- What does state do ?? ---
  - Updates the Components View
  - Persist local variables between renders & re-renders
 */
 
 /*
- --- Using State in React
+ --- Using State in React ---
  1. Define a State Variable
  2. Use the State variable mainly in JSX
  3. Update the State in Event Handlers
 */
 
 /* 
- --- useState() in React
- - The useState is a React Hook, all React hooks have a prefix 'use'
- - It is a function & it takes an argument which is the default value of the State
- - useState returns the Current State (default value) and a Setter Function to update the value
- - The Setter Function updates the Current State value without mutating it. This means that when you call Setter on current state, React does not directly modify the current state but instead creates a new state value and triggers a re-render with this new state
- - We we use the setter function inside the event handler, it updates the Current State, React re-renders the component & eventually update the DOM Tree
- - Always use the Setter Function only to Update the State and Rerender React Components, never manually update the state
+ --- useState() in React ---
+ 
+ - The `useState` is a React Hook, and all React hooks have a prefix 'use'.
+ - It is a function that takes one argument: the initial state value.
+ - `useState` returns an array with two elements: the current state (initialized to the provided default value) and a setter function to update the state.
+ - The setter function updates the current state value without mutating it.
+ - Always use the setter function to update the state and trigger re-renders of React components. Never manually update the state variable directly.
+ - State updates are scheduled, meaning the new state value will be available on the next render.
+ 
+ Example:
+ const [count, setCount] = useState(0);
+ - `count` is the current state value, initially set to 0.
+ - `setCount` is the setter function used to update the `count` state.
+ - Calling `setCount(newCount)` will update the `count` state and trigger a re-render with the new state.
+*/
+
+/*
+ --- Mechanics of State in React ---
+ - The Setter Function updates the current state value without mutating it.
+ - When an event occurs, the event handler is called, which uses the Setter Function to update the state.
+ - React does not directly modify the current state; instead, it creates a new state value and triggers a re-render with this new state.
+ - This means React calls the component function again (e.g., `App()`) to render the new state.
+ - When we use the Setter Function inside the event handler, it updates the current state, State update triggers a re-render causing React to re-render the entire component with the updated state, eventually updating the DOM tree.
 */
 
 // Root Component 'App'
