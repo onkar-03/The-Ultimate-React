@@ -39,17 +39,26 @@ const messages = [
  3. Update the State in Event Handlers
 */
 
+/* 
+ --- useState() in React
+ - The useState is a React Hook, all React hooks have a prefix 'use'
+ - It is a function & it takes an argument which is the default value of the State
+ - useState returns the Current State (default value) and a Setter Function to update the value
+ - The Setter Function updates the Current State value without mutating it. This means that when you call Setter on current state, React does not directly modify the current state but instead creates a new state value and triggers a re-render with this new state
+ - We we use the setter function inside the event handler, it updates the Current State, React re-renders the component & eventually update the DOM Tree
+ - Always use the Setter Function only to Update the State and Rerender React Components, never manually update the state
+*/
+
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
   // Defining State variable
-  // It is a function & it takes an argument which is the default value of the State
-  // As we initially want the step to be 1 hence 1
-  // useState returns the default value and a function to update the value, hence we destructure it
+  // As we initially want the step to be 1 hence 1 is passed as argument
+  // We destructure the returned values and store it in step var and setStep function
   const [step, setStep] = useState(1);
 
   // Event Handler Functions
-  // As soon as the event handler is called & the setStep is updated, then React re-renders the Component
+  // Use & Update State: As soon as the event occurs the event handler is called & the step is updated using setter function, then React re-renders the Component
   function handlePrevious() {
     if (step > 1) setStep(step - 1);
   }
@@ -75,8 +84,11 @@ export default function App() {
         </p>
 
         <div className='buttons'>
-          {/* Used inline CSS for buttons */}
-          {/* Adding Event Listeners in JSX */}
+          {/* 
+          - Used inline CSS for buttons
+          - Adding Event Listeners in JSX
+          - Called the Event Handlers when an Event occurs
+          */}
           <button
             style={{ backgroundColor: '#7950f2', color: '#fff' }}
             onClick={handlePrevious}
