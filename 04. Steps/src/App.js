@@ -95,10 +95,14 @@ const messages = [
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
-  // Defining State variable
+  // Defining State for Steps
   // As we initially want the step to be 1 hence 1 is passed as argument
   // We destructure the returned values and store it in step var and setStep function
   const [step, setStep] = useState(1);
+
+  // Defining State for Open & CLose Tab
+  // As we initially want the tab to be opened hence we set default value to true
+  const [isOpen, setIsOpen] = useState(true);
 
   // Event Handler Functions
   // Use & Update State: As soon as the event occurs the event handler is called & the step is updated using setter function, then React re-renders the Component
@@ -109,43 +113,58 @@ export default function App() {
     if (step < 3) setStep(step + 1);
   }
 
+  // Update isOpen state when an Event Occurs
+  function handlerOpen() {
+    // When tab is clicked, we toggle the isOpen state
+    setIsOpen(!isOpen);
+  }
+
   return (
     <>
-      <div className='steps'>
-        <div className='numbers'>
-          {/* Conditional rendering of active class based on current step */}
-          {/* Using the 'step' state variable */}
-          <div className={step >= 1 ? 'active' : ''}>1</div>
-          <div className={step >= 2 ? 'active' : ''}>2</div>
-          <div className={step >= 3 ? 'active' : ''}>3</div>
-        </div>
+      <button className='close' onClick={handlerOpen}>
+        &times;
+      </button>
+      {/*
+      - Using defined state in JSX
+      - If isOpen is True only then teh steps tab renders 
+      */}
+      {isOpen && (
+        <div className='steps'>
+          <div className='numbers'>
+            {/* Conditional rendering of active class based on current step */}
+            {/* Using the 'step' state variable */}
+            <div className={step >= 1 ? 'active' : ''}>1</div>
+            <div className={step >= 2 ? 'active' : ''}>2</div>
+            <div className={step >= 3 ? 'active' : ''}>3</div>
+          </div>
 
-        <p className='message'>
-          {/* Displaying the step & message of the current Step */}
-          {/* As the Array indexing starts from 0 hence we did step - 1 */}
-          Step {step}: {messages[step - 1]}
-        </p>
+          <p className='message'>
+            {/* Displaying the step & message of the current Step */}
+            {/* As the Array indexing starts from 0 hence we did step - 1 */}
+            Step {step}: {messages[step - 1]}
+          </p>
 
-        <div className='buttons'>
-          {/* 
+          <div className='buttons'>
+            {/* 
           - Used inline CSS for buttons
           - Adding Event Listeners in JSX
           - Called the Event Handlers when an Event occurs
           */}
-          <button
-            style={{ backgroundColor: '#7950f2', color: '#fff' }}
-            onClick={handlePrevious}
-          >
-            Prev
-          </button>
-          <button
-            style={{ backgroundColor: '#7950f2', color: '#fff' }}
-            onClick={handleNext}
-          >
-            Next
-          </button>
+            <button
+              style={{ backgroundColor: '#7950f2', color: '#fff' }}
+              onClick={handlePrevious}
+            >
+              Prev
+            </button>
+            <button
+              style={{ backgroundColor: '#7950f2', color: '#fff' }}
+              onClick={handleNext}
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
