@@ -92,6 +92,14 @@ const messages = [
  - When we use the Setter Function inside the event handler, it updates the current state, State update triggers a re-render causing React to re-render the entire component with the updated state, eventually updating the DOM tree.
 */
 
+/* 
+ --- Updating State base on Current State
+ - Whenever we update eth State base on teh current value of the State: 
+ - We should not update the state variable directly in the setter function 
+ - We should always pass a callback function in the setter function that takes in the state as its argument and then update it there
+ - However when we don't update the state based on the current state we can directly pass the value and there is no need of the callback function
+*/
+
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
@@ -102,21 +110,23 @@ export default function App() {
 
   // Defining State for Open & CLose Tab
   // As we initially want the tab to be opened hence we set default value to true
+  // Updating state using the callback function
   const [isOpen, setIsOpen] = useState(true);
 
   // Event Handler Functions
   // Use & Update State: As soon as the event occurs the event handler is called & the step is updated using setter function, then React re-renders the Component
+
   function handlePrevious() {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) setStep((step) => step - 1);
   }
   function handleNext() {
-    if (step < 3) setStep(step + 1);
+    if (step < 3) setStep((step) => step + 1);
   }
 
   // Update isOpen state when an Event Occurs
   function handlerOpen() {
     // When tab is clicked, we toggle the isOpen state
-    setIsOpen(!isOpen);
+    setIsOpen((open) => !open);
   }
 
   return (
