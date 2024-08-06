@@ -100,6 +100,50 @@ const messages = [
  - However when we don't update the state based on the current state we can directly pass the value and there is no need of the callback function
 */
 
+/*
+--- State & State Guidelines
+
+Key Concepts
+
+- Component-Specific State:
+  - Each component manages its own state.
+  - Multiple instances of the same component operate independently.
+  - Example: If you have three counter components, each maintains its own score independently.
+
+- State Isolation:
+  - Changing the state in one component does not affect other components.
+  - Example: Incrementing the score in one counter component will not change the score in other counter components.
+
+- UI as a Function of State:
+  - The entire UI is a representation of all the current states in all components.
+  - React applications are fundamentally about changing state over time and displaying that state correctly.
+
+- Declarative Approach:
+  - Instead of explicit DOM manipulations, view the UI as a reflection of data changing over time.
+  - Describe the UI using state, event handlers, and JSX; React handles the rest.
+
+--- Practical Guidelines for Using State
+
+- Creating State Variables:
+  - Create a new state variable for any data a component needs to track over time.
+  - Use state for variables that need to change at some point in the future.
+  - Example: For a modal window that can be open or closed, create a state variable isOpen.
+
+- Dynamic Components:
+  - Whenever you want something in a component to be dynamic, create a piece of state related to it.
+  - Example: For a modal window, the state variable isOpen determines whether the modal is displayed or hidden.
+
+- Reflecting State in the UI:
+  - Imagine the component's view as a reflection of state changing over time.
+  - Update the state to change the way a component looks or the data it displays.
+
+- Avoid Overusing State:
+  - Do not use state for every single variable in a component.
+  - Use state only for variables that should trigger a rerender.
+  - For variables that do not need to trigger a rerender, use regular variables defined with const.
+*/
+
+
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
