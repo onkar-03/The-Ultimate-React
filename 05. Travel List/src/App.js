@@ -28,8 +28,32 @@ const initialItems = [
 
  3. Listen for Change Event
   - EG: <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-
 */
+
+/* 
+ --- Understanding State and Props in React --- 
+
+ --- What's the difference between state and props?
+
+ --- State:
+  - Internal data that is owned by the component in which it is declared.
+  - Can be thought of as the component's memory because it can hold data over time, across multiple rerenders.
+  - State can be updated by the component itself, which will cause the component to be rerendered by React.
+  - We use this mechanism of state to make components interactive.
+
+ --- Props:
+  - External data that is owned by the parent component.
+  - Can be thought of as function parameters, a communication channel between parent and child components where parents can pass data into children.
+  - Props are read-only and cannot be modified by the component that is receiving them.
+  - When the child component receives new updated props, it will cause the component to rerender to keep in sync with the state it received as a prop.
+  - Props are used to give the parent component the ability to configure their child components, essentially seen as settings in child components which the parent component can define as they wish.
+
+ --- Connection between State and Props:
+ - Whenever a piece of state is passed as a prop, when that state updates, both the component owning the state and the component receiving the state as a prop are rerendered.
+
+In summary, while state is used by developers to make components interactive, props are used to configure child components by passing data from parent to child.
+*/
+
 export default function App() {
   return (
     <div className='app'>
