@@ -19,10 +19,34 @@ function Logo() {
 }
 
 function Form() {
+  // Event handlers
+  function handleSubmit(e) {
+    // To disable the reloading of page on items addition
+    e.preventDefault();
+  }
+
   return (
-    <div className='add-form'>
+    // Rendering Form and its components
+    // Listening for Submit event on the Form
+    // The submit event happens when we click the add button / press Enter on keyboard
+    // The handleSubmit takes the current Event and uses it in teh event handler
+    <form className='add-form' onSubmit={handleSubmit}>
       <h3>What do you need for your 🥳 trip ??</h3>
-    </div>
+      <select name='quantity'>
+        {/* 
+        - Creating 20 options using Array.from() and .map()
+        - Each number is rendered as an option value inside the select element
+        - Whenever we map over a list to render it we need to give a key value to each value of the list to identify them as unique items
+        */}
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          <option value={num} key={num}>
+            {num}
+          </option>
+        ))}
+      </select>
+      <input type='text' placeholder='Item...' />
+      <button type='submit'>Add</button>
+    </form>
   );
 }
 
@@ -34,6 +58,7 @@ function PackingList() {
       - Rendering List using Map method for the whole items array 
       - Each item is passed as a prop to Item component
       - Destructured in the item component and used directly 
+      - Whenever we map over a list to render it we need to give a key value to each value of the list to identify them as unique items
       */}
         {initialItems.map((item) => (
           <Item key={item.id} item={item} />
