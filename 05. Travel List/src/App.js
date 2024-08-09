@@ -54,6 +54,34 @@ const initialItems = [
 In summary, while state is used by developers to make components interactive, props are used to configure child components by passing data from parent to child.
 */
 
+/*
+--- Introduction to Thinking in React ---
+- Building React applications requires a new mindset compared to vanilla JavaScript
+- Learning to think in React is essential for mastering React
+
+--- React Development Mindset ---
+- It's important to understand how to use React tools such as components, state, and props
+- Focus on state transitions rather than element mutations
+
+--- Process Overview:
+- Break UI into Components:
+  - Identify and structure the UI components
+  - Consider reusability of components
+  
+- Build a Static Version:
+  - Create a non-interactive version of the app
+  - Focus on coding the UI without worrying about state and interactivity
+
+- State Management:
+  - Decide when to use state 
+  - Type of state: Local / Global 
+  - Where to place each piece of state
+
+- Data Flow:
+  - Establish how data flows through the application
+  - Consider one-way data flow, child-to-parent communication, and global state management
+*/
+
 export default function App() {
   return (
     <div className='app'>
