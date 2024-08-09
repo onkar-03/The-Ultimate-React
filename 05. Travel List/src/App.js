@@ -33,23 +33,23 @@ const initialItems = [
 /* 
  --- Understanding State and Props in React --- 
 
- --- What's the difference between state and props?
+--- What's the difference between state and props?
 
- --- State:
-  - Internal data that is owned by the component in which it is declared.
-  - Can be thought of as the component's memory because it can hold data over time, across multiple rerenders.
-  - State can be updated by the component itself, which will cause the component to be rerendered by React.
-  - We use this mechanism of state to make components interactive.
+--- State:
+ - Internal data that is owned by the component in which it is declared.
+ - Can be thought of as the component's memory because it can hold data over time, across multiple rerenders.
+ - State can be updated by the component itself, which will cause the component to be rerendered by React.
+ - We use this mechanism of state to make components interactive.
 
- --- Props:
-  - External data that is owned by the parent component.
-  - Can be thought of as function parameters, a communication channel between parent and child components where parents can pass data into children.
-  - Props are read-only and cannot be modified by the component that is receiving them.
-  - When the child component receives new updated props, it will cause the component to rerender to keep in sync with the state it received as a prop.
-  - Props are used to give the parent component the ability to configure their child components, essentially seen as settings in child components which the parent component can define as they wish.
-
- --- Connection between State and Props:
- - Whenever a piece of state is passed as a prop, when that state updates, both the component owning the state and the component receiving the state as a prop are rerendered.
+--- Props:
+ - External data that is owned by the parent component.
+ - Can be thought of as function parameters, a communication channel between parent and child components where parents can pass data into children.
+ - Props are read-only and cannot be modified by the component that is receiving them.
+ - When the child component receives new updated props, it will cause the component to rerender to keep in sync with the state it received as a prop.
+ - Props are used to give the parent component the ability to configure their child components, essentially seen as settings in child components which the parent component can define as they wish.
+ 
+--- Connection between State and Props:
+- Whenever a piece of state is passed as a prop, when that state updates, both the component owning the state and the component receiving the state as a prop are rerendered.
 
 In summary, while state is used by developers to make components interactive, props are used to configure child components by passing data from parent to child.
 */
@@ -81,6 +81,59 @@ In summary, while state is used by developers to make components interactive, pr
   - Establish how data flows through the application
   - Consider one-way data flow, child-to-parent communication, and global state management
 */
+
+/* 
+--- React State Management
+
+- State is a crucial concept in React; managing it is essential.
+- The `useState` function creates state to track data that changes during an app's lifecycle.
+
+- State management involves deciding:
+  - When to create new state
+  - What type of state is neede
+
+  - Where to place the state in the codebase
+  - How data flows through the app
+
+"State management is like giving each piece of state a home in the code"
+
+- Local State: State needed by one or a few related components
+  - Example: Search bar input text in a Udemy App.
+
+- Global State: State needed by multiple components across the app
+  - Managed using React Context API or a global state management library like Redux
+  - Example: Shopping cart data in a Udemy App
+
+- In small apps, local state is usually sufficient
+- Global state is introduced as the app grows
+- Always start with local state and move to global state only if necessary
+
+- A flowchart helps decide when and where to create state:
+  - Determine if data needs to change over time.
+  - If yes, create a new piece of state using `useState`.
+  - Place state in the current component if only it needs it.
+  - Lift state up to a common parent if needed by multiple components
+
+--- When and Where to Use State in React:
+
+- When to Create State:
+  - Check if Data Changes: 
+    - If the data doesn't change, use a regular 'const' variable
+    - If it does, consider creating state
+  - Can the Data be Derived?
+    - If the new data can be derived from existing state or props, derive it instead of creating new state 'derived state'
+  - Should Updating State Re-render the Component? 
+    - If yes, create state using `useState`
+    - If no, consider using a ref
+
+- Where to Place State:
+  - Component-specific State: 
+    - If the state is only needed by the current component, keep it there
+  - Pass State to Child Components: 
+    - If the state is needed by child components, pass it down via props
+  - Lifting State Up:
+    - If multiple sibling or parent components need the same state, consider lifting the state up to the closest common ancestor
+ */
 
 export default function App() {
   return (
