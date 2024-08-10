@@ -7,12 +7,6 @@ const initialItems = [
 
 // App Component
 export default function App() {
-  //  --- Lifting State
-  // We need the new items Array & the its Event handler function in both sibling components i.e. the Form and the Packing List
-  // Form used to create the new Item and add it to the Array
-  // Packing List used to render the list items on the UI
-  // Hence we uplift the State and the Event handler for that state to their closest parent i.e. the App component
-
   // 1. Creating a Piece of State to handle the Items list
   // Default items list must be empty at the start hence we use an y array
   const [items, setItems] = useState([]);
@@ -60,6 +54,8 @@ function Form({ onAddItems }) {
     // Creating the New Item Object
     const newItem = { description, quantity, packed: false, id: Date.now() };
 
+    // Inverse Data Flow
+    // Updating the State of the Parent using the Setter function passed to the child is called inverse data flow
     // Add the new Item to the List
     onAddItems(newItem);
 
