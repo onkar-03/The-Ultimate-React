@@ -7,6 +7,12 @@ const initialItems = [
 
 // App Component
 export default function App() {
+  //  --- Lifting State
+  // We need the new items Array & the its Event handler function in both sibling components i.e. the Form and the Packing List
+  // Form used to create the new Item and add it to the Array
+  // Packing List used to render the list items on the UI
+  // Hence we uplift the State and the Event handler for that state to their closest parent i.e. the App component
+
   // 1. Creating a Piece of State to handle the Items list
   // Default items list must be empty at the start hence we use an y array
   const [items, setItems] = useState([]);
@@ -22,7 +28,10 @@ export default function App() {
   return (
     <div className='app'>
       <Logo />
+
+      {/* As we require the handlerItems handler in the Form Component hence we pass it as a prop in the Form component */}
       <Form onAddItems={handleAddItems} />
+      {/* As we require the items in the PackingList Component hence we pass it as a prop in the PackingList Component */}
       <PackingList items={items} />
       <Stats />
     </div>
@@ -33,6 +42,7 @@ function Logo() {
   return <h1>🌴 Far Away 👜</h1>;
 }
 
+// Destructuring the onAddItems prop that contains the handleAddItems method to add new items to already existing items array
 function Form({ onAddItems }) {
   // Implementing Controlled Elements for Select and Form elements
   // 1. Creating a Piece of State, its default value is an empty string
@@ -113,12 +123,13 @@ function Form({ onAddItems }) {
   );
 }
 
+// Destructuring the items prop that contains the list of items that needs to be rendered in the UI
 function PackingList({ items }) {
   return (
     <div className='list'>
       <ul>
         {/* 
-      - Rendering List using Map method for the whole items array 
+      - Rendering Items List using Map method for the whole items array 
       - Each item is passed as a prop to Item component
       - Destructured in the item component and used directly 
       - Whenever we map over a list to render it we need to give a key value to each value of the list to identify them as unique items
