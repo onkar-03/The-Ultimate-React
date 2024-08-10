@@ -5,142 +5,25 @@ const initialItems = [
   { id: 2, description: 'Socks', quantity: 12, packed: true },
 ];
 
-/* 
- --- Controlled Elements In React ---
-
- --- Default Behavior of Input Fields
-
- - By default, input fields such as `<input>` and `<select>` elements maintain their own state within the DOM. This makes it challenging to read their values and manage their state effectively.
- - In React, we prefer to keep all state in a single, central place within the React application, rather than in the DOM.
-
- --- Controlled Elements
-
- - To achieve centralized state management, we use a technique called controlled elements. This means that React controls and owns the state of these input fields, not the DOM
- - Doing this helps us achieve the fact that now React controls teh States of input / select fields of the Form element
-
- --- Steps to Implement Controlled Elements
- 1. Create a Piece of State: 
-   - EG: const [description, setDescription] = useState('');
-
- 2. Use State as Value of Input Field: 
- - Force the element to always take the Value of the State variable 
-  - EG: <input type="text" value={description} />
-
- 3. Listen for Change Event
-  - EG: <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-*/
-
-/* 
- --- Understanding State and Props in React --- 
-
---- What's the difference between state and props?
-
---- State:
- - Internal data that is owned by the component in which it is declared.
- - Can be thought of as the component's memory because it can hold data over time, across multiple rerenders.
- - State can be updated by the component itself, which will cause the component to be rerendered by React.
- - We use this mechanism of state to make components interactive.
-
---- Props:
- - External data that is owned by the parent component.
- - Can be thought of as function parameters, a communication channel between parent and child components where parents can pass data into children.
- - Props are read-only and cannot be modified by the component that is receiving them.
- - When the child component receives new updated props, it will cause the component to rerender to keep in sync with the state it received as a prop.
- - Props are used to give the parent component the ability to configure their child components, essentially seen as settings in child components which the parent component can define as they wish.
- 
---- Connection between State and Props:
-- Whenever a piece of state is passed as a prop, when that state updates, both the component owning the state and the component receiving the state as a prop are rerendered.
-
-In summary, while state is used by developers to make components interactive, props are used to configure child components by passing data from parent to child.
-*/
-
-/*
---- Introduction to Thinking in React ---
-- Building React applications requires a new mindset compared to vanilla JavaScript
-- Learning to think in React is essential for mastering React
-
---- React Development Mindset ---
-- It's important to understand how to use React tools such as components, state, and props
-- Focus on state transitions rather than element mutations
-
---- Process Overview:
-- Break UI into Components:
-  - Identify and structure the UI components
-  - Consider reusability of components
-  
-- Build a Static Version:
-  - Create a non-interactive version of the app
-  - Focus on coding the UI without worrying about state and interactivity
-
-- State Management:
-  - Decide when to use state 
-  - Type of state: Local / Global 
-  - Where to place each piece of state
-
-- Data Flow:
-  - Establish how data flows through the application
-  - Consider one-way data flow, child-to-parent communication, and global state management
-*/
-
-/* 
---- React State Management
-
-- State is a crucial concept in React; managing it is essential.
-- The `useState` function creates state to track data that changes during an app's lifecycle.
-
-- State management involves deciding:
-  - When to create new state
-  - What type of state is neede
-
-  - Where to place the state in the codebase
-  - How data flows through the app
-
-"State management is like giving each piece of state a home in the code"
-
-- Local State: State needed by one or a few related components
-  - Example: Search bar input text in a Udemy App.
-
-- Global State: State needed by multiple components across the app
-  - Managed using React Context API or a global state management library like Redux
-  - Example: Shopping cart data in a Udemy App
-
-- In small apps, local state is usually sufficient
-- Global state is introduced as the app grows
-- Always start with local state and move to global state only if necessary
-
-- A flowchart helps decide when and where to create state:
-  - Determine if data needs to change over time.
-  - If yes, create a new piece of state using `useState`.
-  - Place state in the current component if only it needs it.
-  - Lift state up to a common parent if needed by multiple components
-
---- When and Where to Use State in React:
-
-- When to Create State:
-  - Check if Data Changes: 
-    - If the data doesn't change, use a regular 'const' variable
-    - If it does, consider creating state
-  - Can the Data be Derived?
-    - If the new data can be derived from existing state or props, derive it instead of creating new state 'derived state'
-  - Should Updating State Re-render the Component? 
-    - If yes, create state using `useState`
-    - If no, consider using a ref
-
-- Where to Place State:
-  - Component-specific State: 
-    - If the state is only needed by the current component, keep it there
-  - Pass State to Child Components: 
-    - If the state is needed by child components, pass it down via props
-  - Lifting State Up:
-    - If multiple sibling or parent components need the same state, consider lifting the state up to the closest common ancestor
- */
-
+// App Component
 export default function App() {
+  // 1. Creating a Piece of State to handle the Items list
+  // Default items list must be empty at the start hence we use an y array
+  const [items, setItems] = useState([]);
+
+  //Event Handler for adding Items to the List
+  function handleAddItems(item) {
+    // --- Updating Items without Mutating the Original Array
+    // We can't mutate the Original value in React
+    // As we dont want to mutate the original array, hence we create a new array and then destructure the elements of the old array and add the new item along with the rest of them
+    setItems((items) => [...items, item]);
+  }
+
   return (
     <div className='app'>
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={handleAddItems} />
+      <PackingList items={items} />
       <Stats />
     </div>
   );
@@ -150,7 +33,7 @@ function Logo() {
   return <h1>🌴 Far Away 👜</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   // Implementing Controlled Elements for Select and Form elements
   // 1. Creating a Piece of State, its default value is an empty string
   const [description, setDescription] = useState('');
@@ -166,6 +49,9 @@ function Form() {
 
     // Creating the New Item Object
     const newItem = { description, quantity, packed: false, id: Date.now() };
+
+    // Add the new Item to the List
+    onAddItems(newItem);
 
     // Rest all the Values back to Default using setter functions
     setDescription('');
@@ -227,7 +113,7 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className='list'>
       <ul>
@@ -237,7 +123,7 @@ function PackingList() {
       - Destructured in the item component and used directly 
       - Whenever we map over a list to render it we need to give a key value to each value of the list to identify them as unique items
       */}
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item key={item.id} item={item} />
         ))}
       </ul>
