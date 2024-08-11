@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 const initialItems = [
   { id: 1, description: 'Passports', quantity: 2, packed: false },
-  { id: 2, description: 'Socks', quantity: 12, packed: true },
+  { id: 2, description: 'Socks', quantity: 12, packed: false },
 ];
 
 // App Component
 export default function App() {
   // 1. Creating a Piece of State to handle the Items list
   // Default items list must be empty at the start hence we use an empty array [], or we can pass te default values too if we want i.e. the initialItems
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState([]);
 
   //Event Handler for adding Items to the List
   function handleAddItems(item) {
@@ -28,6 +28,19 @@ export default function App() {
     setItems((items) => items.filter((item) => item.id !== id));
   }
 
+  // Function to Toggle the Check mark of the items
+  function handleToggleItems(id) {
+    // --- Updating Items without Mutating the Original Array
+    // We can't mutate the Original value in React
+    // As we dont want to mutate the original array, hence we create a new array and then destructure the elements of the old array and add the items with the updated packed status along with the rest of them
+    // If the Item is same as what we want to mark as packed in the UI then we create a new Object of the item and set the packed value to the opposite of what it was ... if previous value packed: false, then we make it packed:true
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item,
+      ),
+    );
+  }
+
   return (
     <div className='app'>
       <Logo />
@@ -38,7 +51,11 @@ export default function App() {
        - As we require the items in the PackingList Component hence we pass it as a prop in the PackingList Component 
        - Passing the delete items as a prop in the PackingList Component to delete the item when we click the cross icon
       */}
-      <PackingList items={items} onDeleteItem={handleDeleteItems} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItems}
+        onToggleItems={handleToggleItems}
+      />
       <Stats />
     </div>
   );
@@ -132,7 +149,7 @@ function Form({ onAddItems }) {
 }
 
 // Destructuring the items prop that contains the list of items that needs to be rendered in the UI & onDeleteItem method that has the id of the item to be deleted
-function PackingList({ items, onDeleteItem }) {
+function PackingList({ items, onDeleteItem, onToggleItems }) {
   return (
     <div className='list'>
       <ul>
@@ -144,7 +161,12 @@ function PackingList({ items, onDeleteItem }) {
       - Using State lifting method to pass the onDeleteItem method to the child component i.e. the Item
       */}
         {items.map((item) => (
-          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} />
+          <Item
+            key={item.id}
+            item={item}
+            onDeleteItem={onDeleteItem}
+            onToggleItems={onToggleItems}
+          />
         ))}
       </ul>
     </div>
@@ -152,10 +174,21 @@ function PackingList({ items, onDeleteItem }) {
 }
 
 // Destructuring the Item received as Props then we can use the Oject directly
-function Item({ item, onDeleteItem }) {
+function Item({ item, onDeleteItem, onToggleItems }) {
   // The onDeleteItem passed from APP -> PackingList -> Item to be used here using State Lifting Technique
+  // The onToggleItem passed from APP -> PackingList -> Item to be used here using State Lifting Technique
   return (
     <li>
+      <input
+        type='checkbox'
+        value={item.packed}
+        onChange={() => {
+          // --- Child to Parent Communication (Child Updates Parent State)
+          // -  We need to call the event with the item id only and not the Object hence we pass in the item.id
+          // - Also as we want the react to call the function when event happens we can not directly call te function as onDeleteItem(item.id) rather as a callback function like () => onDeleteItem(item.id)
+          onToggleItems(item.id);
+        }}
+      />
       {/* 
       - Using Ternary Operator to set Styles
       - If item packed then we want to add style to that item else nothing to add 
