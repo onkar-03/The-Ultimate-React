@@ -140,3 +140,29 @@ This repository contains my notes and summaries on various concepts in React. It
 ### 5. Inverse Data Flow (Child-to-Parent Communication)
 
 - **Explanation**: By passing down a setter function, we enable a form of child-to-parent communication, sometimes referred to as "inverse data flow." While React generally enforces one-way data flow from parent to child, this technique allows data to effectively "flow" up the tree by updating the parent state from a child component.
+
+## Derived State in React
+
+- **Understanding Derived State:**
+  Derived state refers to state that is computed from existing state or props. Instead of maintaining multiple state variables, derived state allows you to calculate certain values directly from another piece of state, simplifying your component logic.
+
+- **Example Scenario:**
+  Consider a React component with three states: `cart`, `numItems`, and `totalPrice`. In this example, `numItems` represents the number of items in the cart, and `totalPrice` is the sum of all item prices. Both `numItems` and `totalPrice` are derived from the `cart` state.
+
+- **Problems with Multiple State Variables:**
+  Having separate state variables for `numItems` and `totalPrice` can lead to issues. Since these values depend on the `cart` state, they must be manually updated whenever `cart` changes. This can result in inconsistencies and bugs if not handled correctly.
+
+- **Unnecessary Rerenders:**
+  Updating `numItems`, `totalPrice`, and `cart` separately causes the component to rerender multiple times, which is inefficient and unnecessary. This happens because each state update triggers a rerender, leading to performance issues.
+
+- **The Solution - Deriving State:**
+  Instead of creating separate state variables, you can derive `numItems` and `totalPrice` from the `cart` state. By using regular variables, you eliminate the need for additional `useState` calls. This approach ensures that all related data remains consistent and avoids unnecessary rerenders.
+
+- **Single Source of Truth:**
+  The `cart` state becomes the single source of truth, meaning all related values are derived from it. This makes your code more maintainable and reduces the risk of state mismatches or inconsistencies.
+
+- **Automatic Recalculation:**
+  When the `cart` state updates, the component rerenders, and the derived values (`numItems` and `totalPrice`) are automatically recalculated. This ensures that your UI always reflects the latest data without manual updates.
+
+- **Best Practice:**
+  Whenever possible, prefer derived state over creating multiple state variables. This approach minimizes complexity and prevents common mistakes, such as managing redundant or unnecessary state.
