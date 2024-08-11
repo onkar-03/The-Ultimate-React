@@ -44,7 +44,6 @@ export default function App() {
   return (
     <div className='app'>
       <Logo />
-
       {/* As we require the handlerItems handler in the Form Component hence we pass it as a prop in the Form component */}
       <Form onAddItems={handleAddItems} />
       {/*
@@ -56,7 +55,11 @@ export default function App() {
         onDeleteItem={handleDeleteItems}
         onToggleItems={handleToggleItems}
       />
-      <Stats />
+      {/* 
+      Passing the items Array in order to use the data to display the State
+      of Items in State Component such as number of items using numItems which is a derived state depending upon the items array length
+      */}
+      <Stats items={items} />
     </div>
   );
 }
@@ -207,10 +210,29 @@ function Item({ item, onDeleteItem, onToggleItems }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  // If no items then we don't have to perform any calculations we just need to display this message
+  if (items.length === 0)
+    return (
+      <footer className='stats'>
+        {' '}
+        Start adding some Items to your List !!
+      </footer>
+    );
+
+  // If List isn't Empty
+  // Derived States
+  const numItems = items.length;
+  const numItemsPacked = items.filter((item) => item.packed === true).length;
+  const percentage = Math.round((numItemsPacked / numItems) * 100);
+
   return (
     <footer className='stats'>
-      You have X items on your list, an you already packed X(X%)
+      {percentage === 100
+        ? 'You got everything! Ready to go.'
+        : // Using the Derived State to display the required Information in the UI
+          `You have ${numItems} items on your list, an you already packed 
+      ${numItemsPacked} (${percentage}%)`}
     </footer>
   );
 }
