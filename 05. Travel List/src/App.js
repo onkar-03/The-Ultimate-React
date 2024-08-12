@@ -41,6 +41,21 @@ export default function App() {
     );
   }
 
+  // Function to Handle the Clear List Task
+  function handleClearList() {
+    // Alert Confirmation
+    //  The window.confirm() method displays a modal dialog with a specified message and two buttons: "OK" and "Cancel"
+    // If the user clicks "OK", the method returns true
+    // If the user clicks "Cancel", the method returns false
+    // Assign to Variable: The returned value is stored in the confirmed variable. This allows you to use confirmed later in your code to decide what to do based on the user's response.
+    const confirmed = window.confirm(
+      'Are you sure you want to delete all Items?',
+    );
+
+    // Reset the Items Array to an Empty Array only if user agrees to delete it from teh alert window
+    if (confirmed) setItems([]);
+  }
+
   return (
     <div className='app'>
       <Logo />
@@ -54,6 +69,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItems}
         onToggleItems={handleToggleItems}
+        onClearList={handleClearList}
       />
       {/* 
       Passing the items Array in order to use the data to display the State
@@ -152,7 +168,7 @@ function Form({ onAddItems }) {
 }
 
 // Destructuring the items prop that contains the list of items that needs to be rendered in the UI & onDeleteItem method that has the id of the item to be deleted
-function PackingList({ items, onDeleteItem, onToggleItems }) {
+function PackingList({ items, onDeleteItem, onToggleItems, onClearList }) {
   // Controlled Element
   // Default sorting set to input type
   const [sortBy, setSortBy] = useState('input');
@@ -168,12 +184,15 @@ function PackingList({ items, onDeleteItem, onToggleItems }) {
   // Sort by Description
   // .slice() crates a copy of the original array, we need to do this as we dont want to modify the original array
   // using the .sort() method of arrays to sort in increasing order
+  // .localeCompare() is used to compare 2 strings and sort them in increasing order by default
   if (sortBy === 'description')
     sortedItems = items
       .slice()
       .sort((a, b) => a.description.localeCompare(b.description));
 
   // Sort by Packed Status
+  // .slice() crates a copy of the original array, we need to do this as we dont want to modify the original array
+  // using the .sort() method of arrays to sort in increasing order
   // As packed is a boolean value we convert it from boolean to number using Number() / +
   if (sortBy === 'packed')
     sortedItems = items.slice().sort((a, b) => +a.packed - +b.packed);
@@ -211,6 +230,7 @@ function PackingList({ items, onDeleteItem, onToggleItems }) {
           <option value='description'>Sort by Description</option>
           <option value='packed'>Sort by Packed Status</option>
         </select>
+        <button onClick={onClearList}>Clear List</button>
       </div>
     </div>
   );
