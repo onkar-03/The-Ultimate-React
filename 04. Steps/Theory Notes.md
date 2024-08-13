@@ -121,9 +121,10 @@
 
 ### How to Use the `children` Prop in React?
 
-- When you define a component, you can access the `children` prop using `props.children`.
+- When you define a component, you can access the `children` prop using `props.children`/`{children}`.
 - You do not need to explicitly pass the `children` prop; it is automatically available in the component's props object.
 - You can then render the `children` within your component's JSX.
+- - The `children` prop is automatically received in teh Component u can use it using the `children` keyword
 
 ### Key Points to Remember
 

@@ -54,12 +54,12 @@ export default function App() {
             <div className={step >= 3 ? 'active' : ''}>3</div>
           </div>
 
-          <p className='message'>
-            {/* Displaying the step & message of the current Step */}
-            {/* As the Array indexing starts from 0 hence we did step - 1 */}
-            Step {step}: {messages[step - 1]}
-          </p>
+          {/* 
+          - Using children prop to create reusable component
+          */}
+          <StepMessage step={step}>{messages[step - 1]}</StepMessage>
 
+          {/* Using Children Prop to create reusable Button Component */}
           <div className='buttons'>
             {/* 
             - Using the reusable `Button` component to render different buttons.
@@ -86,6 +86,16 @@ export default function App() {
         </div>
       )}
     </>
+  );
+}
+function StepMessage({ step, children }) {
+  return (
+    <div className='message'>
+      {/* Displaying the step & message of the current Step */}
+      {/* As the Array indexing starts from 0 hence we did step - 1 */}
+      <h3>Step {step}:</h3>
+      {children}
+    </div>
   );
 }
 
