@@ -13,3 +13,7 @@ You can view the challenge Result on CodeSandBox here: [accordion-component](htt
 # Challenge 4
 
 You can view the challenge Result on CodeSandBox here: [accordion-component-v2](https://codesandbox.io/p/sandbox/accordion-component-v2-hm4yjt?file=%2Fsrc%2FApp.js%3A55%2C43)
+
+# Challenge5
+
+You can view the challenge Result on CodeSandBox here: [tip-calculator](https://codesandbox.io/p/sandbox/tip-calculator-wqp5gd?file=%2Fsrc%2FApp.js%3A120%2C1)
