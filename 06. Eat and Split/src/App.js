@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 // Static Data
 const initialFriends = [
   {
@@ -20,13 +22,43 @@ const initialFriends = [
   },
 ];
 
+// Button Component
+// Reusable at multiple Components
+function Button({ children, onClick }) {
+  return (
+    <button className='button' onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 export default function App() {
+  // We need a State to handle the Add new Friend Form on clicking the Button
+  // Also rerender teh Component
+  // As the Component is rendered in App Component hence we define a State here
+  // As its initially hidden hence false
+  const [addFriend, setAddFriend] = useState(false);
+
+  // Event Handler for Add Friend
+  function handleAddFriend() {
+    // Here we toggle the state of addFriend to open the Form
+    setAddFriend(!addFriend);
+  }
+
   return (
     <div className='app'>
       <div className='sidebar'>
         <FriendsList />
-        <FormAddFriend />
-        <Button>Add Friend</Button>
+
+        {/*
+        - Conditionally render the Form only when the addFriend value is True
+        - When the value is false hide the Form 
+        */}
+        {addFriend && <FormAddFriend />}
+        <Button onClick={handleAddFriend}>
+          {/* Conditionally render Text based on Open and Closed Form State */}
+          {addFriend ? 'Close' : 'Add Friend'}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
@@ -72,13 +104,7 @@ function Friend({ friend }) {
   );
 }
 
-// Button Component
-// Reusable at multiple Components
-function Button({ children }) {
-  return <button className='button'>{children}</button>;
-}
-
-function FormAddFriend() {
+function FormAddFriend({ handleAddFriend }) {
   return (
     <form className='form-add-friend'>
       <label>🧑‍🤝‍🧑Add Friend</label>
