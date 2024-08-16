@@ -38,7 +38,6 @@ export default function App() {
   // As the Component is rendered in App Component hence we define a State here
   // As its initially hidden hence false
   const [addFriend, setAddFriend] = useState(false);
-  const [splitBill, setSplitBill] = useState(false);
 
   // We render the Friends list in the FriendsList component, but we add a new Friend in the FordAddFriend component hence we wan to update the friends list here
   // As the State needs to be accessed in the FriendsList component & update i.e. the setter needs up update the state in FormAddFriend component
@@ -46,18 +45,28 @@ export default function App() {
   // We can have te Array empty [] / initialFriends as we wish
   const [friends, setFriends] = useState(initialFriends);
 
+  // Same Uplifting State when we select a friend to split bill
+  // We want the List and the split bill component to communicate with each other
+  // As both of them are sibling components hence we uplift ht estate to nearest parent component
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
   // Event Handler for Add Friend
   function handleAddFriend() {
     // Here we toggle the state of addFriend to open the Form
     setAddFriend(!addFriend);
   }
 
-  // Event Handler for Split Bill
-  function handleSplitBill() {
-    // Here we toggle the state of splitBill to open the Form
-    setSplitBill(!splitBill);
+  // Event Handler for Split Bill for Selected Friend
+  function handleSelection(friend) {
+    // When a select is clicked the associated friend is set as the currently selected
+    // setSelectedFriend(friend);
+
+    // When a select is clicked the associated friend is set as the currently selected, also if the friend tab is already open for split bill and we click again we want to close the tab hence get the selectedFriend back to null
+    // Using ?. nullish coalescing so as to avoid error of reading null.id when the value is bull
+    setSelectedFriend((curr) => (curr?.id === friend.id ? null : friend));
   }
 
+  // Event Handler for Add Friends
   function handleAddFriends(friend) {
     // Here we add the new friend to the friends list
     // We use the spread operator to create a new array with the new friend and the old friends
@@ -71,7 +80,12 @@ export default function App() {
   return (
     <div className='app'>
       <div className='sidebar'>
-        <FriendsList onClick={handleSplitBill} friends={friends} />
+        {/* FriendsList needs the Setter function hence we pass it in here */}
+        <FriendsList
+          onSelection={handleSelection}
+          friends={friends}
+          selectedFriend={selectedFriend}
+        />
 
         {/*
         - Conditionally render the Form only when the addFriend value is True
@@ -85,26 +99,37 @@ export default function App() {
           {addFriend ? 'Close' : 'Add Friend'}
         </Button>
       </div>
-      {splitBill && <FormSplitBill onClick={handleSplitBill} />}
+      {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
     </div>
   );
 }
 
-function FriendsList({ onClick, friends }) {
+function FriendsList({ onSelection, friends, selectedFriend }) {
   // Rendering Each friend iof Friends Array using .map()
   return (
     <ul>
       {friends.map((friend) => (
-        <Friend friend={friend} key={friend.id} onClick={onClick} />
+        // Now as the Friends component also needs it hence we pass the setter function further down to the Friends component
+        <Friend
+          friend={friend}
+          key={friend.id}
+          onSelection={onSelection}
+          selectedFriend={selectedFriend}
+        />
       ))}
     </ul>
   );
 }
 
-function Friend({ friend, onClick }) {
+function Friend({ friend, onSelection, selectedFriend }) {
+  // taking the currently selected friend and comparing with each friend
+  // Marking the matching one as selected with the selected class
+  // Using ?. nullish coalescing so as to avoid error of reading null.id when the value is bull
+  const isSelected = selectedFriend?.id === friend.id;
+
   // Rendering Each Friend component as a list item
   return (
-    <li className='friend'>
+    <li className={isSelected ? 'selected' : ''}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
 
@@ -124,7 +149,14 @@ function Friend({ friend, onClick }) {
       {friend.balance === 0 && (
         <p className=''>You and {friend.name} are even</p>
       )}
-      <Button onClick={onClick}>Select</Button>
+      {/* 
+      - Using the passed setter function to save the current friend in the selected friends state
+      - As we want to pass the friend as an argument hence we don it in this way of callback 
+      - Using the boolean value of isSelected to make sure to add the CLose text to the Button for currently selected friend
+      */}
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? 'Close' : 'Select'}
+      </Button>
     </li>
   );
 }
@@ -189,17 +221,17 @@ function FormAddFriend({ friends, updateFriends }) {
   );
 }
 
-function FormSplitBill({ onClick }) {
+function FormSplitBill({ selectedFriend }) {
   return (
     <form className='form-split-bill'>
-      <h2>Split a Bill with X</h2>
+      <h2>Split a Bill with {selectedFriend.name}</h2>
       <label>💰 Bill Value</label>
       <input type='text'></input>
 
       <label>🕴️ Your Expense</label>
       <input type='text'></input>
 
-      <label>🧑‍🤝‍🧑 X's Expense</label>
+      <label>🧑‍🤝‍🧑 {selectedFriend.name}'s Expense</label>
       <input type='text' disabled></input>
 
       <label>🤑 Who's paying the Bill</label>
@@ -208,7 +240,7 @@ function FormSplitBill({ onClick }) {
         <option value='friend'>X</option>
       </select>
 
-      <Button onClick={onClick}>Split Bill</Button>
+      <Button>Split Bill</Button>
     </form>
   );
 }
