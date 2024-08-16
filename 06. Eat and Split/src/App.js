@@ -76,6 +76,20 @@ export default function App() {
     setAddFriend(false);
   }
 
+  function handleSplitBill(value) {
+    // Creating a new array with teh updated data of who ows you and who do u owe money in the new array
+    setFriends((friends) =>
+      friends.map((friend) =>
+        friend.id === selectedFriend.id
+          ? { ...friend, balance: friend.balance + value }
+          : friend,
+      ),
+    );
+
+    // Close the Form after bill split
+    setSelectedFriend(null);
+  }
+
   // Render App Component
   return (
     <div className='app'>
@@ -99,7 +113,12 @@ export default function App() {
           {addFriend ? 'Close' : 'Add Friend'}
         </Button>
       </div>
-      {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
+      {selectedFriend && (
+        <FormSplitBill
+          selectedFriend={selectedFriend}
+          onSplitBill={handleSplitBill}
+        />
+      )}
     </div>
   );
 }
@@ -221,7 +240,7 @@ function FormAddFriend({ friends, updateFriends }) {
   );
 }
 
-function FormSplitBill({ selectedFriend }) {
+function FormSplitBill({ selectedFriend, onSplitBill }) {
   // States to hold each of the input data with their default values
   // Implementing Controlled Elements to store their data
   const [bill, setBill] = useState('');
@@ -231,10 +250,21 @@ function FormSplitBill({ selectedFriend }) {
   // Derived State
   const paidByFriend = bill ? bill - paidByUser : '';
 
+  // Event Handler for Submitting the Split Bill Form
+  function handleSubmit(e) {
+    // Prevent default reload always
+    e.preventDefault();
+
+    if (!bill || !paidByUser) return;
+
+    // If i am paying the Bill my friend ows me the Money and visa versa
+    onSplitBill(whoIsPaying === 'user' ? paidByFriend : paidByUser);
+  }
+
   // Implementing Controlled Elements in every select and input field
   // Converting the String Numbers to Digits using +
   return (
-    <form className='form-split-bill'>
+    <form className='form-split-bill' onSubmit={handleSubmit}>
       <h2>Split a Bill with {selectedFriend.name}</h2>
       <label>💰 Bill Value</label>
       <input
