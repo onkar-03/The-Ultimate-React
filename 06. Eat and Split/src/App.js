@@ -40,6 +40,12 @@ export default function App() {
   const [addFriend, setAddFriend] = useState(false);
   const [splitBill, setSplitBill] = useState(false);
 
+  // We render the Friends list in the FriendsList component, but we add a new Friend in the FordAddFriend component hence we wan to update the friends list here
+  // As the State needs to be accessed in the FriendsList component & update i.e. the setter needs up update the state in FormAddFriend component
+  // Hence as both the siblings component need access to the state and the setter function hence we Uplift the State to their nearest parent component
+  // We can have te Array empty [] / initialFriends as we wish
+  const [friends, setFriends] = useState(initialFriends);
+
   // Event Handler for Add Friend
   function handleAddFriend() {
     // Here we toggle the state of addFriend to open the Form
@@ -52,17 +58,28 @@ export default function App() {
     setSplitBill(!splitBill);
   }
 
+  function handleAddFriends(friend) {
+    // Here we add the new friend to the friends list
+    // We use the spread operator to create a new array with the new friend and the old friends
+    setFriends((friends) => [...friends, friend]);
+
+    // After adding the new friend, we close the Form
+    setAddFriend(false);
+  }
+
   // Render App Component
   return (
     <div className='app'>
       <div className='sidebar'>
-        <FriendsList onClick={handleSplitBill} />
+        <FriendsList onClick={handleSplitBill} friends={friends} />
 
         {/*
         - Conditionally render the Form only when the addFriend value is True
         - When the value is false hide the Form 
         */}
-        {addFriend && <FormAddFriend />}
+        {addFriend && (
+          <FormAddFriend updateFriends={handleAddFriends} friends={friends} />
+        )}
         <Button onClick={handleAddFriend}>
           {/* Conditionally render Text based on Open and Closed Form State */}
           {addFriend ? 'Close' : 'Add Friend'}
@@ -73,11 +90,11 @@ export default function App() {
   );
 }
 
-function FriendsList({ onClick }) {
+function FriendsList({ onClick, friends }) {
   // Rendering Each friend iof Friends Array using .map()
   return (
     <ul>
-      {initialFriends.map((friend) => (
+      {friends.map((friend) => (
         <Friend friend={friend} key={friend.id} onClick={onClick} />
       ))}
     </ul>
@@ -112,13 +129,61 @@ function Friend({ friend, onClick }) {
   );
 }
 
-function FormAddFriend({ handleAddFriend }) {
+function FormAddFriend({ friends, updateFriends }) {
+  // As we want to get the Value of the input fields and store it somewhere to use it in our application
+  // For this we use the Controlled Elements, where we have one piece of state for each input and retrieve its value from the input fields
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('https://i.pravatar.cc/48');
+
+  // To generate random ID
+  const id = crypto.randomUUID();
+
+  function handleSubmit(e) {
+    // Prevent Default reload
+    e.preventDefault();
+
+    // If nothing entered nothing happens
+    if (!name || !image) return;
+
+    // Create a new Friend Object to add to the Array
+    const newFriend = {
+      id,
+      name,
+      image: `${image}?={id}`,
+      balance: 0,
+    };
+
+    console.log(newFriend);
+
+    // Add to the existing Array
+    // using destructuring
+    updateFriends(newFriend);
+
+    // We would also reset the form fields
+    setName('');
+    setImage('https://i.pravatar.cc/48');
+
+    // We would also reset the form fields
+    setName('');
+    setImage('https://i.pravatar.cc/48');
+  }
+
   return (
-    <form className='form-add-friend'>
+    <form className='form-add-friend' onSubmit={handleSubmit}>
       <label>🧑‍🤝‍🧑Add Friend</label>
-      <input type='text' />
+      {/* Using Controlled Elements  */}
+      <input
+        type='text'
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <label>🌞image url</label>
-      <input type='text' />
+      {/* Using Controlled Elements  */}
+      <input
+        type='text'
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
       <Button>Add</Button>.
     </form>
   );
