@@ -38,6 +38,7 @@ export default function App() {
   // As the Component is rendered in App Component hence we define a State here
   // As its initially hidden hence false
   const [addFriend, setAddFriend] = useState(false);
+  const [splitBill, setSplitBill] = useState(false);
 
   // Event Handler for Add Friend
   function handleAddFriend() {
@@ -45,10 +46,17 @@ export default function App() {
     setAddFriend(!addFriend);
   }
 
+  // Event Handler for Split Bill
+  function handleSplitBill() {
+    // Here we toggle the state of splitBill to open the Form
+    setSplitBill(!splitBill);
+  }
+
+  // Render App Component
   return (
     <div className='app'>
       <div className='sidebar'>
-        <FriendsList />
+        <FriendsList onClick={handleSplitBill} />
 
         {/*
         - Conditionally render the Form only when the addFriend value is True
@@ -60,23 +68,23 @@ export default function App() {
           {addFriend ? 'Close' : 'Add Friend'}
         </Button>
       </div>
-      <FormSplitBill />
+      {splitBill && <FormSplitBill onClick={handleSplitBill} />}
     </div>
   );
 }
 
-function FriendsList() {
+function FriendsList({ onClick }) {
   // Rendering Each friend iof Friends Array using .map()
   return (
     <ul>
       {initialFriends.map((friend) => (
-        <Friend friend={friend} key={friend.id} />
+        <Friend friend={friend} key={friend.id} onClick={onClick} />
       ))}
     </ul>
   );
 }
 
-function Friend({ friend }) {
+function Friend({ friend, onClick }) {
   // Rendering Each Friend component as a list item
   return (
     <li className='friend'>
@@ -99,7 +107,7 @@ function Friend({ friend }) {
       {friend.balance === 0 && (
         <p className=''>You and {friend.name} are even</p>
       )}
-      <Button>Select</Button>
+      <Button onClick={onClick}>Select</Button>
     </li>
   );
 }
@@ -116,7 +124,7 @@ function FormAddFriend({ handleAddFriend }) {
   );
 }
 
-function FormSplitBill() {
+function FormSplitBill({ onClick }) {
   return (
     <form className='form-split-bill'>
       <h2>Split a Bill with X</h2>
@@ -135,7 +143,7 @@ function FormSplitBill() {
         <option value='friend'>X</option>
       </select>
 
-      <Button>Split Bill</Button>
+      <Button onClick={onClick}>Split Bill</Button>
     </form>
   );
 }
