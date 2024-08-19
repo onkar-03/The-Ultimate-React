@@ -50,29 +50,36 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+// Structural Component
 export default function App() {
+  // Listing State Up
+  // As this state is required by both components hence lifting it up to the closest Parent App
+  const [movies, setMovies] = useState(tempMovieData);
+
   return (
     <>
-      <NavBar />
-      <Main />
+      <NavBar movies={movies} />
+      <Main movies={movies} />
     </>
   );
 }
 
-// Clearly Stated What all teh Nav bar Includes, and if we want we can look into the individual components as well
-function NavBar() {
+// Structural Component
+// Clearly Stated What all the Nav bar Includes, and if we want we can look into the individual components as well
+function NavBar({ movies }) {
   return (
     <nav className='nav-bar'>
       <Logo />
       <SearchBar />
-      <NumResults />
+      <NumResults movies={movies} />
     </nav>
   );
 }
 
 // --- Reusable Components
-// Having 1 responsibility each
+// Having 1 responsibility each Logo, SearchBar & NumResults
 
+// Stateless / Presentational Component
 function Logo() {
   return (
     <div className='logo'>
@@ -82,6 +89,7 @@ function Logo() {
   );
 }
 
+// Stateful Component
 function SearchBar() {
   const [query, setQuery] = useState('');
 
@@ -96,24 +104,27 @@ function SearchBar() {
   );
 }
 
-function NumResults() {
+// Presentational Component
+function NumResults({ movies }) {
   return (
     <p className='num-results'>
-      Found <strong>X</strong> results
+      Found <strong>{movies.length}</strong> results
     </p>
   );
 }
 
-function Main() {
+// Structural Component
+function Main({ movies }) {
   return (
     <main className='main'>
-      <ListBox />
+      <ListBox movies={movies} />
       <WatchedBox />
     </main>
   );
 }
 
-function ListBox() {
+// Stateful Component
+function ListBox({ movies }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -126,14 +137,13 @@ function ListBox() {
       </button>
 
       {/* If Button is Open we show the Movie List */}
-      {isOpen1 && <MovieList />}
+      {isOpen1 && <MoviesList movies={movies} />}
     </div>
   );
 }
 
-function MovieList() {
-  const [movies, setMovies] = useState(tempMovieData);
-
+// Stateful Component
+function MoviesList({ movies }) {
   return (
     <ul className='list'>
       {movies?.map((movie) => (
@@ -143,6 +153,7 @@ function MovieList() {
   );
 }
 
+// Presentational Component
 function Movie({ movie }) {
   return (
     <li>
@@ -158,6 +169,7 @@ function Movie({ movie }) {
   );
 }
 
+// Stateful Component
 function WatchedBox() {
   // States
   const [watched, setWatched] = useState(tempWatchedData);
@@ -180,6 +192,7 @@ function WatchedBox() {
   );
 }
 
+// Presentational Component
 function WatchedSummary({ watched }) {
   // Derived States based on watched state
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
@@ -211,6 +224,7 @@ function WatchedSummary({ watched }) {
   );
 }
 
+// Presentational Component
 function WatchedMoviesList({ watched }) {
   return (
     <ul className='list'>
@@ -222,6 +236,7 @@ function WatchedMoviesList({ watched }) {
   );
 }
 
+// Presentational Component
 function WatchedMovie({ movie }) {
   return (
     <li key={movie.imdbID}>
