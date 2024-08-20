@@ -93,6 +93,13 @@ Component composition solves this problem by allowing components to be combined 
 
 We can modify the Modal component to accept children through the children prop. This way, we can pass any component as a child, making the Modal reusable:
 
+### How Composition Works
+
+- **Children Prop:** One of the most common ways to achieve composition is by using the `children` prop. This allows any content, including other components, to be passed into the parent component, which can then render it appropriately.
+- **Component Props:** Another way to compose components is by passing them as explicit props. This allows for even more control over which components are included and how they are rendered.
+
+#### EG: Using the `children` prop
+
 ```jsx
 function Modal({ children }) {
   return <div className='modal'>{children}</div>;
@@ -108,10 +115,20 @@ function Success() {
 </Modal>;
 ```
 
-### How Composition Works
+#### EG: Using the `component` prop
 
-- **Children Prop:** One of the most common ways to achieve composition is by using the `children` prop. This allows any content, including other components, to be passed into the parent component, which can then render it appropriately.
-- **Component Props:** Another way to compose components is by passing them as explicit props. This allows for even more control over which components are included and how they are rendered.
+```jsx
+function Modal({ content }) {
+  return <div className='modal'>{content}</div>;
+}
+
+function Success() {
+  return <p>Well done!</p>;
+}
+
+// Usage
+<Modal content={<Success />} />;
+```
 
 ### Addressing Prop Drilling with Composition
 
@@ -133,3 +150,7 @@ Prop drilling occurs when you need to pass data through multiple layers of compo
 
 - **Reusable Components:** Composition is often used to create highly reusable components, such as modal windows, where the content inside the modal can vary.
 - **Layout Components:** Composition is also useful for creating layouts where the structure of the page remains the same, but the content within that structure can change.
+
+```
+
+```

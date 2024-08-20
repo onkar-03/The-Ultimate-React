@@ -81,6 +81,12 @@ export default function App() {
       - Sending all the components we want inside the ListBox as children
       - Hence we avoid the Prop Drilling Problem now
        */}
+
+        {/* \
+        A)
+        - Passing as Children 
+        - Accepting as children in the Component
+        */}
         <Box>
           <MoviesList movies={movies} />
         </Box>
@@ -88,6 +94,21 @@ export default function App() {
           <WatchedSummary watched={watched} />
           <WatchedMoviesList watched={watched} />
         </Box>
+
+        {/* 
+        B)
+        - Passing as Prop
+        - Accepting as element in the Component
+        */}
+        {/* <Box element={<MoviesList movies={movies} />} />
+        <Box
+          element={
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          }
+        /> */}
       </Main>
     </>
   );
