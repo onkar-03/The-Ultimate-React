@@ -55,7 +55,9 @@ export default function App() {
   // Listing State Up
   // As this state is required by both components hence lifting it up to the closest Parent App
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
+  // Entire Structure of App visible here
   return (
     <>
       {/* 
@@ -79,10 +81,13 @@ export default function App() {
       - Sending all the components we want inside the ListBox as children
       - Hence we avoid the Prop Drilling Problem now
        */}
-        <ListBox>
+        <Box>
           <MoviesList movies={movies} />
-        </ListBox>
-        <WatchedBox />
+        </Box>
+        <Box>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </Box>
       </Main>
     </>
   );
@@ -137,6 +142,25 @@ function Main({ children }) {
 }
 
 // Stateful Component
+// Instead of having different boxes such as ListBox and Watched Box we created a Reusable Component Box and passed in required Components that we want to display using the Same box Component
+// So instead of writing the Components separately we used a single component to display both the ListBox and WatchedBox using Component COmposition
+
+function Box({ children }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className='box'>
+      <button className='btn-toggle' onClick={() => setIsOpen((open) => !open)}>
+        {isOpen ? '–' : '+'}
+      </button>
+      {/* If Button is Open we show the Movie List */}
+      {isOpen && children}
+    </div>
+  );
+}
+
+/* 
+// Stateful Component
 function ListBox({ children }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
@@ -148,11 +172,36 @@ function ListBox({ children }) {
       >
         {isOpen1 ? '–' : '+'}
       </button>
-      {/* If Button is Open we show the Movie List */}
       {isOpen1 && children}
     </div>
   );
 }
+*/
+
+/*
+// Stateful Component
+function WatchedBox() {
+  // States
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen2, setIsOpen2] = useState(true);
+  return (
+    <div className='box'>
+      <button
+        className='btn-toggle'
+        onClick={() => setIsOpen2((open) => !open)}
+      >
+        {isOpen2 ? '–' : '+'}
+      </button>
+      {isOpen2 && (
+        <>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </>
+      )}
+    </div>
+  );
+}
+*/
 
 // Stateful Component
 function MoviesList({ movies }) {
@@ -178,29 +227,6 @@ function Movie({ movie }) {
         </p>
       </div>
     </li>
-  );
-}
-
-// Stateful Component
-function WatchedBox() {
-  // States
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen2, setIsOpen2] = useState(true);
-  return (
-    <div className='box'>
-      <button
-        className='btn-toggle'
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? '–' : '+'}
-      </button>
-      {isOpen2 && (
-        <>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
-        </>
-      )}
-    </div>
   );
 }
 
