@@ -13,7 +13,5 @@ root.render(
     - In case no value passed we have assigned a predefined default value for stars in the Component
     */}
     <StarRating maxRating={10} />
-    <StarRating maxRating={5} />
-    <StarRating />
   </React.StrictMode>,
 );
