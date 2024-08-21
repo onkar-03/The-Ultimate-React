@@ -22,14 +22,15 @@ export default function StarRating({ maxRating = 10 }) {
   // As we wan the Stars to be empty if not hovered and Filled when hovered, means that we need some state to hold the current state of Star
   const [rating, setRating] = useState(0);
 
-  // To store the Temporary Star Rating on hover we crate a New state
+  // we crate a New State to store the Temporary Star Rating on hover
   const [tempRating, setTempRating] = useState(0);
 
-  // Event Handler to Update the States
+  // Event Handler to Update the rating State
   function handleRating(rating) {
     setRating(rating);
   }
 
+  // Event Handler to Update the tempRating State
   function handleTemporaryRating(tempRating) {
     setTempRating(tempRating);
   }
@@ -57,18 +58,21 @@ export default function StarRating({ maxRating = 10 }) {
 
           <Star
             key={i}
-            // Passing Event handlers to Star Component to update States on Events
+            // Passing Event handlers to Star Component for every rating user does
             onRate={() => handleRating(i + 1)}
+            // Passing Event handlers to Star Component Hover User does on Stars
             onHoverIn={() => handleTemporaryRating(i + 1)}
             onHoverOut={() => handleTemporaryRating(0)}
             // Using the Full var to hold the T/F value
+            // If user just hovers we display the tempRating State value otherwise we display the rating state value
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
           />
         ))}
       </div>
 
       {/* 
-      - Using Short Circuiting to Display the Rating Number i.e. the number of Stars currently Hovered or just display an empty String 
+      - Using Short Circuiting to Display the Rating Number i.e. the number of Stars currently Hovered / Rated OR just display an empty String 
+      - If None of them is true i.e. all are 0 then an empty string is displayed
       */}
       <p style={StyleText}>{tempRating || rating || ''}</p>
     </div>
@@ -82,6 +86,7 @@ const StarStyle = {
   cursor: 'pointer',
 };
 
+// Accepting States
 function Star({ onRate, full, onHoverIn, onHoverOut }) {
   return (
     // Call the Setter Function to update the Rating State OnClick
@@ -89,6 +94,7 @@ function Star({ onRate, full, onHoverIn, onHoverOut }) {
     <span
       role='button'
       style={StarStyle}
+      // Calling Event Handlers on Click and OnMouseEnter ('HoverIn') & OnMouseLeave('HoverOut')
       onClick={onRate}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
