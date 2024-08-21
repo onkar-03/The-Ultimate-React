@@ -22,9 +22,16 @@ export default function StarRating({ maxRating = 10 }) {
   // As we wan the Stars to be empty if not hovered and Filled when hovered, means that we need some state to hold the current state of Star
   const [rating, setRating] = useState(0);
 
-  // Event Handler
+  // To store the Temporary Star Rating on hover we crate a New state
+  const [tempRating, setTempRating] = useState(0);
+
+  // Event Handler to Update the States
   function handleRating(rating) {
     setRating(rating);
+  }
+
+  function handleTemporaryRating(tempRating) {
+    setTempRating(tempRating);
   }
 
   return (
@@ -50,9 +57,12 @@ export default function StarRating({ maxRating = 10 }) {
 
           <Star
             key={i}
+            // Passing Event handlers to Star Component to update States on Events
             onRate={() => handleRating(i + 1)}
+            onHoverIn={() => handleTemporaryRating(i + 1)}
+            onHoverOut={() => handleTemporaryRating(0)}
             // Using the Full var to hold the T/F value
-            full={rating >= i + 1}
+            full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
           />
         ))}
       </div>
@@ -60,7 +70,7 @@ export default function StarRating({ maxRating = 10 }) {
       {/* 
       - Using Short Circuiting to Display the Rating Number i.e. the number of Stars currently Hovered or just display an empty String 
       */}
-      <p style={StyleText}>{rating || ''}</p>
+      <p style={StyleText}>{tempRating || rating || ''}</p>
     </div>
   );
 }
@@ -72,9 +82,17 @@ const StarStyle = {
   cursor: 'pointer',
 };
 
-function Star({ onRate, full }) {
+function Star({ onRate, full, onHoverIn, onHoverOut }) {
   return (
-    <span role='button' style={StarStyle} onClick={onRate}>
+    // Call the Setter Function to update the Rating State OnClick
+    // On Hover we want to change the temporary rating which is handled by OnMouseEnter
+    <span
+      role='button'
+      style={StarStyle}
+      onClick={onRate}
+      onMouseEnter={onHoverIn}
+      onMouseLeave={onHoverOut}
+    >
       {
         // Conditional Rendering of Full / Empty Star based on value of full
         // Full has True/ False value which depends on whether the current star is clicked or not
