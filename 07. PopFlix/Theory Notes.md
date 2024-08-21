@@ -158,8 +158,8 @@ Prop drilling occurs when you need to pass data through multiple layers of compo
 - **Component Creation**:
   - A component is always created by someone (the creator).
   - The creator defines what props the component can accept.
-  
 - **Component Consumption**:
+
   - A component is consumed by someone (the consumer).
   - The consumer uses the component by specifying values for the props.
 
@@ -171,7 +171,6 @@ Prop drilling occurs when you need to pass data through multiple layers of compo
 
 - **Separation of Roles**:
   - Even when working solo, it’s beneficial to think of the creator and consumer as separate entities.
-  
 - **Public API**:
   - The props a component accepts act as its public API.
   - The creator defines this API, controlling what complexity is exposed to the consumer.
@@ -208,3 +207,77 @@ Prop drilling occurs when you need to pass data through multiple layers of compo
 - **Practice and Mindset**:
   - Developing a good understanding of prop management comes with practice.
   - Always consider the distinction between component creators and consumers when designing components.
+
+## Prop Types
+
+### 1. Introduction to Prop Types
+
+- **Definition**:
+  - Prop Types are a mechanism for checking the types of props that a component receives.
+- **Purpose**:
+  - They help ensure that components receive props of the correct type, preventing runtime errors and making code more robust.
+
+### 2. Common Prop Types
+
+- **Basic Types**:
+
+  - **String**: Represents text.
+  - **Number**: Represents numerical values.
+  - **Boolean**: Represents `true` or `false` values.
+  - **Function**: Represents a function passed as a prop.
+  - **Array**: Represents an array of items.
+  - **Object**: Represents an object.
+
+- **Complex Types**:
+  - **Array of Specific Type**: `PropTypes.arrayOf(PropTypes.number)` for an array of numbers.
+  - **Object with Specific Shape**: `PropTypes.shape({ key: PropTypes.string })` for an object with specific keys.
+  - **One of Specific Values**: `PropTypes.oneOf(['Option1', 'Option2'])` for an enumeration of values.
+
+### 3. Applying Prop Types in a Component
+
+- **Usage**:
+
+  - Prop Types are defined as static properties in the component.
+  - Example:
+    ```javascript
+    MyComponent.propTypes = {
+      name: PropTypes.string,
+      age: PropTypes.number,
+      isAdmin: PropTypes.bool,
+    };
+    ```
+
+- **Default Props**:
+  - You can also define default values for props using `defaultProps`.
+  - Example:
+    ```javascript
+    MyComponent.defaultProps = {
+      isAdmin: false,
+    };
+    ```
+
+### 4. Benefits of Using Prop Types
+
+- **Type Checking**:
+
+  - Ensures that props passed to components are of the expected type.
+
+- **Documentation**:
+
+  - Serves as a form of documentation for developers, making it clear what types of data are expected.
+
+- **Error Prevention**:
+  - Helps catch bugs early by warning when a prop of an incorrect type is passed.
+
+### 5. Limitations of Prop Types
+
+- **Only for Development**:
+  - Prop Types only work during development; they don't enforce type checks in production.
+- **Not a Complete Solution**:
+  - They don't replace the need for other forms of testing or type systems like TypeScript.
+
+### 6. Conclusion
+
+- **Best Practice**:
+  - Always define Prop Types for components to ensure type safety and clarity.
+  - While Prop Types are useful, consider using TypeScript for more robust type checking in larger projects.

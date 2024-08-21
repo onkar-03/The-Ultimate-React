@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 // Global Styling
 const containerStyle = {
@@ -9,6 +10,15 @@ const containerStyle = {
 
 const StarContainerStyle = {
   display: 'flex',
+};
+
+// Defining Prop Types of Props received by the Component
+StarRating.propTypes = {
+  maxRating: PropTypes.number,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  defaultRating: PropTypes.number,
+  messages: PropTypes.arrayOf,
 };
 
 // Stars Component
