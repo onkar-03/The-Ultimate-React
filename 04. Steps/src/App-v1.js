@@ -94,7 +94,7 @@ const messages = [
 
 /* 
  --- Updating State base on Current State
- - Whenever we update eth State base on teh current value of the State: 
+ - Whenever we update eth State base on the current value of the State: 
  - We should not update the state variable directly in the setter function 
  - We should always pass a callback function in the setter function that takes in the state as its argument and then update it there
  - However when we don't update the state based on the current state we can directly pass the value and there is no need of the callback function
@@ -143,7 +143,6 @@ Key Concepts
   - For variables that do not need to trigger a rerender, use regular variables defined with const.
 */
 
-
 // Root Component 'App'
 // Exporting so as the index.js can use it where it is imported
 export default function App() {
@@ -180,7 +179,7 @@ export default function App() {
       </button>
       {/*
       - Using defined state in JSX
-      - If isOpen is True only then teh steps tab renders 
+      - If isOpen is True only then the steps tab renders 
       */}
       {isOpen && (
         <div className='steps'>

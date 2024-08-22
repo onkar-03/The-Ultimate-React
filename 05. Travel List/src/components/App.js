@@ -56,7 +56,7 @@ export default function App() {
       'Are you sure you want to delete all Items?',
     );
 
-    // Reset the Items Array to an Empty Array only if user agrees to delete it from teh alert window
+    // Reset the Items Array to an Empty Array only if user agrees to delete it from the alert window
     if (confirmed) setItems([]);
   }
 

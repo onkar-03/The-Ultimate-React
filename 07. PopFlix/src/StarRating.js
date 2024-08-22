@@ -23,7 +23,7 @@ StarRating.propTypes = {
 
 // Stars Component
 // Default Value as 10 inc as no value is passed
-// Improved teh Component with Props as Components API
+// Improved the Component with Props as Components API
 export default function StarRating({
   maxRating = 10,
   color = '#fcc419',

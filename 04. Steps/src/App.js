@@ -42,7 +42,7 @@ export default function App() {
       </button>
       {/*
       - Using defined state in JSX
-      - If isOpen is True only then teh steps tab renders 
+      - If isOpen is True only then the steps tab renders 
       */}
       {isOpen && (
         <div className='steps'>

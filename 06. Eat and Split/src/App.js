@@ -34,7 +34,7 @@ function Button({ children, onClick }) {
 
 export default function App() {
   // We need a State to handle the Add new Friend Form on clicking the Button
-  // Also rerender teh Component
+  // Also rerender the Component
   // As the Component is rendered in App Component hence we define a State here
   // As its initially hidden hence false
   const [addFriend, setAddFriend] = useState(false);
@@ -77,7 +77,7 @@ export default function App() {
   }
 
   function handleSplitBill(value) {
-    // Creating a new array with teh updated data of who ows you and who do u owe money in the new array
+    // Creating a new array with the updated data of who ows you and who do u owe money in the new array
     setFriends((friends) =>
       friends.map((friend) =>
         friend.id === selectedFriend.id
