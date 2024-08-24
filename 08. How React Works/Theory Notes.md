@@ -63,3 +63,91 @@ However, when you call a component directly as a function, like `DifferentConten
    - React has strict rules around how hooks should be used, especially that they must be called at the top level of a component. Calling a component directly can lead to violations of these rules, causing unexpected behavior or errors.
 
 In conclusion, always render components using JSX syntax (`<ComponentName />`). This ensures that React recognizes the component as an instance, correctly manages its state, and adheres to the rules of hooks.
+
+## How React Rendering Works - Part 1 (Overview)
+
+### Introduction
+
+- This part sets the foundation to understand how React renders applications behind the scenes.
+- The topic is extensive, so it's broken down into three parts.
+
+### Recap: Components and React Elements
+
+- **Components**: Building blocks in React applications.
+  - Can be used inside other components multiple times.
+  - React creates **component instances** for each usage.
+  - These instances hold state and props.
+- **JSX to React Elements**:
+  - When React calls a component instance, the JSX is converted into a series of `react.createElement` function calls.
+  - These function calls generate **React elements**.
+- **React Elements to DOM Elements**:
+  - Eventually, React elements are transformed into **DOM elements**.
+  - These DOM elements are displayed on the screen as part of the user interface.
+
+### Understanding the Rendering Process
+
+- The rendering process consists of four main stages:
+  1. **Render Triggered**
+  2. **Render Phase**
+  3. **Commit Phase**
+  4. **Browser Paint**
+
+#### The Render Process
+
+- **Triggering a Render**:
+
+  - A new render is triggered usually due to a state update.
+
+- **Render Phase**:
+  - React initiates the **render phase**.
+  - During this phase, React calls the component functions.
+  - Determines how the DOM should be updated based on the latest state changes.
+  - **Important**: This phase does not update the DOM itself.
+  - In React, "rendering" refers to this internal process, not directly producing visual changes.
+
+#### The Commit Phase
+
+- **Commit Phase**:
+  - React moves to the **commit phase** after determining necessary updates.
+  - This phase updates the DOM by:
+    - Placing new elements in the DOM.
+    - Updating or deleting existing elements.
+  - The commit phase aligns the DOM with the current state of the application.
+  - Traditionally corresponds to what we think of as "rendering."
+
+#### Final Browser Repaint
+
+- **Browser Repaint**:
+  - After the DOM is updated, the browser:
+    - Notices changes in the DOM.
+    - Repaints the screen.
+  - This repaint is what users perceive as the rendered interface.
+  - **Note**: This step is outside React's control.
+
+### Triggering a Render
+
+- Two primary ways a render can be triggered in a React application:
+
+  1. **Initial Render**:
+     - Occurs the very first time the application runs.
+  2. **Re-render**:
+     - Occurs when a state update happens in one or more component instances.
+
+- **Render Process Scope**:
+  - The render process is triggered for the entire application not just for one single component
+  - This doesn't mean that the entire DOM is updated
+  - In React rendering is about calling component functions and figuring out what needs to be changed in DOM later
+  - In practice it looks like React only renders the updated components but thats not how react works behind the scenes
+  - React looks at the entire tree when a render happens
+
+#### Scheduling a Render
+
+The re-rendering isn't triggered immediately after a State change happens, instead its scheduled for when the JS Engine has some free time with it
+
+- **Render Scheduling**:
+  - A render is not triggered immediately after a state update.
+  - It is **scheduled** to occur when the JavaScript engine has free time.
+  - This scheduling usually occurs within a few milliseconds and is not noticeable.
+- **Batching**:
+  - Multiple `setState` calls within the same function might be **batched** together.
+  - Batching optimizes the render process by reducing unnecessary renders.
