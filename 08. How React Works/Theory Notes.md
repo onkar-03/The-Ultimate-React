@@ -136,7 +136,7 @@ In conclusion, always render components using JSX syntax (`<ComponentName />`). 
 - **Render Process Scope**:
   - The render process is triggered for the entire application not just for one single component
   - This doesn't mean that the entire DOM is updated
-  - In React rendering is about calling component functions and figuring out what needs to be changed in DOM later
+  - In React rendering is about calling component functions for the Updated Components and figuring out what needs to be changed in DOM later
   - In practice it looks like React only renders the updated components but thats not how react works behind the scenes
   - React looks at the entire tree when a render happens
 
@@ -151,3 +151,54 @@ The re-rendering isn't triggered immediately after a State change happens, inste
 - **Batching**:
   - Multiple `setState` calls within the same function might be **batched** together.
   - Batching optimizes the render process by reducing unnecessary renders.
+
+## React Rendering and Reconciliation - Part 2
+
+Welcome to this deep dive into the React rendering process and reconciliation
+
+### How React Rendering works in Render Phase ??
+
+- **Component Rendering**: When a state update occurs, React calls the component functions to create updated React elements. This crates a New Virtual DOM structure
+
+- **Virtual DOM**: Tree of all React Elements created from all instances in teh component Tree. It’s created quickly and efficiently and is used to determine changes in the DOM.
+
+"Also called as React Element Tree!!"
+
+### Virtual DOM vs. Shadow DOM
+
+- **Virtual DOM**: A term that describes a tree of React elements. It’s not as significant as it seems; it's essentially a simple JavaScript object.
+- **Shadow DOM**: A browser technology used in web components, unrelated to React’s virtual DOM.
+
+### Re-rendering
+
+- When a State Update happens a Re-render is triggered. React calls the component functions of the Component whose state is updated
+- Then place the new React Element of the Component in the Virtual DOM structure
+- React will also re-render all child components whenever a parent component is updated, regardless of whether the props have changed.
+- This approach ensures that React doesn’t miss any changes but can lead to re-rendering the entire application.
+- The whole Virtual DOM is recreated not the actual DOM
+
+### Why not update the entire DOM whenever state changes somewhere in the app ??
+
+- Writing the DOM is slow than creating a virtual DOM Tree
+- Usually a small part of the DOM needs to be updated on state changes
+- React reuses as much of the existing DOM as possible
+
+### Fiber and Reconciliation
+
+- **Reconciliation**: The process of comparing the new virtual DOM with the old one to determine what needs to be updated in the actual DOM. The process of comparing elements step-by-step based on their position in the tree is called Diffing about which we will learn later
+- **Fiber**: The reconciler in React,teh heart of React that manages this process efficiently by keeping a mutable data structure for components and DOM elements. They are called "Units of Work"
+
+  - **Fiber Tree**: A tree of fibers, each representing a component instance or DOM element.On Initial Render of the Page a Fibre Tree is created. Unlike React elements, fibers are not recreated on each render but are mutated.
+
+- The Fiber Tree us used to created the updated DOM Tree
+
+### Efficiency and Asynchronous Work
+
+- React aims to be efficient by updating only the parts of the DOM that have changed.
+- Fiber allows work to be split into chunks and processed asynchronously, enabling prioritization and handling of tasks.
+
+### Summary
+
+- The virtual DOM is a performance optimization, not the core of React’s efficiency.
+- Reconciliation and the fiber tree are key to React’s ability to efficiently manage and update the UI.
+- Understanding these concepts helps in grasping how React handles updates and maintains performance.
