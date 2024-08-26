@@ -481,16 +481,17 @@ The `key` prop is a special prop used in React to help the Diffing algorithm eff
 ```jsx
 <div>
   <Question
-  question={{
-    title: React vs Js,
-    body:'Why should we use React ??
-  }}
-    key={q24}/>
+    question={{
+      title: React,
+      body: 'What is React ??',
+    }}
+    key={q24}
+  />
   />
 </div>
 ```
 
-- **Effect**: By assigning a new `key` to the component when props change, React treats it as a new instance, resetting its state.
+- **Effect**: By assigning a new `key` to the component when props change, React treats it as a new instance, resetting its state and displays the new Question and Answer Component
 
 ### Summary
 

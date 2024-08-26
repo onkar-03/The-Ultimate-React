@@ -44,7 +44,7 @@ function Tabbed({ content }) {
         <TabContent
           item={content.at(activeTab)}
           // Adding a key to Every Content Tab so that React identifies each of them as unique
-          // Also when the key changes we ha
+          // Also when the key changes its treated as a completely new element, and re-rendering of Component takes place
           key={content.at(activeTab).summary}
         />
       ) : (
