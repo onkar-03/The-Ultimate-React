@@ -41,7 +41,12 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent
+          item={content.at(activeTab)}
+          // Adding a key to Every Content Tab so that React identifies each of them as unique
+          // Also when the key changes we ha
+          key={content.at(activeTab).summary}
+        />
       ) : (
         <DifferentContent />
       )}

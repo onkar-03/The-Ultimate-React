@@ -392,10 +392,6 @@ In summary:
 
 These principles are crucial for understanding how React efficiently updates the DOM while managing state.
 
-```
-
-```
-
 ## Understanding the Key Prop in React
 
 The `key` prop is a special prop used in React to help the Diffing algorithm efficiently update the DOM. Here's a detailed breakdown of its purpose and usage:
