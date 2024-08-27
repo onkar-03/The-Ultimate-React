@@ -500,3 +500,72 @@ The `key` prop is a special prop used in React to help the Diffing algorithm eff
 - **Changing Keys**: Useful for resetting component state when needed.
 
 By understanding and using the `key` prop effectively, you can optimize your React applications and ensure they perform efficiently.
+
+## Rendering Process and Related Concepts in React
+
+### 1. **Render Logic**
+
+- **Definition**: Render logic is all the code that lives at the top level of your component functions and is responsible for describing how the view of a component instance should look.
+- **Examples**:
+  - Code in the return block of the component.
+  - Functions that are called within the return block
+ 
+### 2. **Event Handler Functions**
+
+- **Definition**: Event handler functions are pieces of code that execute as a consequence of an event that the handler is listening to.
+- **Examples**:
+  - Functions registered to events like `handleNewAnswer` for a change event.
+- **Purpose**: Event handlers contain code that makes things happen in the application, such as state updates, HTTP requests, and page navigation.
+
+### 3. **Importance of Differentiating Render Logic and Event Handlers**
+
+- **Render Logic**: Responsible for rendering the component.
+- **Event Handlers**: Contain code that interacts with the outside world to perform actions.
+
+### 4. **Pure Functions and Side Effects**
+
+- **Side Effects**:
+  - Occur when a function depends on or modifies data outside its scope.
+  - Examples: HTTP requests, DOM manipulations, setting timers.
+- **Pure Functions**:
+  - Functions without side effects.
+  - Always return the same output for the same input.
+  - Predictable behavior.
+
+### 5. **Impure Functions**
+
+- **Characteristics**:
+  - Depend on external data or modify data outside their scope.
+  - Unpredictable behavior.
+  - Examples: Functions that return the current date/time or mutate outside variables.
+
+### 6. **Render Logic Must Be Pure**
+
+- **Rule**: Components must be pure functions when it comes to render logic.
+- **Implications**:
+  - Render logic must not produce any side effects.
+  - Render logic cannot perform network requests, create timers, or directly manipulate the DOM.
+  - Render logic must not mutate objects or variables outside the component function's scope.
+  - Mutating props is forbidden because it would be a side effect.
+
+### 7. **State Updates and Render Logic**
+
+- **Rule**:
+  - State updates cannot occur in render logic as they would cause an infinite loop.
+  - State updates are technically not side effects but are still prohibited in render logic.
+
+### 8. **Exceptions and Allowed Side Effects**
+
+- **Examples**:
+  - `console.log` and creating random numbers are technically side effects but are generally harmless and allowed.
+
+### 9. **Managing Side Effects**
+
+- **Event Handlers**:
+  - Side effects are allowed and encouraged within event handler functions.
+- **`useEffect` Hook**:
+  - Used to handle side effects that need to occur as soon as the component is rendered.
+
+### 10. **Upcoming Topics**
+
+- **State Update Batching**: The next important topic to be discussed.
