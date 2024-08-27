@@ -503,69 +503,114 @@ By understanding and using the `key` prop effectively, you can optimize your Rea
 
 ## Rendering Process and Related Concepts in React
 
-### 1. **Render Logic**
+### Two Types of Logic we can Write in React
 
-- **Definition**: Render logic is all the code that lives at the top level of your component functions and is responsible for describing how the view of a component instance should look.
+1. Render Logic
+2. Event Handler Functions
+
+#### 1. **Render Logic**
+
+- **Definition**: Render logic is all the code that lives at the top level of your component functions and is responsible for describing how the view of a component instance should look. It refers to all the code that's executed when a component is rendered
+
 - **Examples**:
   - Code in the return block of the component.
   - Functions that are called within the return block
- 
-### 2. **Event Handler Functions**
+
+#### 2. **Event Handler Functions**
 
 - **Definition**: Event handler functions are pieces of code that execute as a consequence of an event that the handler is listening to.
 - **Examples**:
-  - Functions registered to events like `handleNewAnswer` for a change event.
+  - Functions registered to events like `onClick` for a click event.
 - **Purpose**: Event handlers contain code that makes things happen in the application, such as state updates, HTTP requests, and page navigation.
 
-### 3. **Importance of Differentiating Render Logic and Event Handlers**
+**Summary** : "_Render Logic code renders the component whereas event handlers contain code that actually does things. Basically Event Handlers code makes things happen in the application_"
+
+### Fundamentals of Functional Programming
+
+1.  **Side Effects**
+
+    - It refers to the dependency on or modification of any data outside the function scope".
+    - Interaction with the outside world".
+    - Examples: mutating external variables, HTTP requests, writing to DOM
+
+Example:
+
+```jsx
+areas {} // Empty Object
+
+function circleAreas (){
+areas.circle = 3.14 * r * r; // Mutates the Outside Object
+}
+```
+
+=> Mutates teh Outside Variable / Object
+
+1.  **Pure Functions**
+    - A function that has no side effects
+    - Basically they don't change any variable outside their scope
+    - Given the same Input it always returns the same Output
+
+Example:
+
+```jsx
+function Area(r) {
+  return 3.14 * r * r; // returns the area of a circle
+}
+```
+
+=> Returns the same Output for same Input
+
+3. **Impure Function**
+   - A function that has side effects
+   - Basically they change any variable outside their scope
+   - Given the same Input it always returns a different Output
+
+Example 1:
+
+```jsx
+areas {} // Empty Object
+
+
+function circleAreas (){
+  areas.circle = 3.14 * r * r; // Mutates the Outside Object
+}
+```
+
+=> Mutates the Outside Object areas by creating a new property named circle
+
+Example 2:
+
+```jsx
+function Area(r) {
+  const date = Date.now();
+  const area = 3.14 * r * r;
+  return `${date} ${area}`;
+}
+```
+
+=> This returns a different Output for the same Input as the Date Changes every time
+
+#### 3. **Importance of Differentiating Render Logic and Event Handlers**
 
 - **Render Logic**: Responsible for rendering the component.
 - **Event Handlers**: Contain code that interacts with the outside world to perform actions.
 
-### 4. **Pure Functions and Side Effects**
-
-- **Side Effects**:
-  - Occur when a function depends on or modifies data outside its scope.
-  - Examples: HTTP requests, DOM manipulations, setting timers.
-- **Pure Functions**:
-  - Functions without side effects.
-  - Always return the same output for the same input.
-  - Predictable behavior.
-
-### 5. **Impure Functions**
-
-- **Characteristics**:
-  - Depend on external data or modify data outside their scope.
-  - Unpredictable behavior.
-  - Examples: Functions that return the current date/time or mutate outside variables.
-
-### 6. **Render Logic Must Be Pure**
+### Rule for Render Logic
 
 - **Rule**: Components must be pure functions when it comes to render logic.
 - **Implications**:
+  - Given the same prop (input) the Component should give the same JSX (output)
   - Render logic must not produce any side effects.
   - Render logic cannot perform network requests, create timers, or directly manipulate the DOM.
   - Render logic must not mutate objects or variables outside the component function's scope.
   - Mutating props is forbidden because it would be a side effect.
-
-### 7. **State Updates and Render Logic**
-
-- **Rule**:
   - State updates cannot occur in render logic as they would cause an infinite loop.
   - State updates are technically not side effects but are still prohibited in render logic.
-
-### 8. **Exceptions and Allowed Side Effects**
-
-- **Examples**:
   - `console.log` and creating random numbers are technically side effects but are generally harmless and allowed.
 
-### 9. **Managing Side Effects**
+#### Where to Use Side Effects ??
 
 - **Event Handlers**:
   - Side effects are allowed and encouraged within event handler functions.
 - **`useEffect` Hook**:
   - Used to handle side effects that need to occur as soon as the component is rendered.
-
-### 10. **Upcoming Topics**
-
-- **State Update Batching**: The next important topic to be discussed.
