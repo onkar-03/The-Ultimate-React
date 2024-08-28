@@ -614,3 +614,60 @@ function Area(r) {
   - Side effects are allowed and encouraged within event handler functions.
 - **`useEffect` Hook**:
   - Used to handle side effects that need to occur as soon as the component is rendered.
+
+## State Update Batching in React
+
+### Overview
+
+In React, state updates are batched to optimize performance. This means that multiple `setState` calls within the same event handler are combined into a single state update, which triggers only one render and commit phase.
+
+### Key Concepts
+
+1. **State Updates Are Batched**:
+
+   - React does not trigger renders immediately after each state update within an event handler.
+   - Multiple `setState` calls are batched into one state update, leading to a single render and commit phase.
+   - This approach prevents unnecessary re-renders and optimizes performance by only updating the screen once, even if multiple pieces of state are updated.
+
+2. **Example Scenario**:
+
+   - Consider an event handler function that updates three pieces of state. Instead of rendering the UI three times, React batches these updates and renders the UI only once.
+
+   How React Handles This ??
+
+   - When the `reset` function is called, it triggers three state updates:
+
+     - `setAnswer('')`
+     - `setBest(true)`
+     - `setSolve(false)`
+
+   - Instead of updating the state and re-rendering the component three times (once for each state update), React batches these state updates together.
+
+   - React waits until all the state updates in the `reset` function have been made, and then triggers a single re-render. This ensures that the UI is only updated once, reflecting all the changes made to the state.
+
+   - The `console.log(answer)` statement inside the `reset` function logs the old value of `answer` before it gets updated. This happens because React does not immediately update the state after calling `setAnswer('')`. Instead, the state is updated after the component re-renders. This answer State now is called **Stale State**.
+
+   - React schedules the state updates, and they take effect only after the render phase is complete. This behavior is what makes state updates in React asynchronous.
+
+   - **Performance**: By batching multiple state updates into a single render, React avoids unnecessary re-renders, which could lead to performance issues, especially in large applications.
+
+   - **Consistency**: This batching ensures that all related state updates are reflected together in the UI, maintaining consistency and avoiding intermediate states that might not make sense to the user.
+
+   In summary, React's automatic batching of state updates optimizes performance and ensures a more predictable and consistent UI update process.
+
+3. **Asynchronous State Updates**:
+
+   - State updates in React are asynchronous, meaning the updated state is not immediately available after a `setState` call.
+   - The updated state can only be accessed after the render phase is complete.
+
+4. **Handling Immediate State Needs**:
+
+   - If you need the new state immediately after updating it (e.g., to update the state again based on the previous state), you can pass a callback function to `setState` instead of a single value.
+
+5. **React 18 Enhancements**:
+
+   - Before React 18, automatic batching only occurred in event handlers.
+   - With React 18, batching is now automatic for all scenarios, including `timeouts`, promises`, and native event handlers using `addEventListener`.
+
+6. **Dealing with Batching Issues**:
+   - In rare cases where batching may cause issues, you can use `ReactDOM.flushSync` to exclude specific state updates from batching. However, this is seldom needed.
