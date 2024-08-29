@@ -70,7 +70,40 @@ function TabContent({ item }) {
   const [likes, setLikes] = useState(0);
 
   function handleInc() {
-    setLikes(likes + 1);
+    // Always use callback to update states
+    setLikes((likes) => likes + 1);
+  }
+
+  function handleTripleInc() {
+    // To increase Likes + 3 we can do it this way
+    // setLikes(likes + 3);
+
+    // If we write this
+    // As we know states are Updated in Batch
+    // Hence the Value of like after the first line still will be 0 and update would give 1 only as we know states are not updated immediately
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+
+    // If we want the current value of state to be accessed and updated we use the callback function
+    // Here in every callback the current / updated value of likes is used hence we update the like +3 on every click
+    // We should use the callback function always as in future if we want to change the working of the logic we are safe and dont fall into some unexpected behavior
+    setLikes((likes) => likes + 1);
+    setLikes((likes) => likes + 1);
+    setLikes((likes) => likes + 1);
+  }
+
+  function handleUndo() {
+    // Batched Re-Rendering
+    // Both states are updated when together and the component is re rendered
+    setShowDetails(true);
+    setLikes(0);
+  }
+
+  function handleUndoLater() {
+    // We prove that batch updates work in React outside the Event handlers as well
+    // Updating State using SetTimeout i.e. not an event handler function
+    setTimeout(handleUndo, 2000);
   }
 
   return (
@@ -86,13 +119,13 @@ function TabContent({ item }) {
         <div className='hearts-counter'>
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleTripleInc}>+++</button>
         </div>
       </div>
 
       <div className='tab-undo'>
-        <button>Undo</button>
-        <button>Undo in 2s</button>
+        <button onClick={handleUndo}>Undo</button>
+        <button onClick={handleUndoLater}>Undo in 2s</button>
       </div>
     </div>
   );
