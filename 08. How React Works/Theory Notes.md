@@ -671,3 +671,73 @@ In React, state updates are batched to optimize performance. This means that mul
 
 6. **Dealing with Batching Issues**:
    - In rare cases where batching may cause issues, you can use `ReactDOM.flushSync` to exclude specific state updates from batching. However, this is seldom needed.
+
+## Events in React
+
+### Event Capture, Target, Bubble, and Event Delegation
+
+To understand event handling in both the traditional DOM and React, it's essential to grasp the concepts of event capture, target, bubble, and why event delegation and propagation are significant.
+
+#### **Event Propagation Phases**
+
+- **Event propagation** refers to the order in which events are triggered in the DOM.
+- When an event occurs, like a user clicking a button, the event is created. It doesn't immediately activate the target element but goes through the following phases:
+
+1. **Event Capture (Capturing Phase)**
+
+   - The event starts from the root of the DOM tree and moves downward toward the target element.
+   - During this phase, any event listeners set to capture the event can intercept it before it reaches the target element.
+   - This phase is less commonly used but is important for scenarios where you want to catch events before they reach their intended target.
+
+2. **Target Phase**
+
+   - This is the phase where the event has reached the target element, the one directly interacted with by the user (e.g., the button that was clicked).
+   - The event listeners attached directly to this element are triggered during this phase.
+
+3. **Event Bubble (Bubbling Phase)**
+   - After reaching the target element, the event bubbles back up to the root, triggering event listeners on ancestor elements.
+   - This phase is commonly used for handling events, especially in event delegation.
+
+### **Event Delegation**
+
+- **Event delegation** is a technique where you leverage event propagation, particularly the bubbling phase, to handle events efficiently.
+- Instead of attaching event listeners to every child element individually, you can attach a single event listener to a parent element. This listener can then manage events for all its descendants.
+
+#### **Using `e.target` to Identify Event Source**
+
+- When using event delegation, it’s crucial to determine whether the event occurred on one of the intended child elements.
+- You can do this by checking the `e.target` property, which refers to the actual element that triggered the event.
+
+#### **Why Use Event Delegation?**
+
+- **Performance:** Reduces the number of event listeners, which can be especially important in cases where you have many similar elements (e.g., a list of items).
+- **Dynamic Content Handling:** Allows you to manage events on elements that are added to the DOM after the initial load, without needing to attach new event listeners.
+- **Simplified Code:** Makes your code easier to maintain by centralizing event handling in one place.
+
+#### **Event Propagation and React**
+
+- Understanding event propagation is crucial in React because React's synthetic event system is built on top of the DOM's event system.
+- React manages event listeners at the root of the DOM and uses delegation to handle events, making it essential to understand these phases to predict how events will behave in your React components.
+
+### Behind the Scenes: Event Handling in React
+
+- Behind the scenes, React performs **Event Delegation** for all the events in our Application.
+- React registers all event handlers on the root DOM container, which is generally a `div` with the id of `root`. This is where all events are handled.
+- React uses event delegation by attaching a single event listener to the root of the document, ensuring efficient event handling.
+
+### React Event Handling
+
+- React's approach to event handling differs from the traditional DOM.
+- Whenever we declare an EventHandler, React gives us the Event Object, which we generally refer to as `e`.
+- In Vanilla JavaScript, we get access to the native DOM event object like mouse/keyboard events.
+- React gives us something called **Synthetic Event**, which is a thin wrapper around the DOM's native event object.
+- Synthetic Events are similar to native event objects but add/change some functionalities on top of them.
+- They have the same interface as native events and methods like `stopPropagation` and `preventDefault`.
+- Events in React are normalized and wrapped in a SyntheticEvent object, ensuring cross-browser compatibility.
+- Most of the Synthetic Events bubble (including `focus`, `blur`, and `change`) except `scroll`.
+
+### Event Handlers in React vs. JavaScript
+
+- Attributes and event handlers are named using camelCase (e.g., `onClick` instead of `onclick` or `click`).
+- In Vanilla JavaScript, if we want to stop the default behavior of the browser (like reloading the page), we pass the `false` value, but in React, we need to use `preventDefault()`.
+- Attach `Capture` if you need to handle during the capture phase (e.g., `onClickCapture`).
