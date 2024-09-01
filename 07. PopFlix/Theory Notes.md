@@ -281,3 +281,34 @@ Prop drilling occurs when you need to pass data through multiple layers of compo
 - **Best Practice**:
   - Always define Prop Types for components to ensure type safety and clarity.
   - While Prop Types are useful, consider using TypeScript for more robust type checking in larger projects.
+
+## Components Life Cycle
+
+The COmponent Lifecycle refers to the different phases a component instance goes through over time.
+
+### 1. Mounting (Initial Render)
+
+- **Definition:** The phase where the component instance is created and rendered for the first time.
+- **Key Points:**
+  - The component is "born" during this phase.
+  - Fresh state and props are initialized.
+  - The component appears on the screen for the first time.
+
+### 2. Re-rendering
+
+- **Definition:** The phase where the component instance is rendered again due to changes in state, props, or context.
+- **Key Points:**
+  - Occurs when the component's state or props change.
+  - Can also happen when the parent component re-renders.
+  - Can also happen when the Context of Component changes
+  - This phase is optional and may not occur for all components.
+  - Enables the component to update its appearance or behavior based on new data.
+
+### 3. Unmounting
+
+- **Definition:** The phase where the component instance is removed from the screen and destroyed.
+- **Key Points:**
+  - The component "dies" in this phase i.e Components Instance is destroyed / removed
+  - State and props associated with the component are discarded.
+  - Commonly occurs when the user navigates away from the component or closes the application.
+  - A new instance of the same component can be mounted later, but the specific instance is gone.
