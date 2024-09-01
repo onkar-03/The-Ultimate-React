@@ -1,8 +1,5 @@
 import { useState } from 'react';
 
-// e2283e92
-// http://www.omdbapi.com/?apikey=e2283e92&
-
 const tempMovieData = [
   {
     imdbID: 'tt1375666',
@@ -53,34 +50,12 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-// API Key
-const KEY = 'e2283e92';
-
 // Structural Component
 export default function App() {
-  // --- Rendering Logic Code: which is at the top of the Component, it runs as the app renders on the screen
-
   // Listing State Up
   // As this state is required by both components hence lifting it up to the closest Parent App
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-
-  // Fetch Data using API
-  // As we should never create side effects in Render logic
-  // But here we are fetching data in the Render Logic which is indeed creating a side effect
-  // Also we are breaking teh React Rules here
-  fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
-    // Convert the received response from fetch to Json() using .json() function
-    .then((res) => res.json())
-    // .then((data) => setMovies(data.Search));
-    // Log the Response Data
-    .then((data) => console.log(data.Search));
-
-  // --- CONS of Fetching data in Render Logic
-  // On setting State here we are stuck in an infinite loop of API calls
-  // This is because here we did setup the State in render Logic using setMovies(), and setting state causes re rendering
-  // On every re-rendering the function fetch again and renders again and this goes on and on as an infinite loop
-  // Hence we should never fetch data in render logic
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   // Entire Structure of App visible here
   return (
