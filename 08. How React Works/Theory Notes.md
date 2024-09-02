@@ -610,10 +610,18 @@ function Area(r) {
 
 #### Where to Use Side Effects ??
 
-- **Event Handlers**:
-  - Side effects are allowed and encouraged within event handler functions.
-- **`useEffect` Hook**:
-  - Used to handle side effects that need to occur as soon as the component is rendered.
+- It basically is interaction of react component with the world outside that component.
+- We need side effects all the time.
+- They make out applications do something.
+- But they shouldn't be included in the Render Logic
+
+Instead we can create side effects in two different places in React:
+
+1.  **Event Handlers**:
+    Side effects are allowed and encouraged within event handler functions.
+
+1.  **`useEffect` Hook**:
+    Used to handle side effects that need to occur as soon as the component is rendered.
 
 ## State Update Batching in React
 

@@ -312,3 +312,53 @@ The COmponent Lifecycle refers to the different phases a component instance goes
   - State and props associated with the component are discarded.
   - Commonly occurs when the user navigates away from the component or closes the application.
   - A new instance of the same component can be mounted later, but the specific instance is gone.
+
+## Summary of useEffect and Side Effects in React
+
+## Side Effect in React
+
+- **Definition**:
+  - A side effect is any interaction between a React component and the external world.
+  - Examples include fetching data from an API or interacting with the browser DOM.
+
+## Why Side Effects Matter
+
+- **Importance**:
+  - Side effects are essential in React apps to perform useful actions like data fetching.
+  - Side effects should not be included in the render logic of a component.
+
+## Where to Place Side Effects
+
+- **Event Handlers**:
+  - Functions triggered by specific user actions (e.g., button clicks).
+  - Commonly used to initiate side effects when an event occurs.
+- **useEffect Hook**:
+  - Used for side effects that need to happen automatically during a component's lifecycle (e.g., after initial render, re-rendering, unmounting).
+
+## useEffect Hook
+
+- **Effect Execution**:
+  - Runs code at different moments of a component’s lifecycle (mounting, rendering, unmounting).
+  - Particularly useful for running code right after a component is first rendered.
+- **Dependency Array**:
+  - Controls when the effect runs.
+  - An empty array (`[]`) means the effect runs only after the first render.
+  - Dependencies in the array trigger the effect when they change.
+- **Cleanup Function**:
+  - An optional function returned by the effect that runs before the component re-renders or unmounts.
+
+## Comparison: Event Handlers vs. useEffect
+
+- **Event Handlers**:
+  - Trigger side effects in response to user actions / events.
+  - Used to react to certain Events on the UI
+- **useEffect**:
+  - Used to run at different moments of a component lifecycle
+  - Synchronizes the component with external systems, running code at specific points in the lifecycle.
+
+## Best Practices
+
+- **Prefer Event Handlers**:
+  - Always use event handlers for side effects when possible.
+- **Avoid Overusing useEffect**:
+  - Reserve the useEffect hook for effects that cannot be handled by event handlers.
