@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // e2283e92
 // http://www.omdbapi.com/?apikey=e2283e92&
@@ -69,18 +69,32 @@ export default function App() {
   // As we should never create side effects in Render logic
   // But here we are fetching data in the Render Logic which is indeed creating a side effect
   // Also we are breaking teh React Rules here
-  fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
-    // Convert the received response from fetch to Json() using .json() function
-    .then((res) => res.json())
-    // .then((data) => setMovies(data.Search));
-    // Log the Response Data
-    .then((data) => console.log(data.Search));
+  // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
+  //   // Convert the received response from fetch to Json() using .json() function
+  //   .then((res) => res.json())
+  //   // .then((data) => setMovies(data.Search));
+  //   // Log the Response Data
+  //   .then((data) => console.log(data.Search));
 
   // --- CONS of Fetching data in Render Logic
   // On setting State here we are stuck in an infinite loop of API calls
   // This is because here we did setup the State in render Logic using setMovies(), and setting state causes re rendering
   // On every re-rendering the function fetch again and renders again and this goes on and on as an infinite loop
-  // Hence we should never fetch data in render logic
+  // Hence we should never fetch data in render logic, instead use the useEffect() hook to handle Side effects like these (data fetching etc...)
+
+  // --- Using useEffect() hook to handle Side Effects
+  // No more Infinite Loop of Fetch and Render Logic
+  // It doesn't store anything hence we don't need to store the result
+  // It takes in a function, which contains the code we want to run as a side effect
+  useEffect(function () {
+    // Fetch data from the OMDB API using the given URL and API key
+    fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
+      // Convert the received response from the fetch into a JSON object
+      .then((res) => res.json())
+      // After conversion, take the data and update the 'movies' state with the search results
+      .then((data) => setMovies(data.Search));
+    // Pass an empty dependency array to ensure this effect runs only once after the initial render
+  }, []);
 
   // Entire Structure of App visible here
   return (
@@ -189,7 +203,7 @@ function Main({ children }) {
 
 // Stateful Component
 // Instead of having different boxes such as ListBox and Watched Box we created a Reusable Component Box and passed in required Components that we want to display using the Same box Component
-// So instead of writing the Components separately we used a single component to display both the ListBox and WatchedBox using Component COmposition
+// So instead of writing the Components separately we used a single component to display both the ListBox and WatchedBox using Component Composition
 
 function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
