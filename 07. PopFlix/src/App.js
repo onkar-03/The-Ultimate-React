@@ -65,8 +65,13 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // States for Error Handling and Query
   const [error, setError] = useState('');
-  const query = 'interstellar';
+  const tempQuery = 'interstellar';
+
+  // Lifting State Up to App from SearchBar
+  const [query, setQuery] = useState('');
 
   // Fetch Data using API
   // As we should never create side effects in Render logic
@@ -95,9 +100,12 @@ export default function App() {
           // Show Loading Icon
           setIsLoading(true);
 
+          //Reset Error
+          setError('');
+
           // Fetch data from the OMDB API using the given URL and API key
           const res = await fetch(
-            `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=${query}}`,
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`,
           );
 
           // Check if fetching was successful
@@ -124,11 +132,19 @@ export default function App() {
           setIsLoading(false);
         }
       }
+      // Reset Search Page if no search in the Search Bar
+      if (query.length < 3) {
+        // Delete Movies from the State if no Text to Search in the Search Bar
+        setMovies([]);
+        //Reset Error State & Return
+        setError('');
+        return;
+      }
       // Calling the Function
       fetchMovies();
     },
-    // Pass an empty dependency array to ensure this effect runs only once after the initial render
-    [],
+    // Pass query prop as its used in the useEffect() Hooks code for execution of certain logic
+    [query],
   );
 
   // Entire Structure of App visible here
@@ -141,7 +157,7 @@ export default function App() {
        */}
       <NavBar>
         <Logo />
-        <SearchBar />
+        <SearchBar query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
 
@@ -231,9 +247,7 @@ function Logo() {
 }
 
 // Stateful Component
-function SearchBar() {
-  const [query, setQuery] = useState('');
-
+function SearchBar({ query, setQuery }) {
   return (
     <input
       className='search'
@@ -246,7 +260,7 @@ function SearchBar() {
 }
 
 // Presentational Component
-function NumResults({ movies }) {
+function NumResults({ movies = [] }) {
   return (
     <p className='num-results'>
       Found <strong>{movies.length}</strong> results
