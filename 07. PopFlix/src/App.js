@@ -64,6 +64,7 @@ export default function App() {
   // As this state is required by both components hence lifting it up to the closest Parent App
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch Data using API
   // As we should never create side effects in Render logic
@@ -88,6 +89,9 @@ export default function App() {
   useEffect(
     function () {
       async function fetchMovies() {
+        // Show Loading Icon
+        setIsLoading(true);
+
         // Fetch data from the OMDB API using the given URL and API key
         const res = await fetch(
           `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`,
@@ -96,6 +100,8 @@ export default function App() {
         const data = await res.json();
         // update State
         setMovies(data.Search);
+        //Hide Loading Icon when data arrived
+        setIsLoading(false);
       }
       // Calling the Function
       fetchMovies();
@@ -135,7 +141,10 @@ export default function App() {
         - Accepting as children in the Component
         */}
         <Box>
-          <MoviesList movies={movies} />
+          {/* 
+          - Conditional Rendering of Loading Icon / Movies List based on isLoading State value
+          */}
+          {isLoading ? <Loader /> : <MoviesList movies={movies} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -159,6 +168,10 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className='loader'>Loading...</p>;
 }
 
 // Structural Component
