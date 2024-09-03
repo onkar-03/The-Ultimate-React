@@ -98,7 +98,7 @@ We can modify the Modal component to accept children through the children prop. 
 - **Children Prop:** One of the most common ways to achieve composition is by using the `children` prop. This allows any content, including other components, to be passed into the parent component, which can then render it appropriately.
 - **Component Props:** Another way to compose components is by passing them as explicit props. This allows for even more control over which components are included and how they are rendered.
 
-#### EG: Using the `children` prop
+#### Example: Using the `children` prop
 
 ```jsx
 function Modal({ children }) {
@@ -315,19 +315,19 @@ The COmponent Lifecycle refers to the different phases a component instance goes
 
 ## Summary of useEffect and Side Effects in React
 
-## Side Effect in React
+### Side Effect in React
 
 - **Definition**:
   - A side effect is any interaction between a React component and the external world.
   - Examples include fetching data from an API or interacting with the browser DOM.
 
-## Why Side Effects Matter
+### Why Side Effects Matter
 
 - **Importance**:
   - Side effects are essential in React apps to perform useful actions like data fetching.
   - Side effects should not be included in the render logic of a component.
 
-## Where to Place Side Effects
+### Where to Place Side Effects
 
 - **Event Handlers**:
   - Functions triggered by specific user actions (e.g., button clicks).
@@ -335,19 +335,41 @@ The COmponent Lifecycle refers to the different phases a component instance goes
 - **useEffect Hook**:
   - Used for side effects that need to happen automatically during a component's lifecycle (e.g., after initial render, re-rendering, unmounting).
 
-## useEffect Hook
+### useEffect Hook
 
 - **Effect Execution**:
+
   - Runs code at different moments of a component’s lifecycle (mounting, rendering, unmounting).
   - Particularly useful for running code right after a component is first rendered.
+  - It doesn't store anything hence we don't need to store the result
+
+- **Effect Function**:
+
+  - The first argument to useEffect is a function that contains the side effect logic. This function is executed after every render of the component, by default
+
 - **Dependency Array**:
-  - Controls when the effect runs.
+
+  - The second argument to useEffect is an array of dependencies. These dependencies are variables or props that the effect depends on.
+  - The effect is re-run whenever any value in this array changes.
   - An empty array (`[]`) means the effect runs only after the first render.
   - Dependencies in the array trigger the effect when they change.
-- **Cleanup Function**:
-  - An optional function returned by the effect that runs before the component re-renders or unmounts.
 
-## Comparison: Event Handlers vs. useEffect
+- **Cleanup Function**:
+
+  - An optional function returned by the effect that runs before the component re-renders or unmounts.
+  - The effect function can return a cleanup function.
+  - This is useful for cleaning up subscriptions, timers, or any other resources that were set up in the effect
+
+Example:
+
+```jsx
+useEffect(() =>  fetchData() {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+  }, []); // Runs only once, after the initial render
+```
+
+### Comparison: Event Handlers vs. useEffect
 
 - **Event Handlers**:
   - Trigger side effects in response to user actions / events.
@@ -356,9 +378,36 @@ The COmponent Lifecycle refers to the different phases a component instance goes
   - Used to run at different moments of a component lifecycle
   - Synchronizes the component with external systems, running code at specific points in the lifecycle.
 
-## Best Practices
+### Best Practices
 
 - **Prefer Event Handlers**:
   - Always use event handlers for side effects when possible.
 - **Avoid Overusing useEffect**:
   - Reserve the useEffect hook for effects that cannot be handled by event handlers.
+
+## Using Asynchronous Functions in useEffect Hook
+
+- **Why Use Asynchronous Functions in useEffect**:
+
+  - Side effects in React often involve operations that take time, such as fetching data from an API or performing other asynchronous tasks. Since `useEffect` is designed to manage side effects, it's crucial to know how to work with asynchronous functions within this hook.
+
+- **Handling Asynchronous Code**:
+
+  - `useEffect` cannot directly handle an asynchronous function as its callback because `useEffect` expects a cleanup function or nothing, but an asynchronous function returns a promise. To manage this, an asynchronous function is usually defined inside the `useEffect`, and then it is called immediately within the same hook.
+
+- **Inner Async Function**:
+
+  - The typical approach involves declaring an asynchronous function inside the `useEffect` hook. This function handles the asynchronous task, such as data fetching, and then it is invoked within the `useEffect`. This method allows the effect to run asynchronously without causing issues with React's expectations of the hook's return value.
+
+```jsx
+seEffect(function () {
+  async function fetchMovies() {
+    const res = await fetch(
+      `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`,
+    );
+    const data = await res.json();
+    setMovies(data.Search);
+  }
+  fetchMovies();
+}, []);
+```

@@ -76,7 +76,7 @@ export default function App() {
   //   // Log the Response Data
   //   .then((data) => console.log(data.Search));
 
-  // --- CONS of Fetching data in Render Logic
+  // --- Cons of Fetching data in Render Logic
   // On setting State here we are stuck in an infinite loop of API calls
   // This is because here we did setup the State in render Logic using setMovies(), and setting state causes re rendering
   // On every re-rendering the function fetch again and renders again and this goes on and on as an infinite loop
@@ -84,17 +84,25 @@ export default function App() {
 
   // --- Using useEffect() hook to handle Side Effects
   // No more Infinite Loop of Fetch and Render Logic
-  // It doesn't store anything hence we don't need to store the result
-  // It takes in a function, which contains the code we want to run as a side effect
-  useEffect(function () {
-    // Fetch data from the OMDB API using the given URL and API key
-    fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
-      // Convert the received response from the fetch into a JSON object
-      .then((res) => res.json())
-      // After conversion, take the data and update the 'movies' state with the search results
-      .then((data) => setMovies(data.Search));
+  // Using async Function in useEffect() hook
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        // Fetch data from the OMDB API using the given URL and API key
+        const res = await fetch(
+          `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`,
+        );
+        // Convert the received response from fetch to Json() using.json() function
+        const data = await res.json();
+        // update State
+        setMovies(data.Search);
+      }
+      // Calling the Function
+      fetchMovies();
+    },
     // Pass an empty dependency array to ensure this effect runs only once after the initial render
-  }, []);
+    [],
+  );
 
   // Entire Structure of App visible here
   return (
