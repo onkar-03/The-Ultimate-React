@@ -65,6 +65,8 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const query = 'interstellar';
 
   // Fetch Data using API
   // As we should never create side effects in Render logic
@@ -89,19 +91,38 @@ export default function App() {
   useEffect(
     function () {
       async function fetchMovies() {
-        // Show Loading Icon
-        setIsLoading(true);
+        try {
+          // Show Loading Icon
+          setIsLoading(true);
 
-        // Fetch data from the OMDB API using the given URL and API key
-        const res = await fetch(
-          `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`,
-        );
-        // Convert the received response from fetch to Json() using.json() function
-        const data = await res.json();
-        // update State
-        setMovies(data.Search);
-        //Hide Loading Icon when data arrived
-        setIsLoading(false);
+          // Fetch data from the OMDB API using the given URL and API key
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=${query}}`,
+          );
+
+          // Check if fetching was successful
+          if (!res.ok) {
+            throw new Error('Something went Wrong!!');
+          }
+
+          // Convert the received response from fetch to Json() using.json() function
+          const data = await res.json();
+
+          // Check if the Movie Data exists in the OMDB API, if not then it wont have the data.Search property and we get undefined as response
+          if (data.Response === 'False') {
+            throw new Error('Movie not Found!!');
+          }
+
+          // update State
+          setMovies(data.Search);
+        } catch (err) {
+          // Handle Error
+          console.log(err.message);
+          setError(err.message);
+        } finally {
+          //Hide Loading Icon when data arrived
+          setIsLoading(false);
+        }
       }
       // Calling the Function
       fetchMovies();
@@ -141,10 +162,18 @@ export default function App() {
         - Accepting as children in the Component
         */}
         <Box>
+          {/* - Conditional Rendering of Loading Icon / Movies List based on isLoading State value
+           */}
+          {/* {isLoading ? <Loader /> : <MoviesList movies={movies} />} */}
+
           {/* 
-          - Conditional Rendering of Loading Icon / Movies List based on isLoading State value
+          -Conditional Rendering based on isLoading State value & also checking if there is any errors
+          - '&&' Evaluates LHS expression
+          - '&&' Renders RHS if the LHS is true, else if the LHS is false nothing happens 
           */}
-          {isLoading ? <Loader /> : <MoviesList movies={movies} />}
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MoviesList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -172,6 +201,14 @@ export default function App() {
 
 function Loader() {
   return <p className='loader'>Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className='error'>
+      <span>❌</span> {message}
+    </p>
+  );
 }
 
 // Structural Component
