@@ -349,10 +349,10 @@ The COmponent Lifecycle refers to the different phases a component instance goes
 
 - **Dependency Array**:
 
-  - The second argument to useEffect is an array of dependencies. These dependencies are variables or props that the effect depends on.
+  - The second argument to `useEffect` is an array of dependencies. These dependencies are variables or props that the effect depends on.
   - The effect is re-run whenever any value in this array changes.
-  - An empty array (`[]`) means the effect runs only after the first render.
   - Dependencies in the array trigger the effect when they change.
+  - An empty array (`[]`) means the effect runs only after the first render.
 
 - **Cleanup Function**:
 
@@ -387,17 +387,19 @@ useEffect(() =>  fetchData() {
 
 ## Using Asynchronous Functions in useEffect Hook
 
-- **Why Use Asynchronous Functions in useEffect**:
+### Why Use Asynchronous Functions in useEffect:
 
-  - Side effects in React often involve operations that take time, such as fetching data from an API or performing other asynchronous tasks. Since `useEffect` is designed to manage side effects, it's crucial to know how to work with asynchronous functions within this hook.
+- Side effects in React often involve operations that take time, such as fetching data from an API or performing other asynchronous tasks. Since `useEffect` is designed to manage side effects, it's crucial to know how to work with asynchronous functions within this hook.
 
-- **Handling Asynchronous Code**:
+### Handling Asynchronous Code:
 
-  - `useEffect` cannot directly handle an asynchronous function as its callback because `useEffect` expects a cleanup function or nothing, but an asynchronous function returns a promise. To manage this, an asynchronous function is usually defined inside the `useEffect`, and then it is called immediately within the same hook.
+- `useEffect` cannot directly handle an asynchronous function as its callback because `useEffect` expects a cleanup function or nothing, but an asynchronous function returns a promise. To manage this, an asynchronous function is usually defined inside the `useEffect`, and then it is called immediately within the same hook.
 
-- **Inner Async Function**:
+### Inner Async Function:
 
-  - The typical approach involves declaring an asynchronous function inside the `useEffect` hook. This function handles the asynchronous task, such as data fetching, and then it is invoked within the `useEffect`. This method allows the effect to run asynchronously without causing issues with React's expectations of the hook's return value.
+- The typical approach involves declaring an asynchronous function inside the `useEffect` hook. This function handles the asynchronous task, such as data fetching, and then it is invoked within the `useEffect`. This method allows the effect to run asynchronously without causing issues with React's expectations of the hook's return value.
+
+Example:
 
 ```jsx
 seEffect(function () {
@@ -411,3 +413,101 @@ seEffect(function () {
   fetchMovies();
 }, []);
 ```
+
+## Summary of `useEffect` Dependency Array
+
+### Understanding the `useEffect` Dependency Array
+
+- The `useEffect` hook in React runs after every render by default. However, this behavior can be customized by passing a dependency array as the second argument to the `useEffect` hook.
+
+- **Why does `useEffect` need a dependency array?**
+  - React needs to know when to re-run the effect. The dependency array informs React about which state variables or props the effect relies on.
+  - When one of the dependencies changes, the effect is re-executed.
+
+### What are Dependencies?
+
+- **Dependencies** are state variables and props used within the effect.
+- Every state variable or prop used inside the effect must be included in the dependency array.
+- If a dependency (state or prop) changes, the effect is re-executed. Failing to include all dependencies can result in bugs, such as **stale closures**.
+
+Example:
+
+```jsx
+cons title = props.movie.Title;
+const [userRat1ng, setUserRating] = useState('');
+
+useEffect(
+function () {
+if (!title)return;
+document.title=`${title} ${userRating && `(Rated ${userRating} ⭐)`}`;
+return () => (document.title = 'usePopcorn');
+},
+
+// Including both title prop and userRating state in the effects dependency array as they are used inside the useEffect Hook
+[title,userRating]
+);
+```
+
+### Use effect is a Synchronizing Mechanism
+
+- The `useEffect` hook acts like an event listener, reacting to changes in dependencies by re-running the effect.
+- The Effects are reactive and do react to state and prop updates which are inside the dependency array
+- useEffect is a way to synchronize the effect with the state of the Application
+- **Effect Synchronization:** Effects synchronize with state and props used in the effect, ensuring the UI remains consistent with state changes.
+
+### Synchronization & LifeCycle
+
+- We know that whenever a dependency changes (State / Prop):
+
+  - 1. The effect is executed again
+  - 2. The component is re-rendered
+
+- Hence we can say that the Effect and Components Lifecycle are deeply connected
+- We can use the dependency array of the useEffect hook whenever a Component renders/ re-renders
+
+### Types of Dependency Arrays
+
+1. **Multiple Dependencies**:
+
+- The effect will synchronize with the specified dependencies and will run on the initial render and whenever one of the dependencies changes.
+
+- Say effect synchronizes with the specified dependencies x,y & z
+- Now the Effect runs on Mount and whenever any of the dependencies changes
+
+```jsx
+useEffect(fn, [x, y, z]);
+```
+
+2. **Empty Dependency Array**:
+
+- The effect runs only on the component’s initial mount, as it does not depend on any state or props.
+
+```jsx
+useEffect(fn, []);
+```
+
+3. **No Dependency Array**:
+
+- The effect runs on every render, which is generally undesirable as it can lead to performance issues.
+
+```jsx
+useEffect(fn);
+```
+
+### Lifecycle of `useEffect` Execution
+
+- **Component Lifecycle Integration**: Effects are deeply connected to the component lifecycle. They are executed after the component has been rendered and the DOM has been updated (painted) by the browser.
+- **Painting Process**:
+  - Mount (Initial Render)
+  - Commit
+  - Browser Paint
+- **Execution Timing**:
+  - Effects run asynchronously after the render is painted on the screen, ensuring the UI update is completed before the effect logic is executed.
+  - Effects run this way coz effects might have long running processes like fetching data from the server etc ...
+  - If React allows effects to run before the painting of DOM on screen then the user might see the Old version of the Component for way too long
+
+### Important Points
+
+- The `useEffect` hook is essential for synchronizing component effects with state and props.
+- Properly specifying the dependency array is crucial for ensuring effects run correctly and efficiently.
+- Effects can be thought of as a way to synchronize your component with external systems or other parts of your app, maintaining consistency between state/props and side effects.
