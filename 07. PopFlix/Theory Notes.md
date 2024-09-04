@@ -517,11 +517,11 @@ useEffect(fn);
 ### Understanding the Cleanup Function
 
 - **Purpose**: A cleanup function in React's `useEffect` is executed when a component unmounts or before the effect runs again.
-- **Scenario**: When the `MovieDetails` component unmounts, the page title should revert to its original state (e.g., from "Interstellar" to "usePopcorn").
+- **Scenario**: When the `MovieDetails` component unmounts, the page title should revert to its original state (e.g., from "Interstellar" to "usePopcorn") i.e the Side effect of displaying the Movie title in teh Page Title should be removed.
 
 ### When is the Cleanup Function Executed?
 
-- **On Unmount**: The cleanup function runs when the component is about to unmount, allowing you to reset any side effects.
+- **On Unmount**: The cleanup function runs when the component is about to unmount, allowing you to reset any side effects still happening.
 - **On Rerender**: It also runs right before the next effect is executed during a rerender, cleaning up the previous side effect.
 
 ### Key Points about Cleanup Functions

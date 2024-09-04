@@ -480,6 +480,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       // In case no movie selected show the default title
       if (!title) return;
       document.title = `Movie | ${title} | PopFlix`;
+
+      // CLeanUp Function to reset side Effects
+      return function () {
+        document.title = 'PopFlix';
+      };
     },
     // We wan the Title to re-render on change of title name while clicking on multiple movies
     [title],
