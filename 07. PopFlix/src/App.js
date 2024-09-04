@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import StarRating from './StarRating.js';
 
 // e2283e92
 // http://www.omdbapi.com/?apikey=e2283e92&
@@ -118,7 +119,7 @@ export default function App() {
 
           // Fetch data from the OMDB API using the given URL and API key
           const res = await fetch(
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`,
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
           );
 
           // Check if fetching was successful
@@ -387,12 +388,87 @@ function Movie({ movie, onSelectMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie }) {
+  // State to store the Movie data to display selected data from the Object on Screen
+  // An empty Object as initial State as we get teh JSON response as Object
+  const [movie, setMovie] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Destructuring the JSON Object of Movie Data
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    Director: director,
+    imdbRating,
+    Plot: plot,
+    Genre: genre,
+    Actors: actors,
+    Released: released,
+  } = movie;
+
+  console.log(title, year);
+
+  useEffect(
+    function () {
+      // Display Loading
+      setIsLoading(true);
+
+      async function getMovieDetails() {
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
+        );
+        const data = await res.json();
+
+        // Setting the Object as Object
+        setMovie(data);
+
+        // Set back Loading State
+        setIsLoading(false);
+      }
+      getMovieDetails();
+    },
+
+    // We want to run the Effect whenever the Id changes
+    [selectedId],
+  );
+
   return (
     <div className='details'>
-      <button className='btn-back' onClick={onCloseMovie}>
-        &larr;
-      </button>
-      {selectedId}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className='btn-back' onClick={onCloseMovie}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of ${movie} movie`} />
+            <div className='details-overview'>
+              <h2>{title}</h2>
+              <p>
+                {released}&bull;{runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>🌟</span>
+                {imdbRating} IMDb Rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className='rating'>
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
