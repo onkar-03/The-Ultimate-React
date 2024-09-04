@@ -30,6 +30,8 @@ export default function StarRating({
   size = 38,
   defaultRating = 0,
   messages = [],
+  className,
+  onSetRating,
 }) {
   const StyleText = {
     lineHeight: '1',
@@ -47,6 +49,7 @@ export default function StarRating({
   // Event Handler to Update the rating State
   function handleRating(rating) {
     setRating(rating);
+    onSetRating(rating);
   }
 
   // Event Handler to Update the tempRating State

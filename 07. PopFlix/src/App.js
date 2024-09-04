@@ -87,6 +87,12 @@ export default function App() {
     setSelectedId(null);
   }
 
+  // Handle the Watched Movie List
+  // Destructuring the array and adding the new watched movie to the list
+  function handleWatchedMovie(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
+
   // Fetch Data using API
   // As we should never create side effects in Render logic
   // But here we are fetching data in the Render Logic which is indeed creating a side effect
@@ -212,6 +218,7 @@ export default function App() {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleWatchedMovie}
             />
           ) : (
             <>
@@ -387,12 +394,12 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({ selectedId, onCloseMovie }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
   // State to store the Movie data to display selected data from the Object on Screen
   // An empty Object as initial State as we get teh JSON response as Object
   const [movie, setMovie] = useState({});
-
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
 
   // Destructuring the JSON Object of Movie Data
   const {
@@ -408,7 +415,22 @@ function MovieDetails({ selectedId, onCloseMovie }) {
     Released: released,
   } = movie;
 
-  console.log(title, year);
+  function handleAdd() {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      poster,
+      imdbRating: +imdbRating,
+      runtime: +runtime.split('').at(0),
+      userRating,
+    };
+
+    // Placing the newly watched movie to the list
+    onAddWatched(newWatchedMovie);
+
+    // Close the Movie and display the List
+    onCloseMovie();
+  }
 
   useEffect(
     function () {
@@ -459,7 +481,14 @@ function MovieDetails({ selectedId, onCloseMovie }) {
           </header>
           <section>
             <div className='rating'>
-              <StarRating maxRating={10} size={24} />
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              <button className='btn-add' onClick={handleAdd}>
+                ++ Add to List
+              </button>
             </div>
             <p>
               <em>{plot}</em>
@@ -476,9 +505,13 @@ function MovieDetails({ selectedId, onCloseMovie }) {
 // Presentational Component
 function WatchedSummary({ watched }) {
   // Derived States based on watched state
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const avgImdbRating = average(
+    watched.map((movie) => movie.imdbRating),
+  ).toFixed(2);
+  const avgUserRating = average(
+    watched.map((movie) => movie.userRating),
+  ).toFixed(2);
+  const avgRuntime = average(watched.map((movie) => movie.runtime)).toFixed(2);
 
   return (
     <div className='summary'>
@@ -521,8 +554,8 @@ function WatchedMoviesList({ watched }) {
 function WatchedMovie({ movie }) {
   return (
     <li key={movie.imdbID}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>
