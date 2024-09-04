@@ -121,6 +121,10 @@ export default function App() {
   // Using async Function in useEffect() hook
   useEffect(
     function () {
+      // Abort Controller API to handle and abort unnecessary fetch requests made during search
+      // In order to connect this AbortController with the Request we need to declare a signal property in the fetch request like this { signal: controller.signal }
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           // Show Loading Icon
@@ -132,6 +136,7 @@ export default function App() {
           // Fetch data from the OMDB API using the given URL and API key
           const res = await fetch(
             `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal },
           );
 
           // Check if fetching was successful
@@ -152,7 +157,14 @@ export default function App() {
         } catch (err) {
           // Handle Error
           console.log(err.message);
-          setError(err.message);
+
+          // We want the error to be displayed on when there is a real error
+          // In Js the fetch failed is considered as an error
+          // Hence when we abort the fetch request using cleanup on every key stroke we get errors in the console, which we dont wan t
+          // Hence we do conditional rendering of errors only if they are not due to abort of fetch requests
+          if (error.name !== 'AbortError') {
+            setError(err.message);
+          }
         } finally {
           //Hide Loading Icon when data arrived
           setIsLoading(false);
@@ -168,6 +180,14 @@ export default function App() {
       }
       // Calling the Function
       fetchMovies();
+
+      // Cleanup Function
+      // To abort all unnecessary requests made turing search operations
+      // For each keystroke on SearchBar the component is re-rendered, and for each keystroke we want to abort the search of data until we complete the full name of the search query we wan to put
+      // Hence we cleanup the request and abort for every keystroke in the cleanup function using controller.abort() method
+      return function () {
+        controller.abort();
+      };
     },
     // Pass query prop as its used in the useEffect() Hooks code for execution of certain logic
     [query],
