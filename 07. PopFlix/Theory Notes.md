@@ -414,7 +414,7 @@ seEffect(function () {
 }, []);
 ```
 
-## Summary of `useEffect` Dependency Array
+## The `useEffect` Dependency Array
 
 ### Understanding the `useEffect` Dependency Array
 
@@ -511,3 +511,36 @@ useEffect(fn);
 - The `useEffect` hook is essential for synchronizing component effects with state and props.
 - Properly specifying the dependency array is crucial for ensuring effects run correctly and efficiently.
 - Effects can be thought of as a way to synchronize your component with external systems or other parts of your app, maintaining consistency between state/props and side effects.
+
+## Cleanup Function in React Effects
+
+### Understanding the Cleanup Function
+
+- **Purpose**: A cleanup function in React's `useEffect` is executed when a component unmounts or before the effect runs again.
+- **Scenario**: When the `MovieDetails` component unmounts, the page title should revert to its original state (e.g., from "Interstellar" to "usePopcorn").
+
+### When is the Cleanup Function Executed?
+
+- **On Unmount**: The cleanup function runs when the component is about to unmount, allowing you to reset any side effects.
+- **On Rerender**: It also runs right before the next effect is executed during a rerender, cleaning up the previous side effect.
+
+### Key Points about Cleanup Functions
+
+- **Optional**: Cleanup functions are not mandatory; they are returned from an effect only when necessary.
+- **Two Occasions**:
+  1. **Before the Next Effect**: To clean up the results of the previous side effect before the effect runs again.
+  2. **On Component Unmount**: Run after Component unmounts to reset any side effects created by the effect.
+
+### When is a Cleanup Function Needed?
+
+- **Ongoing Side Effects**: If a side effect continues after the component rerenders or unmounts, a cleanup function is needed.
+- **Examples**:
+  - **HTTP Requests**: Cancel the request if the component rerenders or unmounts to prevent race conditions.
+  - **API Subscriptions**: Cancel any subscriptions when the component unmounts.
+  - **Timers**: Stop any running timers.
+  - **Event Listeners**: Remove event listeners when the component unmounts.
+
+### Best Practices for Effects
+
+- **Single Responsibility**: Each effect should handle only one concern. If multiple effects are needed, use multiple `useEffect` hooks.
+- **Benefits**: Simplifies the code, making each effect easier to understand and clean up.
