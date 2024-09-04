@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import StarRating from './StarRating.js';
 
-// e2283e92
-// http://www.omdbapi.com/?apikey=e2283e92&
-
 const tempMovieData = [
   {
     imdbID: 'tt1375666',
@@ -401,7 +398,7 @@ function WatchedBox() {
 function MoviesList({ movies, onSelectMovie }) {
   return (
     <ul className='list list-movies'>
-      {movies?.map((movie) => (
+      {movies.slice(0, 6)?.map((movie) => (
         <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
       ))}
     </ul>
@@ -509,6 +506,26 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     // We wan the Title to re-render on change of title name while clicking on multiple movies
     [title],
   );
+
+  // Side Effect to enable Esc keystroke for going back
+  useEffect(function () {
+    function callback(e) {
+      // Call CloseMovie only if the key is Escape
+      if (e.code === 'Escape') {
+        onCloseMovie();
+      }
+    }
+
+    // Add the Event Listener on the Document for keypress
+    document.addEventListener('keydown', callback);
+
+    // Cleanup
+    // As for Every Movie we select an event listener is added to it
+    // So before switching to any other movie we remove the event listener from the previous one
+    return function () {
+      document.removeEventListener('keydown', callback);
+    };
+  }, []);
 
   return (
     <div className='details'>

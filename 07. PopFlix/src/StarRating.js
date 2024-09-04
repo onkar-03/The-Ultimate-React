@@ -30,7 +30,6 @@ export default function StarRating({
   size = 38,
   defaultRating = 0,
   messages = [],
-  className,
   onSetRating,
 }) {
   const StyleText = {
