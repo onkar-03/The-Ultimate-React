@@ -283,7 +283,7 @@ function Logo() {
   return (
     <div className='logo'>
       <span role='img'>🍿</span>
-      <h1>usePopcorn</h1>
+      <h1>PopFlix</h1>
     </div>
   );
 }
@@ -449,6 +449,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onCloseMovie();
   }
 
+  // Side Effect Handling for Data Fetching from the API and rendering movies on Screen
   useEffect(
     function () {
       // Display Loading
@@ -471,6 +472,17 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
     // We want to run the Effect whenever the Id changes
     [selectedId],
+  );
+
+  // Side Effects Handling of Changing the Page title whenever we click on a Movie in the List
+  useEffect(
+    function () {
+      // In case no movie selected show the default title
+      if (!title) return;
+      document.title = `Movie | ${title} | PopFlix`;
+    },
+    // We wan the Title to re-render on change of title name while clicking on multiple movies
+    [title],
   );
 
   return (
