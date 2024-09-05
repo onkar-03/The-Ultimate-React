@@ -1,0 +1,105 @@
+## Custom Hooks, Refs, and More State
+
+### What are React Hooks?
+
+React hooks are essentially **special functions** that are built into React, allowing us to **hook into some of React's internal mechanisms**.
+
+In other words, hooks are APIs that expose some internal React functionality such as:
+
+- Creating and accessing state from the fiber tree.
+- Registering side effects in the fiber tree.
+- DOM manipulation, etc.
+- Hooks always start with "use" (e.g., `useState`, `useEffect`, etc.).
+- Enable easy reuse of non-visual logic: we can compose multiple hooks into our own custom hooks.
+- Give function components the ability to own state and run side effects at different lifecycle points.
+
+### Overview of all Built-in Hooks
+
+- All hooks in React **start with the word `use`** to make it easy for React and us to distinguish hooks from regular functions.
+- We can even create our own custom hooks, which will also start with the word `use`. Custom hooks allow us to reuse non-visual logic, which is a big advantage of using hooks.
+
+### Built-in Hooks
+
+React comes with almost 20 built-in hooks, though we have only used two so far: `useState` and `useEffect`. Here's a list of some of the most commonly used ones:
+
+- **useState**
+- **useEffect**
+- **useReducer**
+- **useContext**
+
+Some lesser-used but still important hooks include:
+
+- **useRef**
+- **useCallback**
+- **useMemo**
+- **useTransition**
+- **useDeferredValue**
+
+There are other hooks intended only for library authors that we won’t cover here.
+
+### Rules of Hooks
+
+There are two rules that must be followed to ensure hooks work properly:
+
+1. **Hooks can only be called at the top level**:
+
+   - This means hooks cannot be called inside conditionals (e.g., `if` statements), loops, or nested functions inside a component.
+   - Hooks should not be called after an early return.
+   - **Why?** Hooks must always be called in the exact same order during each render. If hooks are called based on some condition, it might alter the order in which hooks are invoked, leading to bugs.
+   - This rule ensures that hooks are always in the correct order and can track their state correctly.
+
+2. **Hooks can only be called from React functions**:
+   - Hooks can only be used inside React function components or custom hooks, not in regular functions or class components.
+
+If we use a linter (like ESLint), it will automatically enforce these rules.
+
+### Why Hooks Must Be Called in the Same Order
+
+Let's break this down:
+
+- Every time an application is rendered, React creates a **virtual DOM** tree of React elements.
+- From this, React builds a **fiber tree**, where each element is a **fiber**.
+- Each fiber contains **props**, **a list of hooks**, etc., for all hooks used in the component instance.
+- The **list of hooks** is a linked list, where each hook stores information about itself and the next hook in the list.
+
+#### The Problem with Conditional Hooks
+
+If hooks are conditionally defined, this can break the linked list of hooks and disrupt the order between renders.
+
+For example, consider the following hypothetical code:
+
+(This code will not work as intended and violates the first rule of hooks - conditional hook usage.)
+
+```jsx
+const [A, setA] = useState(23); // State A
+if (A === 23) {
+  const [B, setB] = useState(10); // State B
+}
+useEffect(fnZ, []); // Effect Z
+```
+
+- Here, State A is linked to State B, and State B is indirectly linked to Effect Z in the hook list.
+  - Hook order: A -> B -> Z.
+- On re-render, if the value of A changes, say to 7, the condition becomes false, and the order of hooks breaks, leading to a problem.
+
+```jsx
+const [A, setA] = useState(7); // State A
+if (A === 23) {
+  const [B, setB] = useState(10); // State B
+}
+useEffect(fnZ, []); // Effect Z
+```
+
+- Since the condition is now false, State B is skipped and no longer created, breaking the order:
+
+  - On this render, the hook order becomes: A -> Z.
+
+- Problem: The A hook is still pointing to the place where State B used to be. However, now State B no longer exists, so React tries to assign the Z hook where B used to be, leading to errors.
+
+- As a result, React's internal hook-tracking structure (the fiber tree and hook linked list) becomes corrupted, causing unpredictable behavior
+
+### Conclusion
+
+If hooks are conditionally used, it completely messes up the order of hooks in the linked list between renders. This would lead to React being unable to track the hooks correctly, which will ultimately result in runtime errors.
+
+To prevent this, always use hooks at the top level and never inside conditional statements.
