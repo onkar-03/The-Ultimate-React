@@ -56,7 +56,10 @@ const KEY = 'e2283e92';
 
 // Structural Component
 export default function App() {
+  // --- Rendering Logic Code: which is at the top of the Component, it runs as the app renders on the screen
+
   // Listing State Up
+  // As this state is required by both components hence lifting it up to the closest Parent App
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -82,18 +85,41 @@ export default function App() {
   }
 
   // Handle the Watched Movie List
+  // Destructuring the array and adding the new watched movie to the list
   function handleWatchedMovie(movie) {
     setWatched((watched) => [...watched, movie]);
   }
 
   // Event Handler to remove the movie from the list
+  // .filter() filters out the movies that match the condition and delete the rest
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  // Fetch Data using API
+  // As we should never create side effects in Render logic
+  // But here we are fetching data in the Render Logic which is indeed creating a side effect
+  // Also we are breaking teh React Rules here
+  // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=e2283e92&s=interstellar`)
+  //   // Convert the received response from fetch to Json() using .json() function
+  //   .then((res) => res.json())
+  //   // .then((data) => setMovies(data.Search));
+  //   // Log the Response Data
+  //   .then((data) => console.log(data.Search));
+
+  // --- Cons of Fetching data in Render Logic
+  // On setting State here we are stuck in an infinite loop of API calls
+  // This is because here we did setup the State in render Logic using setMovies(), and setting state causes re rendering
+  // On every re-rendering the function fetch again and renders again and this goes on and on as an infinite loop
+  // Hence we should never fetch data in render logic, instead use the useEffect() hook to handle Side effects like these (data fetching etc...)
+
   // --- Using useEffect() hook to handle Side Effects
+  // No more Infinite Loop of Fetch and Render Logic
+  // Using async Function in useEffect() hook
   useEffect(
     function () {
-      // Abort Controller API to handle and abort unnecessary fetch requests made during
+      // Abort Controller API to handle and abort unnecessary fetch requests made during search
+      // In order to connect this AbortController with the Request we need to declare a signal property in the fetch request like this { signal: controller.signal }
       const controller = new AbortController();
 
       async function fetchMovies() {
@@ -128,6 +154,11 @@ export default function App() {
         } catch (err) {
           // Handle Error
           console.log(err.message);
+
+          // We want the error to be displayed on when there is a real error
+          // In Js the fetch failed is considered as an error
+          // Hence when we abort the fetch request using cleanup on every key stroke we get errors in the console, which we dont wan t
+          // Hence we do conditional rendering of errors only if they are not due to abort of fetch requests
           if (error.name !== 'AbortError') {
             setError(err.message);
           }
@@ -136,29 +167,69 @@ export default function App() {
           setIsLoading(false);
         }
       }
+      // Reset Search Page if no search in the Search Bar
       if (query.length < 3) {
+        // Delete Movies from the State if no Text to Search in the Search Bar
         setMovies([]);
+        //Reset Error State & Return
         setError('');
         return;
       }
+      // Calling the Function
       fetchMovies();
+
+      // Cleanup Function
+      // To abort all unnecessary requests made turing search operations
+      // For each keystroke on SearchBar the component is re-rendered, and for each keystroke we want to abort the search of data until we complete the full name of the search query we wan to put
+      // Hence we cleanup the request and abort for every keystroke in the cleanup function using controller.abort() method
       return function () {
         controller.abort();
       };
     },
+    // Pass query prop as its used in the useEffect() Hooks code for execution of certain logic
     [query],
   );
 
   // Entire Structure of App visible here
   return (
     <>
+      {/* 
+      - Using Component Composition to avoid Prop Drilling Problem
+      - Sending all the components we want inside the nav bar as children
+      - This way we can directly pass the props we want in the NumResults component rather than prop drilling
+       */}
       <NavBar>
         <Logo />
         <SearchBar query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
+
+      {/* 
+      - Using Component Composition to avoid Prop Drilling Problem
+      - Sending all the components we want inside the Main as children
+       */}
       <Main>
+        {/* 
+      - Using Component Composition to avoid Prop Drilling Problem
+      - Sending all the components we want inside the ListBox as children
+      - Hence we avoid the Prop Drilling Problem now
+       */}
+
+        {/* \
+        A)
+        - Passing as Children 
+        - Accepting as children in the Component
+        */}
         <Box>
+          {/* - Conditional Rendering of Loading Icon / Movies List based on isLoading State value
+           */}
+          {/* {isLoading ? <Loader /> : <MoviesList movies={movies} />} */}
+
+          {/* 
+          -Conditional Rendering based on isLoading State value & also checking if there is any errors
+          - '&&' Evaluates LHS expression
+          - '&&' Renders RHS if the LHS is true, else if the LHS is false nothing happens 
+          */}
           {isLoading && <Loader />}
           {!isLoading && !error && (
             <MoviesList movies={movies} onSelectMovie={handleSelectedMovie} />
@@ -183,6 +254,21 @@ export default function App() {
             </>
           )}
         </Box>
+
+        {/* 
+        B)
+        - Passing as Prop
+        - Accepting as element in the Component
+        */}
+        {/* <Box element={<MoviesList movies={movies} />} />
+        <Box
+          element={
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          }
+        /> */}
       </Main>
     </>
   );
@@ -201,11 +287,14 @@ function ErrorMessage({ message }) {
 }
 
 // Structural Component
+// Clearly Stated What all the Nav bar Includes, and if we want we can look into the individual components as well
 function NavBar({ children }) {
   return <nav className='nav-bar'>{children}</nav>;
 }
 
 // --- Reusable Components
+// Having 1 responsibility each Logo, SearchBar & NumResults
+
 // Stateless / Presentational Component
 function Logo() {
   return (
@@ -244,6 +333,9 @@ function Main({ children }) {
 }
 
 // Stateful Component
+// Instead of having different boxes such as ListBox and Watched Box we created a Reusable Component Box and passed in required Components that we want to display using the Same box Component
+// So instead of writing the Components separately we used a single component to display both the ListBox and WatchedBox using Component Composition
+
 function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -257,6 +349,50 @@ function Box({ children }) {
     </div>
   );
 }
+
+/* 
+// Stateful Component
+function ListBox({ children }) {
+  const [isOpen1, setIsOpen1] = useState(true);
+
+  return (
+    <div className='box'>
+      <button
+        className='btn-toggle'
+        onClick={() => setIsOpen1((open) => !open)}
+      >
+        {isOpen1 ? '–' : '+'}
+      </button>
+      {isOpen1 && children}
+    </div>
+  );
+}
+*/
+
+/*
+// Stateful Component
+function WatchedBox() {
+  // States
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen2, setIsOpen2] = useState(true);
+  return (
+    <div className='box'>
+      <button
+        className='btn-toggle'
+        onClick={() => setIsOpen2((open) => !open)}
+      >
+        {isOpen2 ? '–' : '+'}
+      </button>
+      {isOpen2 && (
+        <>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </>
+      )}
+    </div>
+  );
+}
+*/
 
 // Stateful Component
 function MoviesList({ movies, onSelectMovie }) {
@@ -287,6 +423,7 @@ function Movie({ movie, onSelectMovie }) {
 
 function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   // State to store the Movie data to display selected data from the Object on Screen
+  // An empty Object as initial State as we get teh JSON response as Object
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState('');
@@ -311,32 +448,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Actors: actors,
     Released: released,
   } = movie;
-
-  // --- Breaking Hooks Rules (Practice)
-  // But as es-lint wont let us do so hence we disable it first
-  // /* eslint-disable */ (Uncomment to disable es-lint)
-
-  // if (imdbRating > 8) {
-  //   const [isTop, setIsTop] = useState(true);
-  // }
-
-  // Explanation:
-  // Now if we click to get movie details of a movie that has an IMDb rating > 8 we get an error saying:
-  // ERROR: React has detected a change in the order of Hooks called by MovieDetails. This will lead to bugs and errors if not fixed and a chart something like this
-  //  Previous render            Next render
-  //    ------------------------------------------------------
-  // 1. useState                   useState
-  // 2. useState                   useState
-  // 3. useState                   useState
-  // 4. useEffect                  useState
-  //    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  // if (imdbRating > 8) return <p>Greatest Ever !!</p>;
-
-  // Explanation:
-  // Here too we did early return and displayed some text when the Rating was > 8
-  // Hence the Effect Hooks after this aren't executed and we get an Error saying:
-  // ERROR: Rendered fewer hooks than expected. This may be caused by an accidental early return statement
 
   function handleAdd() {
     const newWatchedMovie = {
@@ -408,7 +519,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     // Add the Event Listener on the Document for keypress
     document.addEventListener('keydown', callback);
 
-    // Cleanup Function
+    // Cleanup
+    // As for Every Movie we select an event listener is added to it
+    // So before switching to any other movie we remove the event listener from the previous one
     return function () {
       document.removeEventListener('keydown', callback);
     };
