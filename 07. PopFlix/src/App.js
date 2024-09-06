@@ -59,7 +59,21 @@ export default function App() {
   // Listing State Up
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [watched, setWatched] = useState([]);
+
+  // const [watched, setWatched] = useState([]);
+
+  // Defining watched state differently
+  // Instead of using another effect to get data from local storage and set to the watched list wew can pass a callback function to the useState()
+  // the useState() accepts a value / a callback function as well
+  // This function needs to be pure and can have no arguments
+  // Also as we know the default value of useState() is only considered on initial render hence the function will be called on initial render only i.e on initial mount / re-rendering
+  const [watched, setWatched] = useState(function () {
+    // SO now on re render react calls this callback function and returns the value of the local storage as the initial value of watched
+    const storedValue = localStorage.getItem('watched');
+
+    // We need to convert the Data stored as string back using JSON.parse()
+    return JSON.parse(storedValue);
+  });
 
   // States for Error Handling and Query
   const [error, setError] = useState('');
