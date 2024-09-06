@@ -103,3 +103,78 @@ useEffect(fnZ, []); // Effect Z
 If hooks are conditionally used, it completely messes up the order of hooks in the linked list between renders. This would lead to React being unable to track the hooks correctly, which will ultimately result in runtime errors.
 
 To prevent this, always use hooks at the top level and never inside conditional statements.
+
+## More details on useState() Hook !!
+
+Let's now look at the super important `useState` hook again and review some important details.
+
+## Initial Values in useState
+
+We've used `useState` in many different ways and have a good understanding of how it works. However, it's crucial to remember that the initial values we pass into `useState` only matter during the initial render only.
+
+#### Example of Incorrect Implementation
+
+We might try to create a state that depends on a condition, like this:
+
+```javascript
+const [isTop, setIsTop] = useState(IMDbRating > 8);
+```
+
+- This might seem correct, but it doesn't work as expected. If we log the state, we'll see that isTop remains false even when the IMDb rating is greater than 8
+
+#### Why This Happens
+
+- This occurs because React only considers the initial state on the **first render**.
+- When the component mounts, the IMDb rating is still `undefined`, so the state remains `false`.
+- React does **not** reevaluate this expression on subsequent renders, which is why the state stays `false` forever.
+
+#### Fixing the Issue with useEffect
+
+To fix this, we can use a `useEffect` hook, which will update the state when the IMDb rating changes:
+
+```javascript
+useEffect(() => {
+  setIsTop(IMDbRating > 8);
+}, [IMDbRating]);
+```
+
+This way, when the rating updates, the state is recalculated, and the UI reflects the correct state.
+
+### Asynchronous State Updates in React Hooks
+
+#### Why This Happens
+
+- In React, state updates are **asynchronous** because React batches multiple state updates for performance optimization.
+- When you call the `setState` function (like `setCount` in the example), React doesn't immediately apply the new state value.
+- Instead, it schedules the state update and re-renders the component later.
+- As a result, when you try to access the state value **immediately after** calling `setState`, you might still see the **old state value**. This occurs because React only considers the current value of the state during the current render cycle.
+
+For example:
+
+```javascript
+const increment = () => {
+  setCount(count + 1);
+  console.log(count); // This logs the old count value
+};
+```
+
+In this case, count is updated asynchronously, so it won’t reflect the new value immediately after calling setCount.
+
+#### Fixing the Issue with Functional Updates
+
+- To fix this issue, React provides functional updates in the setState function. This method allows you to pass a callback function to setState that receives the previous state as its argument.
+- This ensures the state is updated based on the most recent value, avoiding issues caused by asynchronous behavior.
+
+```jsx
+const increment = () => {
+  setCount((prevCount) => prevCount + 1); // Using functional update
+  console.log(count); // Still logs the old value, but the state will update correctly
+};
+```
+
+In this example, the function passed to setCount receives the previous state (prevCount). This approach guarantees that the update is based on the latest state, preventing errors caused by the asynchronous nature of state updates.
+
+### Key Takeaway
+
+- React state updates are asynchronous and batched for performance reasons, which means the updated state value is not immediately available after calling setState.
+- To fix issues where the new state depends on the old state, always use functional updates. The callback function (prevState => newState) ensures that React handles the state update correctly, even when multiple updates occur in quick succession.

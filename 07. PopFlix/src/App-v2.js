@@ -157,7 +157,7 @@ export default function App() {
 
           // We want the error to be displayed on when there is a real error
           // In Js the fetch failed is considered as an error
-          // Hence when we abort the fetch request using cleanup on every key stroke we get errors in the console, which we dont wan t
+          // Hence when we abort the fetch request using cleanup on every key stroke we get errors in the console, which we dont want
           // Hence we do conditional rendering of errors only if they are not due to abort of fetch requests
           if (error.name !== 'AbortError') {
             setError(err.message);
