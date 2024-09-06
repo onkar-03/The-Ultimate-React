@@ -58,8 +58,8 @@ const KEY = 'e2283e92';
 export default function App() {
   // Listing State Up
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [watched, setWatched] = useState([]);
 
   // States for Error Handling and Query
   const [error, setError] = useState('');
@@ -84,12 +84,32 @@ export default function App() {
   // Handle the Watched Movie List
   function handleWatchedMovie(movie) {
     setWatched((watched) => [...watched, movie]);
+
+    // Implementing Local Storage
+    // On every new Movie added to the watched list we want to store the List of movies to the Local Storage
+    // As we know the State update is asynchronous, hence the newly watched movie won't be added to the list immediately
+    // Therefore we again create a new array of the List adding the newly watched movie to the list
+    // Convert it to String as Local Storage holds Key-Value pair where the value is a 'String'
+    // localStorage.setItem('watched', JSON.stringify([...watched, movie]));
   }
 
   // Event Handler to remove the movie from the list
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  // Local Storage using useEffect()
+  // Implementing the Storing of Watched List to Local Storage in the handleWatchedMovie is nice
+  // But we want it to be reusable in future hence we create an Effect
+  useEffect(
+    function () {
+      // Here we dont need to create a new array as Effect runs after the component has rendered which means the state is already updated
+      localStorage.setItem('watched', JSON.stringify(watched));
+    },
+    // Wanna run it each time the watched movie is updated
+    [watched],
+  );
+
   // --- Using useEffect() hook to handle Side Effects
   useEffect(
     function () {
