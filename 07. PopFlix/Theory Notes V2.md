@@ -104,7 +104,7 @@ If hooks are conditionally used, it completely messes up the order of hooks in t
 
 To prevent this, always use hooks at the top level and never inside conditional statements.
 
-## More details on useState() Hook !!
+## More details of useState() Hook !!
 
 Let's now look at the super important `useState` hook again and review some important details.
 
@@ -178,3 +178,66 @@ In this example, the function passed to setCount receives the previous state (pr
 
 - React state updates are asynchronous and batched for performance reasons, which means the updated state value is not immediately available after calling setState.
 - To fix issues where the new state depends on the old state, always use functional updates. The callback function (prevState => newState) ensures that React handles the state update correctly, even when multiple updates occur in quick succession.
+
+# `useState` Hook Summary
+
+The `useState` hook is used to create and update state in a React component. Here’s a summary of how it works:
+
+## Creating State
+
+1. **Basic State Creation**:
+
+   - Create a state variable and a setter function:
+     ```jsx
+     const [state, setState] = useState(initialValue);
+     ```
+   - The `initialValue` can be any value, like `0`, `''`, or an object.
+
+2. **Lazy Initialization**:
+   - When the initial state depends on a computation (e.g., reading from `localStorage`), then we pass a callback function:
+     ```jsx
+     const [state, setState] = useState(() => {
+       return someExpensiveComputation();
+     });
+     ```
+   - This callback is called **only on the initial render**.
+   - The callback function needs to be pure & with no arguments.
+   - **Lazy evaluation** is useful for performance optimization.
+
+## Updating State
+
+1. **Simple State Update**:
+
+   - Pass a new value directly to the setter function to update the state:
+     ```jsx
+     setState(1000);
+     ```
+
+2. **State Update Based on Current State**:
+   - When the next state depends on the current state (e.g., incrementing a counter), pass a callback function to the setter:
+     ```jsx
+     setState((count) => count + 1);
+     ```
+   - This is the **preferred method** when working with updates that rely on the current state.
+   - This way we can read the newly updated value of state variable.
+
+## Important Rules
+
+1. **Do Not Mutate State**:
+   - Avoid mutating objects or arrays directly.
+   - Instead, create a new object or array that includes the changes:
+     ```jsx
+     setState((prevState) => {
+       // Creating New Object based on the new Item adn the old items of the already existing prevState Array
+       return {
+         ...prevState,
+         newProperty: value,
+       };
+     });
+     ```
+
+## Key Takeaways
+
+- You can create state **with a value** or **with a callback** (lazy initialization).
+- You can update state **with a value** or **with a callback** (based on current state).
+- Always ensure objects and arrays are **not mutated**, but recreated.
