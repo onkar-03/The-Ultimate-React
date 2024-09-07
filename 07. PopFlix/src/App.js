@@ -252,6 +252,21 @@ function Logo() {
 
 // Stateful Component
 function SearchBar({ query, setQuery }) {
+  // --- How to not select DOM Elements !!
+  // We want to focus on teh Search bar on initial render
+  // 1. First we select the Element the SearchBar
+  // 2. Then we add focus to it
+  // We do all this in teh Search Bar as it renders and executes the code on initial mount
+  // Here we directly select the class of input fields like we did in Vanilla Js (Imperative Way), whereas React is Declarative
+  // In declarative programming, you define what you want the UI to look like based on the current state of your application. React abstracts away the details of how to update the UI, and you just declare the desired end state.
+  // In imperative programming, you provide step-by-step instructions to the computer on how to perform a task. When working with the DOM directly in JavaScript, you manipulate elements explicitly.
+  // Hence this is not the Ideal way to do it... we use refs instead
+  useEffect(function () {
+    const el = document.querySelector('.search');
+    console.log(el);
+
+    el.focus();
+  }, []);
   return (
     <input
       className='search'
