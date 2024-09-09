@@ -347,3 +347,31 @@ const AutoFocusInput = () => {
 
 export default AutoFocusInput;
 ```
+
+## Summary of Custom Hooks
+
+### Reusing Logic with Custom Hooks
+
+1. **Purpose of Custom Hooks**:
+
+   - Custom hooks are designed for reusability. In React, you can reuse either a piece of UI (through components) or logic. Custom hooks allow you to reuse non-visual logic that contains one or more React hooks.
+
+2. **When to Create a Custom Hook**:
+
+   - If the logic you want to reuse contains React hooks, you should create a custom hook. For logic without React hooks, a regular function suffices.
+
+3. **Characteristics of Custom Hooks**:
+
+   - They are JavaScript functions that can receive and return any relevant data.
+   - It is common to return an object or an array from a custom hook.
+   - Unlike regular functions, custom hooks must use one or more React hooks.
+   - Custom hooks must be named with the prefix `use` (e.g., `useFetch`) to be recognized by React as a hook.
+
+4. **Rules**:
+
+   - Custom hooks should have a single, well-defined purpose, just like components or regular functions.
+   - They should not be used to group all hooks of a component together but rather to encapsulate specific logic that can be reused across different components or projects.
+
+5. **Custom Hook Libraries**:
+
+   - Many developers share their custom hooks, and there are various custom hook libraries available on NPM that you can use in your projects.
