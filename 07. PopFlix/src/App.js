@@ -377,12 +377,18 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState('');
 
+  // Storing a hidden var to count the number of times a user rates a movie
   const countRef = useRef(0);
 
+  // update Ref
+  // Use useEffect() to update the ref vars as we cant mutate them in render logic
+  // We want the count to update on every userRating change
   useEffect(
     function () {
+      // Perform teh update only if there already exists a userRating > 0
       if (userRating) {
         countRef.current = countRef.current + 1;
+        // console.log('countRef updated:', countRef.current);
       }
     },
     [userRating],
@@ -443,7 +449,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       imdbRating: +imdbRating,
       runtime: +runtime.split('').at(0),
       userRating,
-      countRating: countRef.current(),
+      countRatingDecisions: countRef.current,
     };
 
     // Placing the newly watched movie to the list
