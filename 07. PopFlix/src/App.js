@@ -377,6 +377,17 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState('');
 
+  const countRef = useRef(0);
+
+  useEffect(
+    function () {
+      if (userRating) {
+        countRef.current = countRef.current + 1;
+      }
+    },
+    [userRating],
+  );
+
   // Checking if the array already has the movie listed in it, if yes we cant rate the movie again
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
 
@@ -432,6 +443,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       imdbRating: +imdbRating,
       runtime: +runtime.split('').at(0),
       userRating,
+      countRating: countRef.current(),
     };
 
     // Placing the newly watched movie to the list
