@@ -179,11 +179,11 @@ In this example, the function passed to setCount receives the previous state (pr
 - React state updates are asynchronous and batched for performance reasons, which means the updated state value is not immediately available after calling setState.
 - To fix issues where the new state depends on the old state, always use functional updates. The callback function (prevState => newState) ensures that React handles the state update correctly, even when multiple updates occur in quick succession.
 
-# `useState` Hook Summary
+## `useState` Hook Summary
 
 The `useState` hook is used to create and update state in a React component. Here’s a summary of how it works:
 
-## Creating State
+### Creating State
 
 1. **Basic State Creation**:
 
@@ -204,7 +204,7 @@ The `useState` hook is used to create and update state in a React component. Her
    - The callback function needs to be pure & with no arguments.
    - **Lazy evaluation** is useful for performance optimization.
 
-## Updating State
+### Updating State
 
 1. **Simple State Update**:
 
@@ -221,7 +221,7 @@ The `useState` hook is used to create and update state in a React component. Her
    - This is the **preferred method** when working with updates that rely on the current state.
    - This way we can read the newly updated value of state variable.
 
-## Important Rules
+### Important Rules
 
 1. **Do Not Mutate State**:
    - Avoid mutating objects or arrays directly.
@@ -236,8 +236,114 @@ The `useState` hook is used to create and update state in a React component. Her
      });
      ```
 
-## Key Takeaways
+### Key Takeaways
 
 - You can create state **with a value** or **with a callback** (lazy initialization).
 - You can update state **with a value** or **with a callback** (based on current state).
 - Always ensure objects and arrays are **not mutated**, but recreated.
+
+## Introduction to `useRef` Hook
+
+### What are a `refs`?
+
+- `Ref` stands for **reference**.
+- It acts as a "box" to store **any data** that we want to preserve between renders.
+- React gives us an object with a **mutable `current` property** where we can read and write data.
+- You can set an initial value for the `current` property.
+- The `current` property is **mutable**, meaning it can be changed.
+- `Refs` are **persisted across renders**, just like state.
+- Refs are for data that is usually NOT rendered in the visual output of the Component
+- They usually only appear in event handlers & effects, not in JSX (otherwise use state)
+- Here too we are not allowed to write or read in the render logic(like State) as they will create side effects
+
+### Main Use Cases for `useRef`
+
+1. **Preserving values across renders**:  
+   Used to preserve the previous state or storing the ID of a `setTimeout` function.
+2. **Selecting and storing DOM elements**:  
+   Useful when we want to select adn store DOM elements across renders.
+
+### Differences Between `useRef` and `useState`
+
+- **Persistence**: Both `refs` and `state` are persisted across renders.
+- **Re-rendering**: Updating state triggers a component re-render, but updating a `ref` does **not**.
+- **Immutability**:
+  - State is **immutable**.
+  - `Refs` are **mutable**.
+- **Synchronous vs Asynchronous**:
+  - State updates are **asynchronous**.
+  - `Refs` are updated **synchronously** and can be accessed immediately after updating.
+
+### When to Use `useRef` vs `useState`
+
+- Use **state** when the value affects the **UI** and needs to trigger a re-render.
+- Use **refs** for data that does not affect the UI directly or should not trigger a re-render (e.g., DOM elements or non-visual data).
+
+### Rules of Using `useRef`
+
+- You cannot directly read or write to the `current` property in render logic as it could create side effects.
+- Mutations should be performed inside event handlers or `useEffect`.
+
+## Using React's `useRef` to Select Dom Elements
+
+### Steps to Select DOM using `ref`
+
+### 1. Create a Ref
+
+- Use the `useRef` hook to create a reference to the input element.
+- The `useRef` hook provides a way to directly access a DOM element without causing re-renders.
+- The initial value is passed ith the current property `useRef(currentProperty)`
+- When we work with DOM elements the initial value in current property is `null`
+
+```jsx
+const inputEl = useRef(initialProperty);
+```
+
+### 2. Assign Ref to the Input Element
+
+Assign the `ref` attribute to the input element, connecting the `inputRef` to the actual DOM element. This allows you to interact with the input field directly.
+
+### 3. Automatically Focus the Input Element
+
+Use the `useEffect` hook to automatically focus the input when the component is mounted. This runs after the component renders, ensuring the input is in focus when the page loads.
+
+### 4. Handle "Enter" Key Press
+
+Add an event listener to the input field that listens for the `key-down` event. Inside the event handler, check if the pressed key is the "Enter" key (key code 13) and trigger an action, such as submitting a form or performing some other logic.
+
+### 5. Assign KeyDown Event Handler to Input
+
+Attach the event handler for the "Enter" key press to the `onKeyDown` event of the input field.
+
+### Complete Code Example
+
+```javascript
+import React, { useRef, useEffect } from 'react';
+
+const AutoFocusInput = () => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // Automatically focus the input field when the component mounts
+    inputRef.current.focus();
+  }, []);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log('Enter key pressed');
+      // Perform the desired action here
+    }
+  };
+
+  return (
+    <input
+      ref={inputRef}
+      type='text'
+      placeholder='Type something...'
+      onKeyDown={handleKeyDown}
+    />
+  );
+};
+
+export default AutoFocusInput;
+```

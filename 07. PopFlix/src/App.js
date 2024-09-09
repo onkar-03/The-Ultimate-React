@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating.js';
 
 const tempMovieData = [
@@ -252,21 +252,53 @@ function Logo() {
 
 // Stateful Component
 function SearchBar({ query, setQuery }) {
-  // --- How to not select DOM Elements !!
-  // We want to focus on teh Search bar on initial render
+  // ! --- How to not select DOM Elements !!
+  // We want to focus on the Search bar on initial render
   // 1. First we select the Element the SearchBar
   // 2. Then we add focus to it
   // We do all this in teh Search Bar as it renders and executes the code on initial mount
   // Here we directly select the class of input fields like we did in Vanilla Js (Imperative Way), whereas React is Declarative
   // In declarative programming, you define what you want the UI to look like based on the current state of your application. React abstracts away the details of how to update the UI, and you just declare the desired end state.
   // In imperative programming, you provide step-by-step instructions to the computer on how to perform a task. When working with the DOM directly in JavaScript, you manipulate elements explicitly.
-  // Hence this is not the Ideal way to do it... we use refs instead
-  useEffect(function () {
-    const el = document.querySelector('.search');
-    console.log(el);
+  // Hence this is not the Ideal way to do it... we use refs instead to make the selection of elements more declarative in React
+  // useEffect(function () {
+  //   const el = document.querySelector('.search');
+  //   console.log(el);
 
-    el.focus();
+  //   el.focus();
+  // }, []);
+
+  // --- Using Refs() for DOM Selection
+  // This selects the DOM element in which we pass it as a prop
+  const inputEl = useRef(null);
+
+  // The ref gets added to the DOM Element after the DOM element has loaded
+  // Hence we use the useRef in useEffect() as they also run after the DOM element has loaded on the Page
+  useEffect(function () {
+    function callBack(e) {
+      // We dont want to delete the Query of SearchBar if it's focused i.e. when we are still typing
+      // SO we use the .activeElement property to check if the current element is SearchBar if yes we do nothing such as clearing texts etc .. on pressing enter and simply return
+      if (document.activeElement === inputEl.current) return;
+
+      if (e.code === 'Enter') {
+        // Now as we know the Refs store all the things inside a box with with a mutable current property
+        // Hence we access and select the current property inside the Object, which is the DOM element itself here and then focus on it
+        inputEl.current.focus();
+
+        // Set Query to empty string on hitting Enter
+        setQuery('');
+      }
+    }
+
+    // For key press Events we need to do select it manually
+    // Adding Enter keypress for Search Functionality
+    document.addEventListener('keydown', callBack);
+
+    // Clean up Function
+    // Remove eventListener if the component re-renders / unmounts until then it persists in the DOM Element
+    return () => document.removeEventListener('keydown', callBack);
   }, []);
+
   return (
     <input
       className='search'
@@ -274,6 +306,11 @@ function SearchBar({ query, setQuery }) {
       placeholder='Search movies...'
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      // COnnecting ref with teh DOM element
+      // Selecting the input field DOM Element this way
+      // No need to write as document.querySelector('.search')
+      // This way we tell React that the ref we just created will contain the input element
+      ref={inputEl}
     />
   );
 }
@@ -458,9 +495,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     document.addEventListener('keydown', callback);
 
     // Cleanup Function
-    return function () {
-      document.removeEventListener('keydown', callback);
-    };
+    return () => document.removeEventListener('keydown', callback);
   }, []);
 
   return (
