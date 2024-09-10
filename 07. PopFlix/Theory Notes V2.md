@@ -375,3 +375,8 @@ export default AutoFocusInput;
 5. **Custom Hook Libraries**:
 
    - Many developers share their custom hooks, and there are various custom hook libraries available on NPM that you can use in your projects.
+
+### When to use Custom hook ??
+
+- When we want to re use some part of the Non-Visual logic
+- Extract a huge part of a Component into some kind of Hook

@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating.js';
 
+// Importing Named Hooks
+import { useMovies } from './useMovies.js';
+
 const tempMovieData = [
   {
     imdbID: 'tt1375666',
@@ -57,8 +60,11 @@ const KEY = 'e2283e92';
 // Structural Component
 export default function App() {
   // Listing State Up
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [movies, setMovies] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+
+  // States for Error Handling and Query
+  // const [error, setError] = useState('');
 
   // const [watched, setWatched] = useState([]);
 
@@ -75,14 +81,15 @@ export default function App() {
     return JSON.parse(storedValue);
   });
 
-  // States for Error Handling and Query
-  const [error, setError] = useState('');
-
   // Lifting State Up to App from SearchBar
   const [query, setQuery] = useState('');
 
   // Lifting State Up to App to hold data about Selected Movie for
   const [selectedId, setSelectedId] = useState(null);
+
+  // Custom Hook
+  // Passing the Entered query as argument in Custom Hook
+  const { movies, isLoading, error } = useMovies(query);
 
   // Handle Movie Details
   function handleSelectedMovie(id) {
@@ -162,7 +169,7 @@ export default function App() {
         } catch (err) {
           // Handle Error
           console.log(err.message);
-          if (error.name !== 'AbortError') {
+          if (err.name !== 'AbortError') {
             setError(err.message);
           }
         } finally {
@@ -348,7 +355,7 @@ function Box({ children }) {
 function MoviesList({ movies, onSelectMovie }) {
   return (
     <ul className='list list-movies'>
-      {movies.slice(0, 6)?.map((movie) => (
+      {movies?.slice(0, 6)?.map((movie) => (
         <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
       ))}
     </ul>
