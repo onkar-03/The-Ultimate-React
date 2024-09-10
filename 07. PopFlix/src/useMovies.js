@@ -76,5 +76,5 @@ export function useMovies(query) {
   );
 
   // If we use Custom Hook we need to return all the necessary things that are required in the Component where the custom hook is called
-  return [movies, setMovies, isLoading, setIsLoading, error, setError];
+  return { movies, isLoading, error };
 }
