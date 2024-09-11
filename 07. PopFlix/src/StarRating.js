@@ -29,7 +29,7 @@ export default function StarRating({
   color = '#fcc419',
   size = 38,
   defaultRating = 0,
-  messages = [],
+  messages = '',
   onSetRating,
 }) {
   const StyleText = {
