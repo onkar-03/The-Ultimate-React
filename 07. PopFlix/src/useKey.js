@@ -7,7 +7,8 @@ export function useKey(key, action) {
     function () {
       function callback(e) {
         // Call CloseMovie only if the key is Escape
-        // We convert the strings to lower case just o avoid capitalization errors
+        // We convert the strings to lower case to avoid comparison confusion
+        // As user might pass Escape / escape etc.. hence convert the code and key both to lowercase and compare
         if (e.code.toLowerCase() === key.toLowerCase()) {
           action();
         }

@@ -3,6 +3,7 @@ import StarRating from './StarRating.js';
 
 // Importing Named Hooks
 import { useMovies } from './useMovies.js';
+import { useKey } from './useKey.js';
 import { useLocalStorageState } from './useLocalStorageState.js';
 
 // const tempMovieData = [
@@ -198,32 +199,18 @@ function SearchBar({ query, setQuery }) {
   // This selects the DOM element in which we pass it as a prop
   const inputEl = useRef(null);
 
-  // The ref gets added to the DOM Element after the DOM element has loaded
-  // Hence we use the useRef in useEffect() as they also run after the DOM element has loaded on the Page
-  useEffect(function () {
-    function callBack(e) {
-      // We dont want to delete the Query of SearchBar if it's focused i.e. when we are still typing
-      // SO we use the .activeElement property to check if the current element is SearchBar if yes we do nothing such as clearing texts etc .. on pressing enter and simply return
-      if (document.activeElement === inputEl.current) return;
+  // Custom Hook for Event Handlers
+  useKey('Enter', function () {
+    // We dont want to delete the Query of SearchBar if it's focused i.e. when we are still typing
+    // SO we use the .activeElement property to check if the current element is SearchBar if yes we do nothing such as clearing texts etc .. on pressing enter and simply return
+    if (document.activeElement === inputEl.current) return;
+    // Now as we know the Refs store all the things inside a box with with a mutable current property
+    // Hence we access and select the current property inside the Object, which is the DOM element itself here and then focus on it
+    inputEl.current.focus();
 
-      if (e.code === 'Enter') {
-        // Now as we know the Refs store all the things inside a box with with a mutable current property
-        // Hence we access and select the current property inside the Object, which is the DOM element itself here and then focus on it
-        inputEl.current.focus();
-
-        // Set Query to empty string on hitting Enter
-        setQuery('');
-      }
-    }
-
-    // For key press Events we need to do select it manually
-    // Adding Enter keypress for Search Functionality
-    document.addEventListener('keydown', callBack);
-
-    // Clean up Function
-    // Remove eventListener if the component re-renders / unmounts until then it persists in the DOM Element
-    return () => document.removeEventListener('keydown', callBack);
-  }, []);
+    // Set Query to empty string on hitting Enter
+    setQuery('');
+  });
 
   return (
     <input
@@ -426,21 +413,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     [title],
   );
 
-  // Side Effect to enable Esc keystroke for going back
-  useEffect(function () {
-    function callback(e) {
-      // Call CloseMovie only if the key is Escape
-      if (e.code === 'Escape') {
-        onCloseMovie();
-      }
-    }
-
-    // Add the Event Listener on the Document for keypress
-    document.addEventListener('keydown', callback);
-
-    // Cleanup Function
-    return () => document.removeEventListener('keydown', callback);
-  }, []);
+  // Custom Hook
+  // We dont call the function here rather pass it into Custom Hook which calls it when required
+  useKey('Escape', onCloseMovie);
 
   return (
     <div className='details'>
