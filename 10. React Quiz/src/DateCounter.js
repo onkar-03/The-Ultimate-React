@@ -7,6 +7,8 @@ const initialState = { count: 0, step: 1 };
 // It gets access to the current state and the action that we pass in the dispatch function
 // Takes in all the details about the action and the current state
 // Based on action type takes in some kind of actions and returns the desired results
+
+// Centralized State Logic at one Place
 function reducer(state, action) {
   console.log(state, action);
 
