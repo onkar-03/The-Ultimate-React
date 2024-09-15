@@ -1,20 +1,23 @@
 import { useEffect, useReducer } from 'react';
 import Header from './Header.js';
 import Main from './Main.js';
+import Loader from './Loader.js';
+import Error from './Error.js';
+import StartScreen from './StartScreen.js';
 // import DateCounter from './DateCounter.js';
 
 // Initial State
 const initialState = {
-  //Initial state is an empty questions array
-  question: [],
+  // Initially we want the Questions to be an Empty Array
+  questions: [],
 
-  // Loading, Error, Ready, Active, Finished
-  status: 'Loading',
+  // Loading, Error, Ready, Active, Finished Status
+  status: 'loading',
 };
 
-// Reducer Function
+// Reducer Function to handle all States
 function reducer(state, action) {
-  // Switch to handle different reducer states
+  // Switch to handle different states along with their update actions & end results
   switch (action.type) {
     case 'data-received':
       return { ...state, questions: action.payload, status: 'ready' };
@@ -27,7 +30,11 @@ function reducer(state, action) {
 
 export default function App() {
   // State
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // Nested Destructuring State
+  const [{ status, questions }, dispatch] = useReducer(reducer, initialState);
+
+  // Derived State
+  const numQuestions = questions.length;
 
   // Load API Data
   useEffect(function () {
@@ -47,7 +54,7 @@ export default function App() {
         // Change Status to Ready
         // dispatch({ type: 'status-change', payload: 'Ready' });
       } catch (err) {
-        console.error(err.message);
+        dispatch({ type: 'data-failed' });
       }
     };
 
@@ -59,8 +66,16 @@ export default function App() {
     <div className='app'>
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question?</p>
+        {/* 
+        --- Children inside the Main Component
+        --- Based on Current Status we conditionally display the content on the Page
+        - 1. If Status is Loading we display the Loader Component
+        - 2. If Status is Error we display the Error Component
+        */}
+
+        {status === 'loading' && <Loader />}
+        {status === 'error' && <Error />}
+        {status === 'ready' && <StartScreen numQuestions={numQuestions} />}
       </Main>
     </div>
   );
