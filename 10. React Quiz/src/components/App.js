@@ -8,6 +8,7 @@ import StartScreen from './StartScreen.js';
 import Questions from './Questions.js';
 import NextButton from './NextButton.js';
 import Progress from './Progress.js';
+import FinishScreen from './FinishScreen.js';
 
 // Initial States
 //Has all the required States we need for the Application
@@ -60,6 +61,10 @@ function reducer(state, action) {
     //Setting the answer back to null as for a new question we want to reset everything and let user choose an option
     case 'next-question':
       return { ...state, index: state.index + 1, answer: null };
+
+    // Finish State
+    case 'finished':
+      return { ...state, status: 'finish' };
     default:
       throw new Error('Invalid action');
   }
@@ -147,8 +152,16 @@ export default function App() {
             - Render the Next Button 
             - Pass the dispatch function and the answer state to the NextButton Component to update state using dispatch and render function and conditionally render state using answer
             */}
-            <NextButton dispatch={dispatch} answer={answer} />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              numQuestions={numQuestions}
+              index={index}
+            />
           </>
+        )}
+        {status === 'finished' && (
+          <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} />
         )}
       </Main>
     </div>
