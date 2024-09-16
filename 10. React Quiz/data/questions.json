@@ -1,4 +1,3 @@
-// Fake JSON Data that contains questions which used to create an API effect using json-server npm package
 {
   "questions": [
     {

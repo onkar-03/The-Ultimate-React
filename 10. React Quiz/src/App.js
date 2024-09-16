@@ -4,6 +4,7 @@ import Main from './Main.js';
 import Loader from './Loader.js';
 import Error from './Error.js';
 import StartScreen from './StartScreen.js';
+import Questions from './Questions.js';
 // import DateCounter from './DateCounter.js';
 
 // Initial State
@@ -23,6 +24,8 @@ function reducer(state, action) {
       return { ...state, questions: action.payload, status: 'ready' };
     case 'data-failed':
       return { ...state, status: 'error' };
+    case 'start':
+      return { ...state, status: 'active' };
     default:
       throw new Error('Invalid action');
   }
@@ -50,9 +53,6 @@ export default function App() {
         // Dispatch
         // Pass the Data received from API to the reducer function
         dispatch({ type: 'data-received', payload: data });
-
-        // Change Status to Ready
-        // dispatch({ type: 'status-change', payload: 'Ready' });
       } catch (err) {
         dispatch({ type: 'data-failed' });
       }
@@ -71,11 +71,17 @@ export default function App() {
         --- Based on Current Status we conditionally display the content on the Page
         - 1. If Status is Loading we display the Loader Component
         - 2. If Status is Error we display the Error Component
+        - 3. If Status is Ready we display the StartScreen Component
+        - 4. If Status is Active we display the Questions Component
         */}
 
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
-        {status === 'ready' && <StartScreen numQuestions={numQuestions} />}
+        {status === 'ready' && (
+          // Passing the dispatch function as a prop as we want it for the onClick event on the Button in StartScreen
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === 'active' && <Questions />}
       </Main>
     </div>
   );
