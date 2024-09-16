@@ -14,6 +14,9 @@ const initialState = {
 
   // Loading, Error, Ready, Active, Finished Status
   status: 'loading',
+
+  // To keep tract of the current Question from the Questions Array we create a State
+  index: 0,
 };
 
 // Reducer Function to handle all States
@@ -32,9 +35,11 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  // State
-  // Nested Destructuring State
-  const [{ status, questions }, dispatch] = useReducer(reducer, initialState);
+  // Nested Destructuring of Initial States
+  const [{ status, questions, index }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   // Derived State
   const numQuestions = questions.length;
@@ -81,7 +86,7 @@ export default function App() {
           // Passing the dispatch function as a prop as we want it for the onClick event on the Button in StartScreen
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === 'active' && <Questions />}
+        {status === 'active' && <Questions question={questions[index]} />}
       </Main>
     </div>
   );
