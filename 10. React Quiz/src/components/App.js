@@ -9,6 +9,8 @@ import Questions from './Questions.js';
 import NextButton from './NextButton.js';
 import Progress from './Progress.js';
 import FinishScreen from './FinishScreen.js';
+import Timer from './Timer.js';
+import Footer from './Footer.js';
 
 // Initial States
 //Has all the required States we need for the Application
@@ -31,6 +33,8 @@ const initialState = {
 
   // Track High Score
   highscore: 0,
+
+  secondsRemaining: 5,
 };
 
 // Reducer Function to handle all States
@@ -81,8 +85,16 @@ function reducer(state, action) {
       return {
         ...initialState,
         status: 'ready',
-        question: state.questions,
+        questions: state.questions,
         highscore: state.highscore,
+      };
+    case 'tick':
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+
+        // Check if Timer reaches Zero finish the Quiz
+        status: state.secondsRemaining === 0 ? 'finished' : state.status,
       };
     default:
       throw new Error('Invalid action');
@@ -91,8 +103,10 @@ function reducer(state, action) {
 
 export default function App() {
   // Nested Destructuring of Initial States
-  const [{ status, questions, index, answer, points, highscore }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { status, questions, index, answer, points, highscore, secondsRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   // Derived State
 
@@ -169,12 +183,16 @@ export default function App() {
             - Render the Next Button 
             - Pass the dispatch function and the answer state to the NextButton Component to update state using dispatch and render function and conditionally render state using answer
             */}
-            <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              numQuestions={numQuestions}
-              index={index}
-            />
+
+            <Footer>
+              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+              <NextButton
+                dispatch={dispatch}
+                answer={answer}
+                numQuestions={numQuestions}
+                index={index}
+              />
+            </Footer>
           </>
         )}
         {status === 'finished' && (
