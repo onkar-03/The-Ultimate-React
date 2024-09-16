@@ -28,6 +28,9 @@ const initialState = {
 
   // State to store the Points of the user
   points: 0,
+
+  // Track High Score
+  highscore: 0,
 };
 
 // Reducer Function to handle all States
@@ -64,7 +67,23 @@ function reducer(state, action) {
 
     // Finish State
     case 'finished':
-      return { ...state, status: 'finish' };
+      return {
+        ...state,
+        status: 'finished',
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+
+    // Restart the Quiz with initial States
+    // Reset Everything except the questions array and highscore
+    // Also we need to keep the status at ready and not loading
+    case 'restart':
+      return {
+        ...initialState,
+        status: 'ready',
+        question: state.questions,
+        highscore: state.highscore,
+      };
     default:
       throw new Error('Invalid action');
   }
@@ -72,10 +91,8 @@ function reducer(state, action) {
 
 export default function App() {
   // Nested Destructuring of Initial States
-  const [{ status, questions, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [{ status, questions, index, answer, points, highscore }, dispatch] =
+    useReducer(reducer, initialState);
 
   // Derived State
 
@@ -161,7 +178,12 @@ export default function App() {
           </>
         )}
         {status === 'finished' && (
-          <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} />
+          <FinishScreen
+            points={points}
+            maxPossiblePoints={maxPossiblePoints}
+            highscore={highscore}
+            dispatch={dispatch}
+          />
         )}
       </Main>
     </div>

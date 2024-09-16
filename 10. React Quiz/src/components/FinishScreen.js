@@ -1,4 +1,4 @@
-function FinishedScreen({ points, maxPossiblePoints }) {
+function FinishedScreen({ points, maxPossiblePoints, highscore, dispatch }) {
   // Percentage Calculation
   const percentage = (points / maxPossiblePoints) * 100;
 
@@ -11,12 +11,19 @@ function FinishedScreen({ points, maxPossiblePoints }) {
   if (percentage === 0) emoji = '🤦‍♂️';
 
   return (
-    <div>
+    <>
       <p className='result'>
-        You Scored <strong>{points}</strong> out of {maxPossiblePoints} (
-        {Math.ceil(percentage)}%)
+        <span>{emoji}</span>You Scored <strong>{points}</strong> out of{' '}
+        {maxPossiblePoints} ({Math.ceil(percentage)}%)
       </p>
-    </div>
+      <p className='highscore'>(Highscore: {highscore} points)</p>
+      <button
+        className='btn btn-ui'
+        onClick={() => dispatch({ type: 'restart' })}
+      >
+        Restart Quiz
+      </button>
+    </>
   );
 }
 
