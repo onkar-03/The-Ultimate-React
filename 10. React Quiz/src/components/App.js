@@ -7,7 +7,8 @@ import StartScreen from './StartScreen.js';
 import Questions from './Questions.js';
 // import DateCounter from './DateCounter.js';
 
-// Initial State
+// Initial States
+//Has all the required States we need for the Application
 const initialState = {
   // Initially we want the Questions to be an Empty Array
   questions: [],
@@ -17,6 +18,13 @@ const initialState = {
 
   // To keep tract of the current Question from the Questions Array we create a State
   index: 0,
+
+  // Initial Answer State holding index of Answer
+  // Initially there is no answer hence null
+  answer: null,
+
+  // State to store the Points of the user
+  points: 0,
 };
 
 // Reducer Function to handle all States
@@ -29,6 +37,22 @@ function reducer(state, action) {
       return { ...state, status: 'error' };
     case 'start':
       return { ...state, status: 'active' };
+
+    // On every new answer by user we want to update the state
+    case 'new-answer':
+      // Getting the current question at the current index
+      const question = state.questions.at(state.index);
+
+      // Complex State Updating Logic
+      // Updating the points based on the selection of correct option otherwise the points stay the same
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
     default:
       throw new Error('Invalid action');
   }
@@ -36,7 +60,7 @@ function reducer(state, action) {
 
 export default function App() {
   // Nested Destructuring of Initial States
-  const [{ status, questions, index }, dispatch] = useReducer(
+  const [{ status, questions, index, answer }, dispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -86,7 +110,13 @@ export default function App() {
           // Passing the dispatch function as a prop as we want it for the onClick event on the Button in StartScreen
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === 'active' && <Questions question={questions[index]} />}
+        {status === 'active' && (
+          <Questions
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
