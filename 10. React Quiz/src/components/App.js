@@ -7,6 +7,7 @@ import Error from './Error.js';
 import StartScreen from './StartScreen.js';
 import Questions from './Questions.js';
 import NextButton from './NextButton.js';
+import Progress from './Progress.js';
 
 // Initial States
 //Has all the required States we need for the Application
@@ -66,13 +67,22 @@ function reducer(state, action) {
 
 export default function App() {
   // Nested Destructuring of Initial States
-  const [{ status, questions, index, answer }, dispatch] = useReducer(
+  const [{ status, questions, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState,
   );
 
   // Derived State
+
+  // Total Questions
   const numQuestions = questions.length;
+
+  // Total Points
+  // Using the .reduce() method to calculate total points of all the questions
+  const maxPossiblePoints = questions.reduce(
+    (prev, curr) => prev + curr.points,
+    0,
+  );
 
   // Load API Data
   useEffect(function () {
@@ -118,6 +128,16 @@ export default function App() {
         )}
         {status === 'active' && (
           <>
+            {/* Displaying the Progress Bar */}
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+              maxPossiblePoints={maxPossiblePoints}
+              answer={answer}
+            />
+
+            {/* Displaying Questions */}
             <Questions
               question={questions[index]}
               dispatch={dispatch}
