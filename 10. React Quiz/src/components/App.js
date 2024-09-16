@@ -1,11 +1,12 @@
 import { useEffect, useReducer } from 'react';
+// import DateCounter from './DateCounter.js';
 import Header from './Header.js';
 import Main from './Main.js';
 import Loader from './Loader.js';
 import Error from './Error.js';
 import StartScreen from './StartScreen.js';
 import Questions from './Questions.js';
-// import DateCounter from './DateCounter.js';
+import NextButton from './NextButton.js';
 
 // Initial States
 //Has all the required States we need for the Application
@@ -53,6 +54,11 @@ function reducer(state, action) {
             ? state.points + question.points
             : state.points,
       };
+
+    // If we click an answer pass this state update to move to hte next question
+    //Setting the answer back to null as for a new question we want to reset everything and let user choose an option
+    case 'next-question':
+      return { ...state, index: state.index + 1, answer: null };
     default:
       throw new Error('Invalid action');
   }
@@ -111,11 +117,18 @@ export default function App() {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === 'active' && (
-          <Questions
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <>
+            <Questions
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            {/* 
+            - Render the Next Button 
+            - Pass the dispatch function and the answer state to the NextButton Component to update state using dispatch and render function and conditionally render state using answer
+            */}
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>
