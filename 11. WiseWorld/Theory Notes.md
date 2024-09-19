@@ -113,3 +113,101 @@ After configuring ESLint, you can manually run it on your project to check for a
 - SPAs can fetch additional data from servers using web APIs, but they do not load completely new pages.
 - If they load a completely new page they dont remain a SPA
 - React apps are inherently SPAs because they do not reload the entire page.
+
+## Implementing React Router
+
+### Installation Steps
+
+1. **Open Terminal or Command Prompt**
+
+   - Navigate to your project directory where you want to install the package using `cd` command.
+
+2. **Install `react-router-dom`**
+
+   - Run the following command to install `react-router-dom` using npm:
+     ```bash
+     npm install react-router-dom
+     ```
+
+3. **Verify Installation**
+
+   - Once installed, you should see `react-router-dom` listed in your `package.json` file under `dependencies`.
+
+### Creating Page Components
+
+- Create a folder named `pages` to organize your page components.
+- Example components to create:
+  - `Product`
+  - `Homepage`
+  - `Pricing`
+- These components represent different pages in your application.
+
+### Defining Routes
+
+- Import necessary components from `react-router-dom`.
+- Use `BrowserRouter` to wrap your application and enable routing.
+- Define routes using the `Routes` component, specifying each route with `Route`.
+
+```jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+```
+
+### Route Configuration
+
+- **Configure routes** by specifying the URL (`path`) and the component (`element`) to render for each path.
+  - **`path`**: Defines the URL path for which the route should render the component.
+  - **`element`**: Specifies the React component to render when the URL matches the `path`.
+
+### Understanding Route Matching
+
+- **React Router** matches the URL to the defined routes and renders the corresponding component.
+
+  - **`/` (Home Page Route)**:
+
+    - Matches the root URL of the application (e.g., `http://example.com/`).
+    - Typically renders the main or `Home` Page of the site.
+
+  - **`/product`**:
+
+    - Matches the URL for the product page (e.g., `http://example.com/product`).
+    - Renders the `Product` component, which displays information related to products.
+
+  - **`/pricing`**:
+
+    - Matches the URL for the pricing page (e.g., `http://example.com/pricing`).
+    - Renders the `Pricing` component, which provides details about pricing plans or options.
+
+  - **`*` (Page Not Found Route)**:
+    - Acts as a catch-all for any URL that doesn't match the other defined routes.
+    - Used to display a `Page Not Found` or `404 error page` for unmatched URLs.
+
+```jsx
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='product' element={<Product />} />
+        <Route path='pricing' element={<Pricing />} />
+        <Route path='*' element={<PageNotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+
+### Rendering Based on URL
+
+1. **URL Navigation**:
+
+   - React Router checks the current URL and compares it with the `path` values defined in the `Route` components.
+
+2. **Component Rendering**:
+   - When a URL matches a specified `path`, the corresponding `element` (component) for that route is displayed.
+   - If no routes match the URL, the wildcard route (`path='*'`) is used to render a fallback component, such as a "Page Not Found" or 404 error page.
+
+#### Examples:
+
+- Navigating to `/` will display the `Home` component.
+- Navigating to `/product` will display the `Product` component.
+```
