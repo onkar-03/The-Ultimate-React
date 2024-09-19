@@ -68,3 +68,48 @@ export default defineConfig({
 ## Step 7: Run ESLint
 
 After configuring ESLint, you can manually run it on your project to check for any linting errors or warnings. This will help maintain code quality by following the set linting rules.
+
+## React Router Integration Summary
+
+### Introduction to React Router
+
+- This section covers React Router and its role in single-page applications.
+
+### What is Routing?
+
+- Routing matches different URLs to different views in a web application.
+- In React, each URL is matched to a specific React component, called a route.
+- When a URL is visited, the corresponding React component is rendered.
+
+### Examples of Routing
+
+- For instance, visiting `example.com` might render a homepage component, while `/login` would render a login component.
+- After logging in, the user might be redirected to `/app` to show the app screen.
+- This setup enables users to navigate between different screens using links and URLs, keeping the UI in sync with the current browser URL.
+
+### Client-Side vs Server-Side Routing
+
+- The described routing works on the client side (in the browser) rather than on the server side.
+- Most front-end frameworks have client-side routing built-in, but React relies on third-party packages for this functionality.
+
+### React Router Package
+
+- React Router is a third-party package used for routing in React applications.
+- It is one of the most important and widely used libraries for React.
+
+### Single-Page Applications (SPAs)
+
+- SPAs are web applications that operate entirely on the client side, without reloading the page.
+- They rely on routes to change views without a full page reload, providing a seamless user experience similar to native applications.
+
+### How SPAs Work
+
+- Clicking a link in an SPA changes the URL
+- triggers the DOM update via JavaScript.
+- The page updates without a complete reload, providing a smoother user experience.
+
+### External Data and Communication
+
+- SPAs can fetch additional data from servers using web APIs, but they do not load completely new pages.
+- If they load a completely new page they dont remain a SPA
+- React apps are inherently SPAs because they do not reload the entire page.
