@@ -1,4 +1,9 @@
-import { Link } from 'react-router-dom'; // Importing the 'Link' component from 'react-router-dom' to handle client-side navigation
+// Importing the 'Link' component from 'react-router-dom' to handle client-side navigation
+// import { Link } from 'react-router-dom';
+
+// Importing the 'Link' component from 'react-router-dom' to handle client-side navigation
+// The difference is that NavLink highlights the currently visiting link with an 'active' in CSS
+import { NavLink } from 'react-router-dom';
 
 // A reusable navigation component that can be used across multiple pages
 function PageNav() {
@@ -15,7 +20,7 @@ function PageNav() {
             The root page is the home page, denoted by '/'.
             The 'to' prop defines the path to navigate when this link is clicked.
           */}
-          <Link to='/'>Home</Link>
+          <NavLink to='/'>Home</NavLink>
         </li>
 
         {/* 
@@ -24,7 +29,7 @@ function PageNav() {
           - All the pages need to have the '/' root link and then the link to their page
         */}
         <li>
-          <Link to='/pricing'>Pricing</Link>
+          <NavLink to='/pricing'>Pricing</NavLink>
         </li>
 
         {/* 
@@ -32,7 +37,7 @@ function PageNav() {
           - The path to Product is '/product'
         */}
         <li>
-          <Link to='/product'>Product</Link>
+          <NavLink to='/product'>Product</NavLink>
         </li>
       </ul>
     </nav>

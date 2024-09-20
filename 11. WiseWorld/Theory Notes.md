@@ -194,7 +194,7 @@ function App() {
     </BrowserRouter>
   );
 }
-
+```
 
 ### Rendering Based on URL
 
@@ -210,4 +210,127 @@ function App() {
 
 - Navigating to `/` will display the `Home` component.
 - Navigating to `/product` will display the `Product` component.
+
+## Linking Between Routes in React Router
+
+### Step 1: Adding Links to the Homepage
+
+#### Creating an Anchor Element
+
+To create a link to the pricing page on our homepage:
+
+1. Wrap the link in an `<h1>` tag for styling.
+2. Create an anchor element (`<a>`) with the `href` attribute pointing to the `/pricing` route.
+
+```jsx
+<h1>
+  Welcome to Our App
+  <a href='/pricing'>Pricing</a>
+</h1>
 ```
+
+#### Observing the Page Reload
+
+When clicking the link, the page will reload, which is not the desired behavior for an SPA. We want seamless transitions between pages without reloading.
+
+### Step 2: Using React Router's Link Component
+
+#### Importing the Link Component
+
+- Instead of using a traditional anchor element, we will use the Link component provided by react-router-dom.
+
+1. Import the Link component:
+
+```jsx
+import { Link } from 'react-router-dom';
+```
+
+2. Replace the anchor element: Use the to prop to specify the route.
+
+- The Root path contains just `/`
+- Other Pages go through the Root page and hence have a `/` at the start of there link
+
+```jsx
+<h1>
+  Welcome to Our App
+  <Link to='/pricing'>Pricing</Link>
+</h1>
+```
+
+#### Behavior of the Link Component
+
+When using the Link component the application navigates to the `/pricing` page without a full page reload. The DOM content is updated seamlessly, maintaining the SPA experience.
+
+### Step 3: Implementing Navigation Across Pages
+
+#### Creating a Navigation Component
+
+- To allow navigation between multiple pages, we'll create a reusable navigation component say `PageNav`.
+
+1. Create a folder called components.
+2. Inside this folder, create a PageNav.jsx component.
+
+```jsx
+import { Link } from 'react-router-dom';
+
+function PageNav() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link to='/'>Home</Link>
+        </li>
+        <li>
+          <Link to='/pricing'>Pricing</Link>
+        </li>
+        <li>
+          <Link to='/product'>Product</Link>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+```
+
+#### Including the Navigation Component
+
+Integrate the PageNav component in each page (e.g., Home, Pricing, Product) to enable navigation.
+
+```jsx
+import PageNav from './components/PageNav';
+```
+
+### Advantages of Using NavLink Instead of Link
+
+- The NavLink component automatically applies an active class to the link when its route matches the current URL.
+- This is useful for highlighting the active page in navigation menus.
+- It allows for more customizable styling based on the active state, improving user experience by providing clear visual feedback on which page is currently active
+- So instead of using <Link></Link> we can use <NavLink><NavLink/> for our Navigation page component
+
+```jsx
+import { Link } from 'react-router-dom';
+
+function PageNav() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <NavLink to='/'>Home</NavLink>
+        </li>
+        <li>
+          <NavLink to='/pricing'>Pricing</NavLink>
+        </li>
+        <li>
+          <NavLink to='/product'>Product</NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+```
+
+### Summary
+
+- We transformed traditional anchor elements into React Router Link components to avoid page reloads.
+- A reusable navigation component was created to allow seamless transitions between pages.
+- This setup enhances user experience by making the application feel like a single cohesive unit.
