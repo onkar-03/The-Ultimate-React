@@ -334,3 +334,59 @@ function PageNav() {
 - We transformed traditional anchor elements into React Router Link components to avoid page reloads.
 - A reusable navigation component was created to allow seamless transitions between pages.
 - This setup enhances user experience by making the application feel like a single cohesive unit.
+
+## Styling React Applications
+
+### 1. Global External CSS
+
+- **What it is**: Traditional CSS file linked to the app, where you use classes in JSX.
+- **Pros**:
+  - Simple and well-understood.
+- **Cons**:
+  - Styles are global, leading to potential conflicts across components in larger apps.
+
+### 2. Inline CSS
+
+- **What it is**: Styles are applied directly to JSX elements using the `style` prop.
+- **Pros**:
+  - Scoped to individual elements, reducing conflicts.
+- **Cons**:
+  - Not ideal for complex styles.
+  - Lacks flexibility for large-scale styling.
+
+### 3. CSS Modules
+
+- **What it is**: Scoped CSS that applies only to a specific component by naming styles uniquely.
+- **Pros**:
+  - Prevents global conflicts.
+  - Makes components more modular.
+- **Cons**:
+  - Requires slightly more setup compared to traditional CSS.
+
+### 4. CSS-in-JavaScript (Styled Components)
+
+- **What it is**: Write CSS directly in JavaScript files. Styles can be defined and used as React components.
+- **Pros**:
+  - Promotes a true modular approach by keeping styles within the component.
+- **Cons**:
+  - Adds additional complexity due to JavaScript-heavy styles.
+
+### 5. Utility-First CSS (Tailwind CSS)
+
+- **What it is**: Use predefined utility classes in JSX to style components directly.
+- **Pros**:
+  - Fast and efficient.
+  - No need to write custom CSS, reducing bloat.
+- **Cons**:
+  - Steep learning curve for utility classes.
+  - JSX can become cluttered with multiple classes.
+
+### 6. Component Libraries (e.g., Material UI etc...)
+
+- **What it is**: Use pre-built, styled components for faster development.
+- **Pros**:
+  - No need to write custom CSS.
+  - Provides consistent UI components.
+- **Cons**:
+  - Limited customization options.
+  - Not ideal for learning core CSS concepts.
