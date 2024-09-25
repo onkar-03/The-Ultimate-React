@@ -4,14 +4,17 @@
 // Importing the 'Nav Link' component from 'react-router-dom' to handle client-side navigation to different pages
 // The difference is that NavLink highlights the currently visiting link with an 'active' in CSS
 import { NavLink } from 'react-router-dom';
+import Logo from './Logo';
 
 // Importing CSS Modules
-import styles from './PagNav.module.css';
+import styles from '../components/PageNav.module.css';
 
 // A reusable navigation component with all the Links that can be used across navigate across multiple pages
 function PageNav() {
   return (
     <nav className={styles.nav}>
+      <Logo />
+
       {/* Using CSS Styles defined in PageNav.module.css */}
       <ul>
         {/* 
@@ -21,13 +24,11 @@ function PageNav() {
           - It prevents full page reloads and enables smooth navigation within the app
           - Here we define a Link for each page as a List Item, along with the path info to that page in the'to' attribute of <Link> 
         */}
-        <li>
-          {/* 
+
+        {/* 
             The root page is the home page, denoted by '/'.
             The 'to' prop defines the path to navigate when this link is clicked.
           */}
-          <NavLink to='/'>Home</NavLink>
-        </li>
 
         {/* 
            Navigation list item for Pricing Page 
@@ -44,6 +45,16 @@ function PageNav() {
         */}
         <li>
           <NavLink to='/product'>Product</NavLink>
+        </li>
+
+        {/* 
+          Navigation list item for Product Page 
+          - The path to Product is '/login'
+        */}
+        <li>
+          <NavLink to='/login' className={styles.ctaLink}>
+            Login
+          </NavLink>
         </li>
       </ul>
     </nav>
