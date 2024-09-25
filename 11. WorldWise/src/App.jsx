@@ -19,10 +19,22 @@ function App() {
         particular path using path='' and element={} in there
         - path='/' is defined for root Page i.e. the Pge to be loaded at the Start of the App 
         */}
+        {/* <Route path='/' element={<HomePage />} /> */}
         <Route path='/' element={<HomePage />} />
         <Route path='product' element={<Product />} />
         <Route path='login' element={<Login />} />
-        <Route path='app' element={<AppLayout />} />
+        <Route path='app' element={<AppLayout />}>
+          {/* Nested Routes */}
+
+          {/* 
+          - Default Index Route
+          - When none of the Sub Routes match we display the Index Route the default one
+          */}
+          <Route index element={<p>Cities</p>} />
+          <Route path='cities' element={<p>Cities</p>} />
+          <Route path='countries' element={<p>Countries</p>} />
+          <Route path='form' element={<p>Form</p>} />
+        </Route>
         <Route path='pricing' element={<Pricing />} />
 
         {/* 
