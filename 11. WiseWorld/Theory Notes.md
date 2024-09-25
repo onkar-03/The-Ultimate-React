@@ -390,3 +390,91 @@ function PageNav() {
 - **Cons**:
   - Limited customization options.
   - Not ideal for learning core CSS concepts.
+
+## CSS Modules and Global CSS Summary Notes
+
+### Problem with Global CSS
+
+- Global CSS can lead to conflicts due to the cascade effect, where styles can unintentionally affect other elements in the application.
+- Naming collisions occur when multiple components use the same class names, leading to unpredictable styling results.
+
+### How CSS Modules Solve These Problems
+
+- CSS Modules scope styles locally by generating unique class names. This prevents naming collisions and ensures that styles applied to one component do not affect others.
+- This encapsulation helps maintain clean and manageable styles in large applications.
+
+CSS Module:
+
+```jsx
+.nav{
+  color:red;
+}
+```
+
+Generated Class Name by React: (Using Hex Code)
+
+```jsx
+<button className='_nav_uue12_25'>
+```
+
+### How to Name CSS Modules
+
+- Use the `.module.css` extension for CSS files to indicate that they are CSS Modules.
+- Follow a consistent naming convention, such as `ComponentName.module.css`, to keep styles organized and easily identifiable.
+  EG: `PageNav.jsx` will have CSS Module File as `PaveNav.module.css`
+
+### Styling in CSS Modules
+
+- CSS Modules allow you to define styles normally but ensure they are scoped to the component level.
+- You can use standard CSS features such as nested rules, pseudo-classes, and media queries.
+
+### Why Not to Use Generic Element Selectors
+
+- Generic selectors (like div, h1, etc.) apply styles globally and can lead to unintended styling effects across different components.
+- They reduce modularity and make it harder to manage styles as the application grows.
+
+### Importing CSS Modules
+
+- Import CSS Modules in your components using the following syntax:
+  ```javascript
+  import styles from './ComponentName.module.css';
+  ```
+- This import assigns the scoped styles to the styles object, which can be used to apply styles to elements
+
+### How to Use the Styles Import to Style Component Elements
+
+- Use the imported styles object to apply styles to elements:
+
+  ```jsx
+  <div className={styles.className}></div>
+  ```
+
+- This method ensures that the correct scoped class name is applied to the element, avoiding conflicts with other styles.
+
+### What Global CSS is Included For
+
+- Global CSS is generally used for base styles, typography, and styles that need to be consistent across the entire application.
+- It is helpful for defining styles for elements that don't require scoping, such as body styles or resets.
+
+### How to Create Own Global CSS Using :global() in CSS Modules
+
+- You can define global styles within a CSS Module using the :global() pseudo-class:
+
+  ```jsx
+  :global .globalClass {
+      color: red;
+  }
+  ```
+
+- This allows you to apply styles globally while still using CSS Modules for component-specific styles.
+
+### Why Use Global CSS for Active Class Added by NavLink Route
+
+- Global CSS is useful for applying styles to active classes added by routing libraries like React Router.
+- It ensures that the active state of navigation links is consistently styled across the application, enhancing user experience.
+
+```jsx
+.nav :global(.active) {
+  background-color: green;
+}
+```

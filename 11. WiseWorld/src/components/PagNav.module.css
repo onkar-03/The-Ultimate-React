@@ -10,9 +10,7 @@
 }
 
 /* 
---- Avoid Using Generic Element Selectors
-- Avoid using generic element selectors like ul, as they will affect all ul elements across the entire application.
--  Instead, scope your styles by selecting elements inside specific classes. This ensures the styles only apply to the current component
+--- Avoid Using Generic Element Selectors:
 */
 .nav ul {
   list-style: none;
@@ -22,10 +20,6 @@
 
 /* 
 --- Creating Global Styles in CSS Modules
-- If we want to create a Global CSS style inside any components module we can do it by using :global(.className){}
-- After this we dont need to import the module,css file using import styles from ''; 
-- We can directly use the test class in any element using className='test'
-EG
  :global(.test) {
   background-color: red;
 }
