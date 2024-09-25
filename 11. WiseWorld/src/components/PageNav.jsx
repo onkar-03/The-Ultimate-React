@@ -1,19 +1,25 @@
-// Importing the 'Link' component from 'react-router-dom' to handle client-side navigation
+// Importing the 'Link' component from 'react-router-dom' to handle client-side navigation to different pages
 // import { Link } from 'react-router-dom';
 
-// Importing the 'Link' component from 'react-router-dom' to handle client-side navigation
+// Importing the 'Nav Link' component from 'react-router-dom' to handle client-side navigation to different pages
 // The difference is that NavLink highlights the currently visiting link with an 'active' in CSS
 import { NavLink } from 'react-router-dom';
 
-// A reusable navigation component that can be used across multiple pages
+// Importing CSS Modules
+import styles from './PagNav.module.css';
+
+// A reusable navigation component with all the Links that can be used across navigate across multiple pages
 function PageNav() {
   return (
-    <nav>
+    <nav className={styles.nav}>
+      {/* Using CSS Styles defined in PageNav.module.css */}
       <ul>
         {/* 
           Navigation list item for Home Page
-          - 'Link' replaces traditional anchor tags (<a>)
+          - <Link to=''/> replaces traditional anchor tags (<a href=''>)
+          - Link is a hyperlink but using this makes out Application SPA
           - It prevents full page reloads and enables smooth navigation within the app
+          - Here we define a Link for each page as a List Item, along with the path info to that page in the'to' attribute of <Link> 
         */}
         <li>
           {/* 

@@ -237,7 +237,7 @@ When clicking the link, the page will reload, which is not the desired behavior 
 
 #### Importing the Link Component
 
-- Instead of using a traditional anchor element, we will use the Link component provided by react-router-dom.
+- Instead of using a traditional anchor element, we will use the `<Link/>` component provided by `react-router-dom`.
 
 1. Import the Link component:
 

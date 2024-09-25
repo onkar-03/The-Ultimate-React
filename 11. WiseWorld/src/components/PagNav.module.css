@@ -1,0 +1,45 @@
+/* 
+--- GLOBAL CSS : Class Name Conflicts
+- In a global CSS file, all styles are applied globally. If multiple components (e.g., PageNav and AppNav) use the same class name (e.g., .nav), the styles can override each other, leading to conflicts.
+
+--- CSS Modules: Scoped Styles to Prevent Conflicts
+- CSS Modules solve this by scoping styles locally to each component. Even if different components have the same class name, CSS Modules generate unique class names (e.g., _nav_uue12_25) behind the scenes. This prevents conflicts, as each component's styles are isolated.
+ */
+.nav {
+  background-color: orange;
+}
+
+/* 
+--- Avoid Using Generic Element Selectors
+- Avoid using generic element selectors like ul, as they will affect all ul elements across the entire application.
+-  Instead, scope your styles by selecting elements inside specific classes. This ensures the styles only apply to the current component
+*/
+.nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 
+--- Creating Global Styles in CSS Modules
+- If we want to create a Global CSS style inside any components module we can do it by using :global(.className){}
+- After this we dont need to import the module,css file using import styles from ''; 
+- We can directly use the test class in any element using className='test'
+EG
+ :global(.test) {
+  background-color: red;
+}
+*/
+
+/* 
+--- Styling Active Links with CSS Modules
+- When using <NavLink /> in React, it automatically adds an active class to the active link, allowing you to style it. 
+- However, when working with CSS Modules, you can't simply style the active class with nav .active because CSS Modules append a unique hash to class names, preventing conflicts.
+- To target the active class without conflict, you can use the :global() selector like this: 
+*/
+
+.nav :global(.active) {
+  background-color: green;
+}
+
+/* This tells CSS Modules to treat .active as a global class, bypassing the local scoping, so you can style it properly */
