@@ -9,6 +9,10 @@ function Sidebar() {
     <div className={styles.sidebar}>
       <Logo />
       <AppNav />
+
+      {/* 
+      - Used to display the Nested Routes using the Outlet Component that the react router provides us
+      */}
       <Outlet />
       <Footer />
     </div>

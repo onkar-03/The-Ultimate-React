@@ -6,6 +6,10 @@ function AppNav() {
   return (
     <nav className={styles.nav}>
       <ul>
+        {/* 
+        - Specifying the navigation links in teh APP navigation component which we see on opening the explore button
+        - The Nested Routes can be declared both ways /parent/pageName OR /PageName
+        */}
         <li>
           <NavLink to='/app/cities'>Cities</NavLink>
         </li>

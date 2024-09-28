@@ -76,8 +76,10 @@ function App() {
 
           {/* 
           - Default Index Route
-          - When none of the Sub Routes match we display the Index Route the default one
-          - Passing teh fetched data from API as props
+          - When none of the Sub Routes match we display the Index Route the default one using 'index'
+          - Passing the fetched data from API as props
+          - To display the Nested Routes we use the <Outlet/> component provided by the react router
+          - We want to display the Nested Routes in Sidebar hence we use the <Outlet/> component there
           */}
           <Route
             index
