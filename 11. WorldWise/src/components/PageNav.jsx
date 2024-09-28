@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import Logo from './Logo';
 
 // Importing CSS Modules
-import styles from '../components/PageNav.module.css';
+import styles from './PageNav.module.css';
 
 // A reusable navigation component with all the Links that can be used across navigate across multiple pages
 function PageNav() {
