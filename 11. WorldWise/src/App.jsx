@@ -1,7 +1,9 @@
+// Importing 3RD Party Libraries
 // Importing Components that react router gives us to define routes for different components
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+// Importing different Components
 // Importing all Pages we want to route to different paths
 import HomePage from './pages/HomePage.jsx';
 import Product from './pages/Product';
@@ -10,6 +12,7 @@ import Login from './pages/Login.jsx';
 import AppLayout from './pages/AppLayout.jsx';
 import PageNotFound from './pages/PageNotFound';
 import CityList from './components/CityList.jsx';
+import CountryList from './components/CountryList.jsx';
 
 const BASE_URL = 'http://localhost:9000';
 
@@ -96,7 +99,10 @@ function App() {
             path='cities'
             element={<CityList cities={cities} isLoading={isLoading} />}
           />
-          <Route path='countries' element={<p>Countries</p>} />
+          <Route
+            path='countries'
+            element={<CountryList cities={cities} isLoading={isLoading} />}
+          />
           <Route path='form' element={<p>Form</p>} />
         </Route>
         <Route path='pricing' element={<Pricing />} />
