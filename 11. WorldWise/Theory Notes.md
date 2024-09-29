@@ -329,6 +329,43 @@ function PageNav() {
 }
 ```
 
+### Relative vs. Absolute Paths
+
+#### Understanding Paths in React Router
+
+When defining routes and links in React Router, it's essential to understand the difference between relative and absolute paths:
+
+1. **Absolute Paths**:
+
+   - Absolute paths start with a `/` and refer to a specific location from the root of the application.
+   - They are useful when you want to link to a specific route from anywhere in the application.
+   - For example, linking to `/pricing` will always navigate to the `/pricing` route, regardless of the current URL.
+
+   ```jsx
+   <Link to='/pricing'>Pricing</Link>
+   ```
+
+2. **Relative Paths**:
+
+   - Relative paths do not start with a `/` and are resolved based on the current URL's context.
+   - They are particularly useful for nested routes, allowing you to avoid repeating the base path.
+   - For instance, if the current route is `/app`, linking to `product` will resolve to `/app/product`. If the current route is `/`, it will resolve to `/product`.
+
+   ```jsx
+   <NavLink to='product'>Product</NavLink>
+   ```
+
+#### When to Use Each Type of Path
+
+- **Use Absolute Paths**:
+
+  - When you need to link to a route from anywhere in the app.
+  - When linking from components that may not have a consistent route context (e.g., from a footer or modal).
+
+- **Use Relative Paths**:
+  - When working with nested routes, as they make your code cleaner and reduce repetition.
+  - When you're certain of the current route context and want to link to sibling routes.
+
 ### Summary
 
 - We transformed traditional anchor elements into React Router Link components to avoid page reloads.

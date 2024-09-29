@@ -1,6 +1,6 @@
 // Importing Components that react router gives us to define routes for different components
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importing all Pages we want to route to different paths
 import HomePage from './pages/HomePage.jsx';
@@ -11,48 +11,55 @@ import AppLayout from './pages/AppLayout.jsx';
 import PageNotFound from './pages/PageNotFound';
 import CityList from './components/CityList.jsx';
 
-const URL = 'http://localhost:9000/cities';
+const BASE_URL = 'http://localhost:9000';
 
 function App() {
   //States to hold Data
-  const [isLoading, setIsLoading] = useState(false);
   const [cities, setCities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // As we need the Fake JSON data across multiple components we declare it here so that we can pass it as props later in different components
   // Fetching the Data
   useEffect(
     function () {
-      // Wrapping the fetch call in a try-catch block to handle any potential errors
-      try {
-        setIsLoading(true); // Start loading before the fetch operation begins
+      // Start loading before the fetch operation begins
+      setIsLoading(true);
 
-        // Defining an async function to fetch the list of cities
-        async function fetchCitiesList() {
-          try {
-            // Fetch Data with the Fake JSON URL
-            const res = await fetch(URL);
+      // Defining an async function to fetch the list of cities
+      async function fetchCitiesList() {
+        try {
+          // Display the Loading State
+          setIsLoading(true);
 
-            // Checking if the response is okay
-            if (!res.ok) {
-              throw new Error('Failed to fetch'); // Throw an error if the response status is not OK
-            }
+          // Fetch Data with the Fake JSON URL
+          const res = await fetch(`${BASE_URL}/cities`);
 
-            const data = await res.json(); // Parse the response to JSON
-            setCities(data); // Update the state with the fetched data
-            console.log(data); // Log the data to the console for debugging
-          } catch (err) {
-            console.error(err); // Log any errors encountered during the fetch
-            alert('Failed to fetch cities data'); // Show an alert if data fetching fails
-          } finally {
-            setIsLoading(false); // Set loading state to false after fetch completes (success or failure)
+          // Checking if the response is okay
+          if (!res.ok) {
+            throw new Error('Failed to fetch'); // Throw an error if the response status is not OK
           }
-        }
 
-        // Call the async function to initiate data fetching
-        fetchCitiesList();
-      } catch (err) {
-        console.error(err); // Log any errors that occur outside of the fetchCitiesList function
+          const data = await res.json(); // Parse the response to JSON
+
+          // Update the state with the fetched data
+          setCities(data);
+
+          // Log the data to the console for debugging
+          console.log(data);
+        } catch (err) {
+          // Log any errors encountered during the fetch
+          console.error(err);
+
+          // Show an alert if data fetching fails
+          alert('Failed to fetch cities data');
+        } finally {
+          // Set loading state to false after fetch completes (success or failure)
+          setIsLoading(false);
+        }
       }
+
+      // Call the async function to initiate data fetching
+      fetchCitiesList();
     },
     // Fetch Data on mount initially
     [],
@@ -77,8 +84,8 @@ function App() {
           {/* 
           - Default Index Route
           - When none of the Sub Routes match we display the Index Route the default one using 'index'
-          - Passing the fetched data from API as props
           - To display the Nested Routes we use the <Outlet/> component provided by the react router
+          - Passing the fetched data from API as props 'cities' & 'isLoading'
           - We want to display the Nested Routes in Sidebar hence we use the <Outlet/> component there
           */}
           <Route

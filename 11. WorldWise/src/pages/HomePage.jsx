@@ -5,6 +5,9 @@ import PageNav from '../components/PageNav';
 export default function Homepage() {
   return (
     <main className={styles.homepage}>
+      {/*  
+      - Page Nav component used here to display the Links to various component pages
+      */}
       <PageNav />
       <section>
         <h1>

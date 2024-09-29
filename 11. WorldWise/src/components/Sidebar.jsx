@@ -11,7 +11,8 @@ function Sidebar() {
       <AppNav />
 
       {/* 
-      - Used to display the Nested Routes using the Outlet Component that the react router provides us
+      - <Outlet /> is a place holder where the nested child routes render
+      - <Outlet /> Used to display the Nested Routes using the Outlet Component that the react router provides us
       */}
       <Outlet />
       <Footer />
