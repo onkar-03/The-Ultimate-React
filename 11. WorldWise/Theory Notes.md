@@ -515,3 +515,94 @@ Generated Class Name by React: (Using Hex Code)
   background-color: green;
 }
 ```
+
+# Storing UI State in the URL with React Router
+
+- We can also use the URL to store UI state in React applications using React Router.
+- The URL is an excellent place to store Ul state and an alternative to useState in some situations.
+
+In React applications, managing UI state can often become complex. One effective approach is to utilize the URL to store UI state using React Router. This method provides a robust alternative to using `useState` in specific scenarios.
+
+### Why Use the URL for State Management?
+
+- **Global Accessibility**: Storing state in the URL creates a global storage mechanism, making it easily accessible by any component in the app.
+- **Streamlined Data Handling**: This approach eliminates the need for prop drilling, allowing any component to directly read state from the URL.
+- **Seamless Page Transitions**: The URL facilitates data transfer between pages without requiring temporary in-app storage.
+- **Enhanced Shareability**: Users can bookmark or share URLs that reflect their current UI configuration, such as selected filters.
+
+### Implementing State Storage in the URL
+
+Consider the following URL structure:
+
+```jsx
+www.example.com/app/cities/lisbon?lat:38.728&lng:-9.128
+```
+
+The URL contains different parts, including the **path**, **URL parameter**, and **query parameters**. Let’s break it down based on what was explained in the lecture:
+
+#### 1. Path
+
+The path identifies the specific resource being requested. Everything before the question mark (`?`) is part of the path.
+
+- **Path**: `/app/cities/lisbon`
+
+  - `/app`: Represents a section of the app, routing users to a specific page.
+  - `/cities`: Indicates that the feature is related to cities.
+  - `/lisbon`: A **URL parameter** representing a dynamic city name.
+
+  **Note**: To store state in the URL effectively, utilize both parameters and query strings to persist app state (e.g., currently viewed city or geographical coordinates).
+
+#### 2. URL Parameter (Path Parameter)
+
+- In the path `/app/cities/lisbon`, `lisbon` is a **URL parameter**.
+- In a dynamic application, this can be a variable that changes based on user input. It’s a dynamic part of the URL, typically used for resource identification, such as city names, product IDs, user profiles, etc.
+- They are very useful to pass data to the next page
+
+To access this parameter within the component, we can use a method provided by the router that extracts the parameter value from the URL and allows us to use it in our code.
+
+#### 3. Query Parameters
+
+After the question mark (`?`), query parameters are typically key-value pairs used to pass additional information.
+
+- **Query Parameters**: `lat=38.728&lng=-9.128`
+  - `lat=38.728`: Latitude for Lisbon.
+  - `lng=-9.128`: Longitude for Lisbon.
+
+Query parameters are particularly useful for storing global state information that should be accessible throughout the application.
+
+These are used to pass additional data to the application, like geographical coordinates in this case. To extract the values of these query parameters, we can use another method provided by the router.
+
+### Explanation:
+
+- **Path**: `/app/cities/lisbon` identifies the page and the resource (a city page for Lisbon).
+- **URL Parameter** (`lisbon`): Represents the dynamic city being viewed. It could be replaced with another city dynamically.
+- **Query Parameters** (`lat=38.728&lng=-9.128`): Additional data related to the city, such as geographical coordinates.
+
+### When to Use URL Parameters vs. Query Parameters
+
+- **URL Parameters**: Best for required information that defines a resource (e.g., city names, product IDs).
+- **Query Parameters**: Ideal for optional data that does not define the main resource (e.g., filters, sorting criteria).
+
+### Types of State Suitable for URL Storage
+
+- **UI State**: Affects the appearance or behavior of the UI (e.g., whether a panel is open or closed).
+- **Filter or Sorting Options**: Criteria used to filter or sort lists, such as color or price in an e-commerce application.
+
+### Advantages of URL-Based State Management
+
+1. **Component Accessibility**: Unlike `useState`, URL state is globally accessible to any component.
+2. **Eliminates Prop Drilling**: No need to pass state through multiple component levels.
+3. **Bookmarking and Sharing**: Users can share specific app states (e.g., filter settings).
+4. **Enhanced User Experience**: Users can return to previous states easily.
+
+### Common UI States Stored in the URL
+
+1. **Filters & Sorting**: Applied filters and sorting preferences.
+2. **Search Queries**: Keywords for fetching data.
+3. **Pagination**: Current page number or items per page.
+4. **Modal or Tab State**: Status of modals or active tabs.
+
+### Key Techniques
+
+- **React Router’s `useSearchParams`**: Manages query parameters in the URL.
+- **React Router’s `useLocation`**: Tracks changes in the URL and allows components to respond accordingly.
