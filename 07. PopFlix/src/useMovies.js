@@ -32,7 +32,7 @@ export function useMovies(query) {
 
           // Fetch data from the OMDB API using the given URL and API key
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
             { signal: controller.signal },
           );
 

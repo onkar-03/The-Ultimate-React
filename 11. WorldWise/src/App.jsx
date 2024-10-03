@@ -13,6 +13,7 @@ import AppLayout from './pages/AppLayout.jsx';
 import PageNotFound from './pages/PageNotFound';
 import CityList from './components/CityList.jsx';
 import CountryList from './components/CountryList.jsx';
+import City from './components/City.jsx';
 
 const BASE_URL = 'http://localhost:9000';
 
@@ -99,6 +100,32 @@ function App() {
             path='cities'
             element={<CityList cities={cities} isLoading={isLoading} />}
           />
+
+          {/*
+          - Using Params with React Router (Storing info in URL)
+          - To implement Dynamic Routes with URL parameter we need 3 Steps
+          -  1. Create a Route
+          -  2. Link to that Route
+          -  3. Read the state in that Route from the URL
+           */}
+
+          {/* 
+          - STEP 1: 
+          - Creating a brand new Route 
+          - Here we specify the name of the param adn the component to Link to
+          - Here the parameter we want for the URL is the id of cities
+          - /:id her the parameter name we gave is the id, whatever is after the : is the name of the parameter we are passing in
+          - So whenever the url takes the same fo cities/something that depicts the city id it renders the City component
+          */}
+          <Route path='cities/:id' element={<City />} />
+
+          {/* 
+          - STEP 2: Link to the Route we created
+          - As we want to each of the City List Item we do that in the CityItem component
+          
+          - STEP 3: Read State from the URL 
+          - We dop that in the City Component
+          */}
           <Route
             path='countries'
             element={<CountryList cities={cities} isLoading={isLoading} />}
