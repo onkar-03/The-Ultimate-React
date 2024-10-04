@@ -11,16 +11,23 @@ const formatDate = (date) =>
 /* eslint-disable react/prop-types */
 function CityItem({ city }) {
   // Destructuring City Item
-  const { cityName, emoji, date } = city;
+  // Getting the Id, Lat, Lng to display for each of the City
+  const { cityName, emoji, date, id, position } = city;
+
   return (
     <li>
       {/* STEP 2: 
-      - Link to the Route with city id parameter that we created for in teh APP.jsx
+      - For each Item we want a special Link hence we wrap all the Content inside a <NavLink/>
+      - Link to the Route with city id parameter that we created for in the APP.jsx
       - Use the NavLink component from react-router-dom to navigate to the route with the city id parameter
       - We just pass the current id as we want just this to add to the current URL
-      - As the CityList.jsx passes the prop here hence we link the route here 
+      - Defining the query string having the lat and lng of the country as well in the Link
+      - Now the State that we had inside our Application is transferred to the URL and is available globally and we can use them anywhere we want which we read in Map Component to depict the City Position
       */}
-      <NavLink to={`${city.id}`} className={styles.cityItem}>
+      <NavLink
+        to={`${id}?lat=${position.lat}&lng=${position.lng}`}
+        className={styles.cityItem}
+      >
         <span className={styles.emoji}>{emoji}</span>
         <span className={styles.name}>{cityName}</span>
         <span className={styles.date}>{formatDate(date)}</span>

@@ -1,18 +1,19 @@
-import styles from './City.module.css';
+// import styles from './City.module.css';
 import { useParams } from 'react-router-dom';
 
-const formatDate = (date) =>
-  new Intl.DateTimeFormat('en', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    weekday: 'long',
-  }).format(new Date(date));
+// const formatDate = (date) =>
+//   new Intl.DateTimeFormat('en', {
+//     day: 'numeric',
+//     month: 'long',
+//     year: 'numeric',
+//     weekday: 'long',
+//   }).format(new Date(date));
 
 function City() {
   // STEP 3:
-  // Retrieve the Data that we stored in the URL
+  // Retrieve and Read the Data that we stored in the URL
   // For this we use the useParam Hook
+  // As we stored the id of cities we destructure it here using useParams()
   const { id } = useParams();
 
   // TEMP DATA

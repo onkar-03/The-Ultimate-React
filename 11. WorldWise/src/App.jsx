@@ -115,16 +115,17 @@ function App() {
           - Here we specify the name of the param adn the component to Link to
           - Here the parameter we want for the URL is the id of cities
           - /:id her the parameter name we gave is the id, whatever is after the : is the name of the parameter we are passing in
-          - So whenever the url takes the same fo cities/something that depicts the city id it renders the City component
+          - So whenever the url takes the same fo cities/id that depicts the city id it renders the City component
+          - We linked the route to City Component
           */}
           <Route path='cities/:id' element={<City />} />
 
           {/* 
-          - STEP 2: Link to the Route we created
-          - As we want to each of the City List Item we do that in the CityItem component
+          - STEP 2: Link to the URL in the Route that we created
+          - As we want to do it for each of the List Items hence we Link to the Route URL in the CityItem Component
           
-          - STEP 3: Read State from the URL 
-          - We dop that in the City Component
+          - STEP 3: Then in the Route we read the State from the URL 
+          - We do that in the City Component
           */}
           <Route
             path='countries'
