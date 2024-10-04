@@ -1,6 +1,6 @@
 // Importing 3RD Party Libraries
 // Importing Components that react router gives us to define routes for different components
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 // Importing different Components
@@ -93,10 +93,7 @@ function App() {
           - Passing the fetched data from API as props 'cities' & 'isLoading'
           - We want to display the Nested Routes in Sidebar hence we use the <Outlet/> component there
           */}
-          <Route
-            index
-            element={<CityList cities={cities} isLoading={isLoading} />}
-          />
+          <Route index element={<Navigate replace to='cities' />} />
           <Route
             path='cities'
             element={<CityList cities={cities} isLoading={isLoading} />}

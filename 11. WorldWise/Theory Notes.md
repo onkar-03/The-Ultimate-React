@@ -623,6 +623,7 @@ After calling `useNavigate`, the `navigate` function can be used to move between
 ### Basic Usage
 
 - **Navigation to a Route**: The `navigate()` function takes a path as an argument to move to a specific route.
+- Mostly used imperatively i.e. without any link declarations, means that we define no hard code links using <NavLink/> or <Link/>
 
 ```jsx
 navigate('/home');
