@@ -606,3 +606,81 @@ These are used to pass additional data to the application, like geographical coo
 
 - **React Router’s `useSearchParams`**: Manages query parameters in the URL.
 - **React Router’s `useLocation`**: Tracks changes in the URL and allows components to respond accordingly.
+
+## `useNavigate` Hook in React Router
+
+`useNavigate` is a hook provided by React Router that allows for programmatic navigation between different routes. It provides the ability to navigate to different pages in response to user actions without using `<Link/>` or `<NavLink/>`.
+
+### How to Use `useNavigate`
+
+1. **Purpose**: It returns a function (usually named `navigate`) that can be used to navigate between routes.
+2. **Syntax**: You call the `useNavigate` hook and store the returned `navigate` function for later use.
+
+## `navigate()` Function
+
+After calling `useNavigate`, the `navigate` function can be used to move between different routes.
+
+### Basic Usage
+
+- **Navigation to a Route**: The `navigate()` function takes a path as an argument to move to a specific route.
+
+```jsx
+navigate('/home');
+```
+
+### Moving Back and Forward in History
+
+- **`navigate(-1)`**: Moves the user one step back in their browser history, equivalent to using the browser’s back button.
+
+```jsx
+navigate(-1);
+```
+
+- **`navigate(1)`**: Moves the user one step forward in their history, if possible, similar to using the browser’s forward button.
+
+```jsx
+navigate(+1);
+```
+
+## Example Use Cases
+
+1. **Redirect After Form Submission**: After a form is submitted, `navigate()` can be used to redirect the user to another page, such as a confirmation screen.
+
+```jsx
+import { useNavigate } from 'react-router-dom';
+
+function SubmitForm() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // After form submission logic, navigate to the confirmation page
+    navigate('/confirmation');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* form fields */}
+      <button type='submit'>Submit</button>
+    </form>
+  );
+}
+```
+
+2. **Navigating Back and Forward**: The `navigate(-1)` and `navigate(1)` functions allow moving backward and forward through the browser’s history based on the user’s navigation.
+
+```jsx
+import { useNavigate } from 'react-router-dom';
+
+function NavigationExample() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <button onClick={() => navigate(-1)}>Go Back</button>
+      <button onClick={() => navigate(1)}>Go Forward</button>
+    </>
+  );
+}
+```
