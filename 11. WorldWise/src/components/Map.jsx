@@ -1,5 +1,5 @@
 import styles from './Map.module.css';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function Map() {
   // Lat and Lng passed to URL in the CityItem Component
@@ -7,12 +7,24 @@ function Map() {
   // For this we use the useSearchParams Hook() given by react router
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Programmatic Navigation
+  // We navigate to any URL in an imperative way without using any <Link/> or <NavLink/>
+  // Now this navigate function is used to move to any URL that we want
+  // We define the Path inside the navigate("Path")
+  const navigate = useNavigate();
+
   // We cant directly access the params we need to use the .get() function
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
 
   return (
-    <div className={styles.mapContainer}>
+    <div
+      className={styles.mapContainer}
+      onClick={() => {
+        // On Click we want to navigate to the Form Component using navigate function of useNavigate Hook
+        navigate('form');
+      }}
+    >
       <h1>MAP</h1>
       <h1>
         Position: {lat}, {lng}{' '}
