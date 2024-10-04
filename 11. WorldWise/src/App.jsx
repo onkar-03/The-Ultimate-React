@@ -89,9 +89,11 @@ function App() {
           {/* 
           - Default Index Route
           - When none of the Sub Routes match we display the Index Route the default one using 'index'
-          - To display the Nested Routes we use the <Outlet/> component provided by the react router
           - Passing the fetched data from API as props 'cities' & 'isLoading'
+          - To display the Nested Routes we use the <Outlet/> component provided by the react router
           - We want to display the Nested Routes in Sidebar hence we use the <Outlet/> component there
+          - To enable default loading of cities Component on Navigating to /cities we use the Navigate to describe default navigation to cities on loading /app
+          - replace used to enable or disable users to navigate back to previous pages
           */}
           <Route index element={<Navigate replace to='cities' />} />
           <Route

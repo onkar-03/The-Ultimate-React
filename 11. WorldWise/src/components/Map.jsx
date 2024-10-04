@@ -21,7 +21,7 @@ function Map() {
     <div
       className={styles.mapContainer}
       onClick={() => {
-        // On Click we want to navigate to the Form Component using navigate function of useNavigate Hook
+        // On Click we want to navigate to the Form Component using navigate function of useNavigate Hook imperatively without using any Link tags
         navigate('form');
       }}
     >

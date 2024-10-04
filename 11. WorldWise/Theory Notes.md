@@ -607,9 +607,15 @@ These are used to pass additional data to the application, like geographical coo
 - **React Router’s `useSearchParams`**: Manages query parameters in the URL.
 - **React Router’s `useLocation`**: Tracks changes in the URL and allows components to respond accordingly.
 
-## `useNavigate` Hook in React Router
+## Imperative Navigation using `useNavigate` Hook in React Router
 
-`useNavigate` is a hook provided by React Router that allows for programmatic navigation between different routes. It provides the ability to navigate to different pages in response to user actions without using `<Link/>` or `<NavLink/>`.
+- `useNavigate` is a hook provided by React Router that allows for programmatic navigation between different routes.
+- It provides the ability to navigate to different pages in response to user actions without using `<Link/>` or `<NavLink/>`.
+- Its am Imperative way to navigate routes
+
+### What is imperative way of Navigation ??
+
+In React Router, imperative navigation refers to controlling the navigation of the application based on actions or logic that happen during runtime, like user interactions or program logic, without using declarative elements like <Link /> or <NavLink />
 
 ### How to Use `useNavigate`
 
@@ -685,3 +691,67 @@ function NavigationExample() {
   );
 }
 ```
+
+## Declarative Navigation with `<Navigate />` in React Router
+
+- React Router provides a declarative way to redirect users from one route to another using the `<Navigate />` component.
+
+- This component is useful when you want to automatically navigate based on certain conditions, such as after login or when a user is not authorized to view a page.
+
+### How to Use `<Navigate />`
+
+The `<Navigate />` component allows you to define navigation directly in the JSX. It is often placed conditionally inside the render logic, and once the condition is met, it redirects the user to a specified route.
+
+### Example of Declarative Navigation
+
+Here is an example where a user is redirected to the `/home` page if they are logged in:
+
+```jsx
+import { Navigate } from 'react-router-dom';
+
+function LoginPage() {
+  const isLoggedIn = true; // Example condition
+
+  if (isLoggedIn) {
+    // Redirect to home page if the user is logged in
+    return <Navigate to='/home' />;
+  }
+
+  return <div>Please log in</div>;
+}
+```
+
+### Props of <Navigate /> Component
+
+- to: This prop specifies the path to navigate to.
+
+Example: `<Navigate to="/home" />`
+
+- replace: A boolean that, when set to true, replaces the current entry in the browser's history stack. This prevents users from navigating back to the page from which they were redirected.By default it's set as false.
+
+Example: `<Navigate to="/home" replace={true} />`
+
+- state: Allows you to pass additional data during navigation. This data can be accessed in the target component.
+
+Example: `<Navigate to="/home" state={{ from: '/login' }} />`
+
+Example with replace Prop :
+
+If you want to prevent the user from going back to the login page after successful authentication, use the replace prop:
+
+```jsx
+import { Navigate } from 'react-router-dom';
+
+function LoginPage() {
+  const isLoggedIn = true; // Example condition
+
+  if (isLoggedIn) {
+    // Redirect to home page and replace history
+    return <Navigate to='/home' replace={true} />;
+  }
+
+  return <div>Please log in</div>;
+}
+```
+
+In this case, when the user is redirected to the /home page, the login page is replaced in the history stack, meaning the user cannot use the browser's back button to return to the login page.
