@@ -27,6 +27,7 @@
 .product p {
   font-size: 1.6rem;
   margin-bottom: 2rem;
+  text-align: left;
 }
 
 .product section a {

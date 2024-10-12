@@ -15,9 +15,12 @@ export default function Product() {
             Just $9/month.
           </h2>
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vel
-            labore mollitia iusto. Recusandae quos provident, laboriosam fugit
-            voluptatem iste.
+            The free plan includes essential features like logging up to 10
+            countries and basic map functionality. For more advanced travelers,
+            the premium plans offer unlimited country tracking, personalized
+            travel stats, and detailed insights. With affordable monthly or
+            yearly subscriptions, World Wise ensures that everyone can manage
+            their travels with ease and efficiency
           </p>
         </div>
         <img src='img-2.jpg' alt='overview of a large city with skyscrapers' />

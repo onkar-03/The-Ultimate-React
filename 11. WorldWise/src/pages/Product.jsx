@@ -13,15 +13,17 @@ export default function Product() {
         <div>
           <h2>About WorldWide.</h2>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo est
-            dicta illum vero culpa cum quaerat architecto sapiente eius non
-            soluta, molestiae nihil laborum, placeat debitis, laboriosam at fuga
-            perspiciatis?
+            World Wise is a smart travel app that helps users track the
+            countries they’ve visited. With an interactive world map, you can
+            log your trips, add personal notes, and visualize your travel
+            history. It's an easy way to see where you’ve been and plan where to
+            go next
           </p>
           <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis
-            doloribus libero sunt expedita ratione iusto, magni, id sapiente
-            sequi officiis et.
+            The app also provides personalized travel stats and lets you create
+            a “bucket list” of future destinations. Whether you're a casual
+            explorer or an avid traveler, World Wise keeps your journeys
+            organized and inspires new adventures
           </p>
         </div>
       </section>
