@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { faker } from '@faker-js/faker';
 
 function createRandomPost() {
@@ -11,6 +11,8 @@ function createRandomPost() {
 // Context API
 // 1. Creating a New Context Provider
 // The var 'PostContext' is in uppercase because its a component and the components are declared using Uppercase letters
+
+// Create a new context to store Pots Information
 const PostContext = createContext();
 
 function App() {
@@ -47,13 +49,17 @@ function App() {
   );
 
   return (
+    // Using the Context we created
     // 2. Provide values to the child components
-    // Declare all the props we want the child components to have in teh Object created inside the value property
+    // Declare all the props we want the child components to have in the Object created inside the value property
     <PostContext.Provider
       value={{
         posts: searchedPosts,
         onAddPosts: handleAddPost,
         onClearPosts: handleClearPosts,
+
+        // Shorthand for assigning a variable to a property with the same name
+        // Equivalent to searchQuery: searchQuery
         searchQuery,
         setSearchQuery,
       }}
@@ -66,39 +72,42 @@ function App() {
           {isFakeDark ? '☀️' : '🌙'}
         </button>
 
-        <Header
-          posts={searchedPosts}
-          onClearPosts={handleClearPosts}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-        <Main posts={searchedPosts} onAddPost={handleAddPost} />
-        <Archive onAddPost={handleAddPost} />
+        <Header />
+        <Main />
+        <Archive />
         <Footer />
       </section>
     </PostContext.Provider>
   );
 }
 
-function Header({ posts, onClearPosts, searchQuery, setSearchQuery }) {
+function Header() {
+  // 3. Consuming Context Values
+  // To consume the values from the context we use the useContext() Hook
+  // The Header component needs the onClearPosts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  // The PostContext returns the exact Object that we described in it hence we destructure it adn use what is required for different components
+  const { onClearPosts } = useContext(PostContext);
+
   return (
     <header>
       <h1>
         <span>⚛️</span>The Atomic Blog
       </h1>
       <div>
-        <Results posts={posts} />
-        <SearchPosts
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <Results />
+        <SearchPosts />
         <button onClick={onClearPosts}>Clear posts</button>
       </div>
     </header>
   );
 }
 
-function SearchPosts({ searchQuery, setSearchQuery }) {
+function SearchPosts() {
+  // 3. Consuming Context Values
+  // To consume the values from the context we use the useContext() Hook
+  // The SearchPosts component needs the (searchQuery, setSearchQuery) prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  const { searchQuery, setSearchQuery } = useContext(PostContext);
+
   return (
     <input
       value={searchQuery}
@@ -108,28 +117,38 @@ function SearchPosts({ searchQuery, setSearchQuery }) {
   );
 }
 
-function Results({ posts }) {
+function Results() {
+  // 3. Consuming Context Values
+  // To consume the values from the context we use the useContext() Hook
+  // The SearchPosts component needs the posts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  const { posts } = useContext(PostContext);
+
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
-function Main({ posts, onAddPost }) {
+function Main() {
   return (
     <main>
-      <FormAddPost onAddPost={onAddPost} />
-      <Posts posts={posts} />
+      <FormAddPost />
+      <Posts />
     </main>
   );
 }
 
-function Posts({ posts }) {
+function Posts() {
   return (
     <section>
-      <List posts={posts} />
+      <List />
     </section>
   );
 }
 
-function FormAddPost({ onAddPost }) {
+function FormAddPost() {
+  // 3. Consuming Context Values
+  // To consume the values from the context we use the useContext() Hook
+  // The FormAddPost component needs the onAddPost prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  const { onAddPost } = useContext(PostContext);
+
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -158,7 +177,11 @@ function FormAddPost({ onAddPost }) {
   );
 }
 
-function List({ posts }) {
+function List() {
+  // 3. Consuming Context Values
+  // To consume the values from the context we use the useContext() Hook
+  // The List component needs the posts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  const { posts } = useContext(PostContext);
   return (
     <ul>
       {posts.map((post, i) => (

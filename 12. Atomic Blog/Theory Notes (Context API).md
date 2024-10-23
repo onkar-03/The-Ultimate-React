@@ -2,7 +2,9 @@
 
 ## What is the Context API?
 
-The **Context API** in React is a system that allows us to pass data throughout an application without having to manually pass props down the component tree. It essentially provides a way to broadcast global state that should be available to child components of a certain context.
+The **Context API** in React is a system that allows us to pass data throughout an application (to deeply nested child components) without having to manually pass props down the component tree.
+
+It essentially provides a way to broadcast global state that should be available to child components of a certain context.
 
 ### The Problem It Solves: Prop Drilling
 
@@ -11,11 +13,12 @@ Prop drilling is the issue that arises when we need to pass state through multip
 Example problem:
 
 - Suppose components `B` and `F` both need access to a state variable, such as `count`. Without the Context API, we would have to pass this `count` prop down from a parent to all the intermediary components until it reaches `B` and `F`.
-- EG: A
+- EG:
+  A
   / \
-   B C
+  B C
   / \
-   D E
+  D E
   /
   F
 
@@ -43,6 +46,7 @@ Instead of prop drilling, the **Context API** allows for direct passing of state
 
 - When the context value (state) changes, all (consumer) components that are consuming that context will automatically re-render .
 - This makes it a powerful tool for managing state updates across multiple components.
+- When value changes the Provider tells the consumer about value change adn re renders the consumers
 
 ### Benefits of the Context API
 
@@ -53,18 +57,22 @@ Instead of prop drilling, the **Context API** allows for direct passing of state
 
 ### Step 1: Create a New Context
 
-First, you need to create a context using the `createContext` function. This establishes a "Context" that you can use to share values across multiple components without passing props down manually at every level.
+- First, you need to create a context using the `createContext` function. This establishes a "Context" that you can use to share values across multiple components without passing props down manually at every level.
+
+- The var 'PostContext' is in uppercase because its a component and the components are declared using Uppercase letters
 
 ```jsx
 import { createContext } from 'react';
 
-// Create a new context
+// Create a new context to store Pots Information
 export const PostContext = createContext();
 ```
 
 ### Step 2: Provide Values to Child Components
 
-To make the props available to all child components, use the `Provider` component of the created context. Inside the `Provider`, declare the `value` property, which holds all the values you want the child components to access. The `value` property accepts an object where you list the props.
+- To make the values available to all child components, use the `Provider` component from the created context. Inside the `Provider`, declare the `value` prop, which holds the data and functions you want the child components to access.
+
+- The `value` prop accepts an object where you list the values.
 
 ```jsx
 <PostContext.Provider
@@ -76,12 +84,17 @@ To make the props available to all child components, use the `Provider` componen
     setSearchQuery, // Function to update search query
   }}
 >
-  {/* Child components will be wrapped here */}
+  {/* Components */}
+  <ComponentA /> {/* Can access context values as consumers */}
+  <ComponentB /> {/* Can access context values as consumers */}
+  <ComponentC /> {/* Can access context values as consumers */}
+  <ComponentD /> {/* Can access context values as consumers */}
 </PostContext.Provider>
 ```
 
 **In this example**, the **value** object contains the following props, which are made available to all child components wrapped within the `Provider`:
 
+- Each component (ComponentA, ComponentB, ComponentC, and ComponentD) wrapped inside the PostContext.Provider can access the values provided through the context (such as posts, onAddPosts, searchQuery, etc.) as consumers
 - **`posts`**
 - **`onAddPosts`**
 - **`onClearPosts`**
@@ -89,3 +102,51 @@ To make the props available to all child components, use the `Provider` componen
 - **`setSearchQuery`**
 
 **IMPORTANT**: _We can use different contexts for handling different things; for instance, we could have one context for managing posts and another for handling search queries. However, in this example, we are learning how to use the Context API, so we consolidate everything into one context_.
+
+### Step 3: Consuming Context in React
+
+#### Key Steps
+
+- The context provider and its value are established.
+- The next step is to consume the context value across different components.
+
+##### 1. Importing useContext Hook
+
+- The `useContext` hook from React is introduced.
+- This hook allows components to subscribe to React context without manually using the `Context.Consumer` component.
+- The entire context object is passed into `useContext`, returning the context value.
+
+```jsx
+import { createContext, useContext, useEffect, useState }
+```
+
+##### 2. Accessing Context Values for different Components
+
+###### Header Component
+
+- The `Header` component requires the `onClearPosts` function, which is now accessed from the context.
+- The context value, which includes necessary functions and data, is destructured for use in the component:
+
+  ```jsx
+  // The Header component needs the onClearPosts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
+  // The PostContext returns the exact Object that we described in it hence we destructure it and use what is required for different components
+  const { onClearPosts } = useContext(PostContext);
+  ```
+
+###### SearchPosts Component
+
+The `SearchPosts` component requires access to the `searchQuery` and `setSearchQuery` function to manage its internal state.
+
+- Instead of passing these props down from a parent component, the `SearchPosts` component uses the `useContext` hook to access them directly from the `PostContext`.
+- By utilizing the `useContext` hook, the component can consume the context values seamlessly, promoting a more modular architecture.
+
+  ```jsx
+  // The SearchPosts component needs the searchQuery and setSearchQuery props,
+  // hence we read them from the PostContext (Provider) we created using the useContext() Hook
+  const { searchQuery, setSearchQuery } = useContext(PostContext);
+  ```
+
+#### Summary:
+
+- After removing props from all relevant components, the JSX becomes cleaner and easier to manage.
+- The benefits of using context include reduced prop drilling, allowing components to access needed data without passing props through intermediate components.
