@@ -1,9 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { faker } from '@faker-js/faker';
-
-// Using Custom Provider and Hook as an advanced way of doing things
-// The App-v1.js is absolutely fine but this is a level up
-import { PostProvider, usePosts } from './PostContext';
 
 function createRandomPost() {
   return {
@@ -12,8 +8,37 @@ function createRandomPost() {
   };
 }
 
+// Context API
+// 1. Creating a New Context Provider
+// The var 'PostContext' is in uppercase because its a component and the components are declared using Uppercase letters
+
+// Create a new context to store Pots Information
+const PostContext = createContext();
+
 function App() {
+  const [posts, setPosts] = useState(() =>
+    Array.from({ length: 30 }, () => createRandomPost()),
+  );
+  const [searchQuery, setSearchQuery] = useState('');
   const [isFakeDark, setIsFakeDark] = useState(false);
+
+  // Derived state. These are the posts that will actually be displayed
+  const searchedPosts =
+    searchQuery.length > 0
+      ? posts.filter((post) =>
+          `${post.title} ${post.body}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()),
+        )
+      : posts;
+
+  function handleAddPost(post) {
+    setPosts((posts) => [post, ...posts]);
+  }
+
+  function handleClearPosts() {
+    setPosts([]);
+  }
 
   // Whenever `isFakeDark` changes, we toggle the `fake-dark-mode` class on the HTML element (see in "Elements" dev tool).
   useEffect(
@@ -24,22 +49,35 @@ function App() {
   );
 
   return (
-    <section>
-      <button
-        onClick={() => setIsFakeDark((isFakeDark) => !isFakeDark)}
-        className='btn-fake-dark-mode'
-      >
-        {isFakeDark ? '☀️' : '🌙'}
-      </button>
+    // Using the Context we created
+    // 2. Provide values to the child components
+    // Declare all the props we want the child components to have in the Object created inside the value property
+    <PostContext.Provider
+      value={{
+        posts: searchedPosts,
+        onAddPosts: handleAddPost,
+        onClearPosts: handleClearPosts,
 
-      {/* // Using Created Context API to pass Props and all  */}
-      <PostProvider>
+        // Shorthand for assigning a variable to a property with the same name
+        // Equivalent to searchQuery: searchQuery
+        searchQuery,
+        setSearchQuery,
+      }}
+    >
+      <section>
+        <button
+          onClick={() => setIsFakeDark((isFakeDark) => !isFakeDark)}
+          className='btn-fake-dark-mode'
+        >
+          {isFakeDark ? '☀️' : '🌙'}
+        </button>
+
         <Header />
         <Main />
         <Archive />
         <Footer />
-      </PostProvider>
-    </section>
+      </section>
+    </PostContext.Provider>
   );
 }
 
@@ -48,7 +86,7 @@ function Header() {
   // To consume the values from the context we use the useContext() Hook
   // The Header component needs the onClearPosts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
   // The PostContext returns the exact Object that we described in it hence we destructure it adn use what is required for different components
-  const { onClearPosts } = usePosts();
+  const { onClearPosts } = useContext(PostContext);
 
   return (
     <header>
@@ -68,7 +106,7 @@ function SearchPosts() {
   // 3. Consuming Context Values
   // To consume the values from the context we use the useContext() Hook
   // The SearchPosts component needs the (searchQuery, setSearchQuery) prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
-  const { searchQuery, setSearchQuery } = usePosts();
+  const { searchQuery, setSearchQuery } = useContext(PostContext);
 
   return (
     <input
@@ -83,7 +121,7 @@ function Results() {
   // 3. Consuming Context Values
   // To consume the values from the context we use the useContext() Hook
   // The SearchPosts component needs the posts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
-  const { posts } = usePosts();
+  const { posts } = useContext(PostContext);
 
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
@@ -109,7 +147,7 @@ function FormAddPost() {
   // 3. Consuming Context Values
   // To consume the values from the context we use the useContext() Hook
   // The FormAddPost component needs the onAddPost prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
-  const { onAddPost } = usePosts();
+  const { onAddPost } = useContext(PostContext);
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -143,7 +181,7 @@ function List() {
   // 3. Consuming Context Values
   // To consume the values from the context we use the useContext() Hook
   // The List component needs the posts prop, hence we read it from the PostContext (Provider) we created using the useContext() Hook
-  const { posts } = usePosts();
+  const { posts } = useContext(PostContext);
   return (
     <ul>
       {posts.map((post, i) => (
