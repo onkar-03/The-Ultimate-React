@@ -146,7 +146,57 @@ The `SearchPosts` component requires access to the `searchQuery` and `setSearchQ
   const { searchQuery, setSearchQuery } = useContext(PostContext);
   ```
 
-#### Summary:
+## React Advanced State Management
 
-- After removing props from all relevant components, the JSX becomes cleaner and easier to manage.
-- The benefits of using context include reduced prop drilling, allowing components to access needed data without passing props through intermediate components.
+### 1. **Overview of Context API**
+
+- **Purpose**: Context API enables state sharing across components without prop drilling.
+- **Usage**: Particularly suited for **UI state** rather than **remote state** in large applications.
+
+### 2. Types of State
+
+#### 1. State Management Basics
+
+- **Definition**: Organizing where state resides within an application.
+- **Types**:
+  - **Local State**: Used within a single component or its children.
+  - **Global State**: Needed by multiple components across different parts of the component tree.
+
+#### 2. Classifying State by Domain
+
+- **UI State**: Manages interface elements like theme, filters, form inputs, and panel states.
+- **Remote State**: Data fetched from external sources (e.g., API data).
+  - **Management Needs**: Remote state often needs caching, revalidation, and frequent updates.
+
+### 4. **Determining Local vs. Global State**
+
+- **Guideline**: Ask if an update in one component should reflect in another instance of the same component:
+  - **No**: Local State.
+  - **Yes**: Global State.
+
+### 5. **State Placement Options**
+
+- **Local State**: Managed within the component using `useState`, `useReducer`, or `useRef`.
+- **Parent Component**: Lift state to a shared parent if multiple related components need it.
+- **Context**: Best for global UI state but requires `useState` or `useReducer` to manage updates.
+- **3rd-Party Library**: Suitable for managing complex global state, especially with asynchronous data, and can handle caching, revalidation, and synchronization.
+  - Examples: **Redux**, **React Query**, **SWR**, **Zustand**.
+- **URL**: Useful for shareable, bookmarkable state across pages.
+- **Browser Storage**: Store persistent data in **localStorage** or **sessionStorage** (does not trigger re-renders).
+
+### 6. **State Management Tools by Type**
+
+- **Local UI State**: Managed by `useState`, `useReducer`.
+- **Global UI State**: Context API + `useState` / `useReducer`.
+- **Local Remote State**: `fetch` + `useEffect` + `useReducer` / `useState`.
+- **Global Remote State**: Consider third-party libraries or Context API for complex needs:
+  - **Context API** (paired with `useReducer` or `useState` for state changes)
+  - **Redux**
+  - **React Query**
+  - **SWR**
+  - **Zustand**
+
+### 7. **Selecting the Right Tools**
+
+- UI State: Synchronous and stays within the app, managed by familiar hooks.
+- Remote State: Asynchronous, often requires third-party libraries for handling caching, updates, and revalidation.
