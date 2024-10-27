@@ -17,6 +17,7 @@ function createRandomPost() {
   };
 }
 
+// Provider Component that provides the Context
 function PostProvider({ children }) {
   const [posts, setPosts] = useState(() =>
     Array.from({ length: 30 }, () => createRandomPost()),
