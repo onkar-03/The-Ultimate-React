@@ -1,13 +1,16 @@
 // import styles from './City.module.css';
 import { useParams } from 'react-router-dom';
+import { useCities } from '../contexts/CitiesContext';
+import { useEffect } from 'react';
+import styles from './City.module.css';
 
-// const formatDate = (date) =>
-//   new Intl.DateTimeFormat('en', {
-//     day: 'numeric',
-//     month: 'long',
-//     year: 'numeric',
-//     weekday: 'long',
-//   }).format(new Date(date));
+const formatDate = (date) =>
+  new Intl.DateTimeFormat('en', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    weekday: 'long',
+  }).format(new Date(date));
 
 function City() {
   // STEP 3:
@@ -15,52 +18,51 @@ function City() {
   // For this we use the useParam Hook
   // As we stored the id of cities we destructure it here using useParams()
   const { id } = useParams();
+  console.log(id);
 
-  // TEMP DATA
-  const currentCity = {
-    cityName: 'Lisbon',
-    emoji: '🇵🇹',
-    date: '2027-10-31T15:59:59.138Z',
-    notes: 'My favorite city so far!',
-  };
+  const { getCity, currentCity } = useCities();
 
-  const { cityName, emoji, date, notes } = currentCity;
+  // Get the details about the City using the getCity Function from the Context Provider
+  useEffect(() => {
+    getCity(id);
+  }, [id]);
 
-  return <h1>City {id}</h1>;
+  // Get the current City details from the Context Provider
+  const { cityName, date, notes } = currentCity;
 
-  // return (
-  //   <div className={styles.city}>
-  //     <div className={styles.row}>
-  //       <h6>City name</h6>
-  //       <h3>
-  //         <span>{emoji}</span> {cityName}
-  //       </h3>
-  //     </div>
+  console.log(currentCity);
 
-  //     <div className={styles.row}>
-  //       <h6>You went to {cityName} on</h6>
-  //       <p>{formatDate(date || null)}</p>
-  //     </div>
+  return (
+    <div className={styles.city}>
+      <div className={styles.row}>
+        <h6>City name</h6>
+        <h3>{cityName}</h3>
+      </div>
 
-  //     {notes && (
-  //       <div className={styles.row}>
-  //         <h6>Your notes</h6>
-  //         <p>{notes}</p>
-  //       </div>
-  //     )}
+      <div className={styles.row}>
+        <h6>You went to {cityName} on</h6>
+        <p>{formatDate(date || null)}</p>
+      </div>
 
-  //     <div className={styles.row}>
-  //       <h6>Learn more</h6>
-  //       <a
-  //         href={`https://en.wikipedia.org/wiki/${cityName}`}
-  //         target='_blank'
-  //         rel='noreferrer'
-  //       >
-  //         Check out {cityName} on Wikipedia &rarr;
-  //       </a>
-  //     </div>
-  //   </div>
-  // );
+      {notes && (
+        <div className={styles.row}>
+          <h6>Your notes</h6>
+          <p>{notes}</p>
+        </div>
+      )}
+
+      <div className={styles.row}>
+        <h6>Learn more</h6>
+        <a
+          href={`https://en.wikipedia.org/wiki/${cityName}`}
+          target='_blank'
+          rel='noreferrer'
+        >
+          Check out {cityName} on Wikipedia &rarr;
+        </a>
+      </div>
+    </div>
+  );
 }
 
 export default City;

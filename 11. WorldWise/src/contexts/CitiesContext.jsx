@@ -14,6 +14,9 @@ const CitiesProvider = ({ children }) => {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // As this piece of State is required by both the City and the CityItem component hence we declare it here so that it can be accessed by all the required components
+  const [currentCity, setCurrentCity] = useState({});
+
   // As we need the Fake JSON data across multiple components we declare it here so that we can pass it as props later in different components
   // Fetching the Data
   useEffect(
@@ -61,8 +64,41 @@ const CitiesProvider = ({ children }) => {
     [],
   );
 
+  // Async function to Fetch the City data from an API
+  async function getCity(id) {
+    try {
+      // Display the Loading State
+      setIsLoading(true);
+
+      // Fetch Data with the Fake JSON URL
+      const res = await fetch(`${BASE_URL}/cities/${id}`);
+
+      // Checking if the response is okay
+      if (!res.ok) {
+        throw new Error('Failed to fetch'); // Throw an error if the response status is not OK
+      }
+
+      const data = await res.json(); // Parse the response to JSON
+
+      // Update the state with the fetched data
+      setCurrentCity(data);
+
+      // Log the data to the console for debugging
+      console.log(data);
+    } catch (err) {
+      // Log any errors encountered during the fetch
+      console.error(err);
+
+      // Show an alert if data fetching fails
+      alert('Failed to fetch cities data');
+    } finally {
+      // Set loading state to false after fetch completes (success or failure)
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <CitiesContext.Provider value={{ cities, isLoading }}>
+    <CitiesContext.Provider value={{ cities, isLoading, currentCity, getCity }}>
       {children}
     </CitiesContext.Provider>
   );
