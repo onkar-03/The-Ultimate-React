@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useCities } from '../contexts/CitiesContext';
 import { useEffect } from 'react';
 import styles from './City.module.css';
+import Spinner from './Spinner';
+import BackButton from './BackButton';
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat('en', {
@@ -18,19 +20,19 @@ function City() {
   // For this we use the useParam Hook
   // As we stored the id of cities we destructure it here using useParams()
   const { id } = useParams();
-  console.log(id);
 
-  const { getCity, currentCity } = useCities();
+  const { getCity, currentCity, isLoading } = useCities();
 
   // Get the details about the City using the getCity Function from the Context Provider
+  // For this we use the getCity function from the Context Provider
   useEffect(() => {
     getCity(id);
   }, [id]);
 
-  // Get the current City details from the Context Provider
+  // Destructure the current City details from the Context Provider
   const { cityName, date, notes } = currentCity;
 
-  console.log(currentCity);
+  if (isLoading) return <Spinner />; //
 
   return (
     <div className={styles.city}>
@@ -60,6 +62,10 @@ function City() {
         >
           Check out {cityName} on Wikipedia &rarr;
         </a>
+      </div>
+
+      <div>
+        <BackButton />
       </div>
     </div>
   );

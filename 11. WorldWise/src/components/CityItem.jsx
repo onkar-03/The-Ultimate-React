@@ -1,3 +1,4 @@
+import { useCities } from '../contexts/CitiesContext';
 import styles from './CityItem.module.css';
 import { NavLink } from 'react-router-dom';
 
@@ -14,6 +15,9 @@ function CityItem({ city }) {
   // Getting the Id, Lat, Lng to display for each of the City
   const { cityName, emoji, date, id, position } = city;
 
+  // Read the Current City to match the existing id to current city id and if they are same we render the active class for that City of the list
+  const { currentCity } = useCities();
+
   return (
     <li>
       {/* STEP 2: 
@@ -23,10 +27,17 @@ function CityItem({ city }) {
       - We just pass the current id as we want just this to add to the current URL
       - Defining the query string having the lat and lng of the country as well in the Link
       - Now the State that we had inside our Application is transferred to the URL and is available globally and we can use them anywhere we want which we read in Map Component to depict the City Position
+       - Conditionally render the active class for current city
+
       */}
       <NavLink
+        className={`${styles.cityItem} 
+          ${
+            currentCity && id === currentCity.id
+              ? styles['cityItem--active']
+              : ''
+          }`}
         to={`${id}?lat=${position.lat}&lng=${position.lng}`}
-        className={styles.cityItem}
       >
         <span className={styles.emoji}>{emoji}</span>
         <span className={styles.name}>{cityName}</span>

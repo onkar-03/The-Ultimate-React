@@ -82,9 +82,6 @@ const CitiesProvider = ({ children }) => {
 
       // Update the state with the fetched data
       setCurrentCity(data);
-
-      // Log the data to the console for debugging
-      console.log(data);
     } catch (err) {
       // Log any errors encountered during the fetch
       console.error(err);
