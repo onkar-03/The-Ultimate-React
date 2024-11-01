@@ -1,12 +1,14 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const BASE_URL = 'http://localhost:9000';
 
-// The name of the var is Capitalized because its a Component name
+// Creating Context
 const CitiesContext = createContext();
 
 // Provider Component that provides the Context
 // Moved all the State Logic and Updating Things to the Provider Component
+
+/* eslint-disable react/prop-types */
 const CitiesProvider = ({ children }) => {
   //States to hold Data
   const [cities, setCities] = useState([]);
@@ -66,5 +68,17 @@ const CitiesProvider = ({ children }) => {
   );
 };
 
+// Custom Hook
+// To consume Cities Context everywhere in teh Application
+function useCities() {
+  const value = useContext(CitiesContext);
+
+  // If used outside the Scope of Cities Context then we want to throw an error
+  if (value === undefined) {
+    throw new Error('Post Context was used Outside the CitiesProvider !!');
+  }
+  return value;
+}
+
 // Export both the Context and the Provider Component for use in other components.
-export { CitiesContext, CitiesProvider };
+export { CitiesProvider, useCities };

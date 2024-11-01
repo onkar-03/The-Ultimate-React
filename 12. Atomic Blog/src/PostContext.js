@@ -64,13 +64,17 @@ function PostProvider({ children }) {
 }
 
 // Custom Hook
+// This hook simplifies the process of consuming context values, encapsulates error handling to ensure it's only used within the PostProvider, and improves code readability by centralizing the logic for accessing post-related data.
+// By using this hook, we avoid repetitive context access and make it easier to manage any future changes to the context's implementation.
+// Basically an API for the Context
 function usePosts() {
   const context = useContext(PostContext);
 
-  // Incase we try to access the value of Provider outside children we get undefined
+  // In case we try to access the value of Provider outside children we get undefined
   // This is because we defined the Post Context for a specific set of components / children only
   if (context === undefined)
     throw new Error('Post Context was used Outside the PostProvider !!');
+
   return context;
 }
 

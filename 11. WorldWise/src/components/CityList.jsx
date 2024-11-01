@@ -2,9 +2,12 @@ import Spinner from './Spinner';
 import Message from './Message';
 import styles from './CityList.module.css';
 import CityItem from './CityItem';
+import { useCities } from '../contexts/CitiesContext';
 
-/* eslint-disable react/prop-types */
-function CityList({ cities, isLoading }) {
+function CityList() {
+  // Using the Context from teh Custom Provider
+  const { cities, isLoading } = useCities();
+
   // If the Data is still being Fetched then we display the S[pinner component
   if (isLoading) return <Spinner />;
 
