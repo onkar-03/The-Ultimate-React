@@ -1,11 +1,14 @@
 import styles from './Map.module.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useState } from 'react';
 
 function Map() {
   // Lat and Lng passed to URL in the CityItem Component
   // Read the Lat & Lng from the URL as the State is stored in URL and ios accessible to all without any props transfer
   // For this we use the useSearchParams Hook() given by react router
   const [searchParams, setSearchParams] = useSearchParams();
+  const [mapPosition, setMapPosition] = useState([40, 40]);
 
   // Programmatic Navigation
   // We navigate to any URL in an imperative way without using any <Link/> or <NavLink/>
@@ -18,25 +21,23 @@ function Map() {
   const lng = searchParams.get('lng');
 
   return (
-    <div
-      className={styles.mapContainer}
-      onClick={() => {
-        // On Click we want to navigate to the Form Component using navigate function of useNavigate Hook imperatively without using any Link tags
-        navigate('form');
-      }}
-    >
-      <h1>MAP</h1>
-      <h1>
-        Position: {lat}, {lng}{' '}
-      </h1>
-      {/* Update the Lat and Lng on Button Click */}
-      <button
-        onClick={() => {
-          setSearchParams({ lat: 69, lng: 69 });
-        }}
+    <div className={styles.mapContainer}>
+      <MapContainer
+        center={mapPosition}
+        zoom={13}
+        scrollWheelZoom={true}
+        className={styles.map}
       >
-        Change Pos
-      </button>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+        />
+        <Marker position={mapPosition}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
     </div>
   );
 }
