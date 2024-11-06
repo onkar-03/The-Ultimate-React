@@ -11,8 +11,11 @@ import {
 } from 'react-leaflet';
 import { useEffect, useState } from 'react';
 import { useCities } from '../contexts/CitiesContext';
+import { useGeolocation } from '../Hooks/useGeolocation';
+import Button from '../components/Button';
 
 function Map() {
+  // All Hooks at the Top:
   const [mapPosition, setMapPosition] = useState([40, 40]);
 
   // Cities Marker
@@ -23,6 +26,12 @@ function Map() {
   // Read the Lat & Lng from the URL as the State is stored in URL and ios accessible to all without any props transfer
   // For this we use the useSearchParams Hook() given by react router
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const {
+    isLoading: isLoadingPosition,
+    position: geolocationPosition,
+    getPosition,
+  } = useGeolocation();
 
   // We cant directly access the params we need to use the .get() function
   const lat = searchParams.get('lat');
@@ -36,8 +45,23 @@ function Map() {
     }
   }, [lat, lng]);
 
+  // Effect to sync the Geolocation Position with the Map Position
+  useEffect(
+    () => {
+      // Only if the Geolocation Position Exists we change the Map Position to the current Position
+      if (geolocationPosition) {
+        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+      }
+    },
+    // Run whenever there is a change in geolocation position
+    [geolocationPosition],
+  );
+
   return (
     <div className={styles.mapContainer}>
+      <Button type='position' onClick={getPosition}>
+        {isLoadingPosition ? 'Loading...' : 'Use your Position'}
+      </Button>
       <MapContainer
         center={mapPosition}
         zoom={8}
