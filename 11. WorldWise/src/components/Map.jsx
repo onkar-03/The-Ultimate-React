@@ -1,5 +1,5 @@
 import styles from './Map.module.css';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   MapContainer,
   TileLayer,
@@ -12,20 +12,16 @@ import {
 import { useEffect, useState } from 'react';
 import { useCities } from '../contexts/CitiesContext';
 import { useGeolocation } from '../Hooks/useGeolocation';
+import { useUrlPosition } from '../Hooks/useUrlPosition';
 import Button from '../components/Button';
 
 function Map() {
   // All Hooks at the Top:
-  const [mapPosition, setMapPosition] = useState([40, 40]);
+  const [mapPosition, setMapPosition] = useState([40, 0]);
 
   // Cities Marker
   // We need to get access to the cities data here from our CitiesContext that we created is used
   const { cities } = useCities();
-
-  // Lat and Lng passed to URL in the CityItem Component
-  // Read the Lat & Lng from the URL as the State is stored in URL and ios accessible to all without any props transfer
-  // For this we use the useSearchParams Hook() given by react router
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const {
     isLoading: isLoadingPosition,
@@ -33,9 +29,8 @@ function Map() {
     getPosition,
   } = useGeolocation();
 
-  // We cant directly access the params we need to use the .get() function
-  const lat = searchParams.get('lat');
-  const lng = searchParams.get('lng');
+  // Using Position from Custom Hook
+  const [lat, lng] = useUrlPosition();
 
   // We want the marker to be remembered when we click back from a current city
   // Hence we use a state to store the marker and update only if they exist
@@ -59,9 +54,11 @@ function Map() {
 
   return (
     <div className={styles.mapContainer}>
-      <Button type='position' onClick={getPosition}>
-        {isLoadingPosition ? 'Loading...' : 'Use your Position'}
-      </Button>
+      {!geolocationPosition && (
+        <Button type='position' onClick={getPosition}>
+          {isLoadingPosition ? 'Loading...' : 'Use your Position'}
+        </Button>
+      )}
       <MapContainer
         center={mapPosition}
         zoom={8}
